@@ -1,0 +1,22 @@
+{
+"services": {
+		"testAPI":{
+			"apiName": "testAPI",
+			"host": "http://localhost",
+			"port": 5001,
+			"url": "http://localhost:5001/"
+		},		
+		"usersAPI":{
+			"apiName": "usersAPI",
+			"host": "http://localhost",
+			"port": 5002,
+			"url": "http://localhost:5002/"
+		},		
+		"newsAPI":{
+			"apiName": "newsAPI",
+			"host": "http://localhost",
+			"port": 5003,
+			"url": "http://localhost:5003/"
+		}
+	}
+}
