@@ -29,8 +29,8 @@ router.post('/sign-up', async (req, res) => {
 	};
 
 	// verify if email already exists
-	await r.table("login").filter({email: user.email}).count().run(con).then( result => {
-		if(result) return res.send('Email already registed');	
+	return await r.table("login").filter({email: user.email}).count().run(con).then( result => {
+		if(result) res.send('Email already registed');	
 
 	}); 
 
@@ -38,7 +38,7 @@ router.post('/sign-up', async (req, res) => {
 		if (err) throw err;
 	    	console.log(JSON.stringify(result, null, 2));
 
-	}).then(() => {return res.send('success')} )
+	}).then(() => {res.send('success')} )
 		
 });
 
