@@ -1,5 +1,9 @@
 # ignore file package-lock.json
 package-lock.json
 
+# ignore all files
+*.swp
+*.DS_Store
+
 # ignore All files in any dir node_modules/
 node_modules/
