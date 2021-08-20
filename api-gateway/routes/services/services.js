@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const axios = require('axios')
 const services = require('./services.json')
-const verifyToken = require('../auth/verifyToken');
+const verifyToken = require('../validations/verifyToken');
 
 router.all(['/:apiName/:path', '/:apiName/:path/:id'], verifyToken, (req, res) => {
 	const service = services.services[req.params.apiName];
