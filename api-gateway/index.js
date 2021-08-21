@@ -15,7 +15,7 @@ const port = process.env.PORT || 3434;
 app.use(express.json())
 
 app.use('/gate/auth', authRoute);
-app.use('/gate', servicesRoute);
+app.use('/gate/services', servicesRoute);
 
 
 app.listen(port, () => {

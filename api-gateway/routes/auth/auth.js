@@ -10,13 +10,12 @@ r.connect( {host: process.env.DB_HOST, port: process.env.DB_PORT, db: process.en
     con = conn;
 })
 
-router.post('/sign-up', async (req, res) => {
+router.post('/local-sign-up', async (req, res) => {
 	
 	// validate if empty fields
 	if (await empty(req.body.name, req.body.email, req.body.password, req.body.user_type)) 
-		return res.send('required fields not complete');
+		return res.send({status:false, msg: 'required fields not complete'});
 		
-
 	// hash password	
 	const hash = await crypt.hash(req.body.password);
 	const user = {
@@ -27,28 +26,42 @@ router.post('/sign-up', async (req, res) => {
 		user_type: req.body.user_type,
 		date: new Date()
 	};
-
+	
 	// verify if email already exists
-	return await r.table("login").filter({email: user.email}).count().run(con).then( result => {
-		if(result) res.send('Email already registed');	
-
-	}); 
-
-	await r.table('login').insert(user).run(con, function(err, result) {
-		if (err) throw err;
-	    	console.log(JSON.stringify(result, null, 2));
-
-	}).then(() => {res.send('success')} )
+	await r.table("login").filter({email: user.email}).count().run(con).then( result => {
+		if(result) res.send({status:false, msg:'Email already registed'});	
+		else{
 		
+			r.table('login').insert(user).run(con, function(err, result) {
+				if (err) throw err;
+				console.log(JSON.stringify(result, null, 2));
+
+			}).then(() => {res.send({status: true ,msg: 'user successfuly registed!'})} )
+		}	
+	}); 
 });
 
-router.post('/local-sign-in', (req, res) => {
+router.post('/local-sign-in', async (req, res) => {
 	
-	// user data is supposed to come from db (rethink db)
-	const user = {'user_id': 1};
+	const user = await r.table('login').filter({email: req.body.email}).run(con).then( cursor => cursor.toArray());
 	
-	const token = jwt.sign(user, process.env.SECRET);
-	res.send(token);
+	// verify if email exists	
+	if(user[0]){ 
+		
+		// verify if its duplicated, case true its supposed to trigger some security mechanism
+		if(user.length == 1) {
+			
+			// check if password matches
+			if(crypt.check(req.body.password, user[0].password)){
+				
+				// send token with user data 			
+				const token = jwt.sign(user[0], process.env.SECRET);
+				res.send(token);
+
+			}else res.send({status: false,  msg: 'wrong password'})
+		}else res.send({status: false, msg: 'duplicated data'});	
+	
+	}else res.send({status: false, msg:'email not registed'})	
 });
 
 /**

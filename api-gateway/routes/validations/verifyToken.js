@@ -5,11 +5,11 @@ module.exports = function(req, res, next){
 	if (!token) console.log({'status': false, 'code': 403, 'msg': 'Access Denied'});
 
 	try {
-		const verified = jwt.verify(token, process.env.SECRET);
-		req.token= {'status': true, 'content': verified };
+		const content = jwt.verify(token, process.env.SECRET);
+		req.token= {'status': true, 'content': content};
 
 	}catch{
-		req.token = {'status': false};
+		req.token = {'status': false, 'content': null};
 	}
 	
 	next();

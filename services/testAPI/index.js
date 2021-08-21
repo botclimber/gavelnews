@@ -15,6 +15,14 @@ app.get('/home/:id', (req, res) => {
   res.send('testAPI says: its lit and id = ' + req.params.id+' \n')
 })
 
+
+app.post('/homePost', (req, res) => {
+	
+	// convert string to json
+	
+	res.send(req.query)
+})
+
 app.listen(port, () => {
   console.log('testAPI server up and runnning (PORT:'+port+' )')
 })

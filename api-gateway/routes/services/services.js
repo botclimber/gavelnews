@@ -12,14 +12,13 @@ router.all(['/:apiName/:path', '/:apiName/:path/:id'], verifyToken, (req, res) =
 
 		if( (service.reqTokenPaths).includes(req.params.path) && req.token.status !== true) res.send('Token required');
 		else{
-	
 			const fullUrl = (req.params.id)? service.url+req.params.path+'/'+req.params.id : service.url+req.params.path; 
-		
+			
 			const resp = axios({
 				method: req.method,
 				url: fullUrl,
 				headers: req.headers,
-				data: req.body
+				params: {"params": req.body, "user_data": req.token.content}, 
 			}).then(response => response.data)
 			.catch(err =>{
 				err instanceof Error
