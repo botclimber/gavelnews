@@ -10,6 +10,7 @@ r.connect( {host: process.env.DB_HOST, port: process.env.DB_PORT, db: process.en
     con = conn;
 })
 
+
 router.post('/local-sign-up', async (req, res) => {
 	
 	// validate if empty fields

@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 5001 
 
+app.use(express.json())
 
 app.get('/home', (req, res) => {
   res.send('testAPI says: its lit')
@@ -19,7 +20,7 @@ app.get('/home/:id', (req, res) => {
 app.post('/homePost', (req, res) => {
 	
 	// convert string to json
-	
+	console.log(req.body)	
 	res.send(req.query)
 })
 

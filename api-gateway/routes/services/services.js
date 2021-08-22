@@ -18,7 +18,7 @@ router.all(['/:apiName/:path', '/:apiName/:path/:id'], verifyToken, (req, res) =
 				method: req.method,
 				url: fullUrl,
 				headers: req.headers,
-				params: {"params": req.body, "user_data": req.token.content}, 
+				data: {'params':req.body,'content': req.token.content}, 
 			}).then(response => response.data)
 			.catch(err =>{
 				err instanceof Error
