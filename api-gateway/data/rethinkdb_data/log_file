@@ -102,3 +102,17 @@
 2021-08-22T22:48:07.275836000 9360.465381s notice: All client connections closed.
 2021-08-22T22:48:07.275846000 9360.465391s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
 2021-08-22T22:48:07.278617000 9360.468163s notice: Storage engine shut down.
+2021-08-23T18:47:23.810936000 0.190396s notice: Running rethinkdb 2.4.1 (CLANG 11.0.3 (clang-1103.0.32.62))...
+2021-08-23T18:47:23.836286000 0.215742s notice: Running on Darwin 17.7.0 x86_64
+2021-08-23T18:47:23.836345000 0.215801s notice: Loading data from directory /Users/danielsilva/Documents/gavelnews/api-gateway/data/rethinkdb_data
+2021-08-23T18:47:24.033788000 0.413248s info: Automatically using cache size of 7637 MB
+2021-08-23T18:47:24.034515000 0.413975s notice: Listening for intracluster connections on port 29015
+2021-08-23T18:47:24.131383000 0.510845s notice: Listening for client driver connections on port 28015
+2021-08-23T18:47:24.131604000 0.511065s notice: Listening for administrative HTTP connections on port 8080
+2021-08-23T18:47:24.131607000 0.511068s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2021-08-23T18:47:24.131776000 0.511238s notice: Listening on driver addresses: 127.0.0.1, ::1
+2021-08-23T18:47:24.131780000 0.511242s notice: Listening on http addresses: 127.0.0.1, ::1
+2021-08-23T18:47:24.131784000 0.511245s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2021-08-23T18:47:24.131798000 0.511259s notice: Server ready, "iMac_de_Daniel_local_i0n" 5e703839-0b37-4f86-a454-23a701c0e760
+2021-08-23T18:47:25.975747000 2.355245s info: Table 29f8f18c-d174-49dc-b6a1-d391523ff4a1: Starting a new Raft election for term 6.
+2021-08-23T18:47:26.063595000 2.443094s info: Table 29f8f18c-d174-49dc-b6a1-d391523ff4a1: This server is Raft leader for term 6. Latest log index is 20.

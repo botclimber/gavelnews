@@ -10,7 +10,7 @@ router.all(['/:apiName/:path', '/:apiName/:path/:id'], verifyToken, (req, res) =
 	
 	if(service){
 
-		if( (service.reqTokenPaths).includes(req.params.path) && req.token.status !== true) res.send('Token required');
+		if( (service.reqTokenPaths).includes(req.params.path) && req.token.status !== true) res.status(403).json({msg: 'Token required'});
 		else{
 			const fullUrl = (req.params.id)? service.url+req.params.path+'/'+req.params.id : service.url+req.params.path; 
 			
@@ -28,8 +28,8 @@ router.all(['/:apiName/:path', '/:apiName/:path/:id'], verifyToken, (req, res) =
 			
 			resp.then(result => res.send(result))
 		}
-	}else res.send('API not registed')
-
+	}else res.status(404).json({msg:'API not registed'})
+		
 })
 
 module.exports = router

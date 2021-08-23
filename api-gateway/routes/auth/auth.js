@@ -15,7 +15,7 @@ router.post('/local-sign-up', async (req, res) => {
 	
 	// validate if empty fields
 	if (await empty(req.body.name, req.body.email, req.body.password, req.body.user_type)) 
-		return res.send({status:false, msg: 'required fields not complete'});
+		return res.status(204).json({msg: 'required fields not complete'});
 		
 	// hash password	
 	const hash = await crypt.hash(req.body.password);
@@ -30,14 +30,14 @@ router.post('/local-sign-up', async (req, res) => {
 	
 	// verify if email already exists
 	await r.table("login").filter({email: user.email}).count().run(con).then( result => {
-		if(result) res.send({status:false, msg:'Email already registed'});	
+		if(result) res.status(204).json({msg:'Email already registed'});	
 		else{
 		
 			r.table('login').insert(user).run(con, function(err, result) {
 				if (err) throw err;
 				console.log(JSON.stringify(result, null, 2));
 
-			}).then(() => {res.send({status: true ,msg: 'user successfuly registed!'})} )
+			}).then(() => {res.status(200).json({msg: 'user successfuly registed!'})} )
 		}	
 	}); 
 });
@@ -57,12 +57,12 @@ router.post('/local-sign-in', async (req, res) => {
 				
 				// send token with user data 			
 				const token = jwt.sign(user[0], process.env.SECRET);
-				res.send(token);
+				res.status(200).json({'token': token});
 
-			}else res.send({status: false,  msg: 'wrong password'})
-		}else res.send({status: false, msg: 'duplicated data'});	
+			}else res.status(204).json({'msg': 'wrong password'})
+		}else res.status(204).json({msg: 'duplicated email'});	
 	
-	}else res.send({status: false, msg:'email not registed'})	
+	}else res.status(204).json({msg:'email not registed'})	
 });
 
 /**

@@ -4,24 +4,40 @@ const port = 5001
 
 app.use(express.json())
 
+// token not required req 
 app.get('/home', (req, res) => {
-  res.send('testAPI says: its lit')
+  res.status(200).json('for this life i can not change')
 })
 
-app.get('/create', (req, res) => {
-  res.send('testAPI says: 21 21')
-})
-
+// token not required req 
 app.get('/home/:id', (req, res) => {
-  res.send('testAPI says: its lit and id = ' + req.params.id+' \n')
+  res.status(200).json('testAPI says: its lit and id = ' + req.params.id+' \n')
 })
 
+// token required req 
+app.get('/secrets', (req, res) => {
+  res.status(200).json('stop trying be god')
+})
 
-app.post('/homePost', (req, res) => {
+// token required post req 
+app.post('/createPost/', (req, res) => {
 	
-	// convert string to json
 	console.log(req.body)	
-	res.send(req.query)
+	res.status(200).json('look alive')
+})
+
+// token required delete req
+app.delete('/delPost/:id', (req, res) => {
+	
+	if(!req.params.id) res.status(400).json('send what u want to delete')
+	res.status(200).json('del request received')
+})
+
+// token required put req
+app.put('/updatePost/:id', (req, res) => {
+	
+	if(!req.params.id) res.status(400).json('send what u want to update')
+	res.status(200).json('update request received')
 })
 
 app.listen(port, () => {
