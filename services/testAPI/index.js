@@ -22,20 +22,19 @@ app.get('/secrets', (req, res) => {
 // token required post req 
 app.post('/createPost/', (req, res) => {
 	
-	console.log(req.body)	
-	res.status(200).json('look alive')
+	res.status(200).json({data: req.body.params.msg})
 })
 
 // token required delete req
 app.delete('/delPost/:id', (req, res) => {
-	
+	console.log(req.params.id)	
 	if(!req.params.id) res.status(400).json('send what u want to delete')
 	res.status(200).json('del request received')
 })
 
 // token required put req
 app.put('/updatePost/:id', (req, res) => {
-	
+	console.log(req.params.id)
 	if(!req.params.id) res.status(400).json('send what u want to update')
 	res.status(200).json('update request received')
 })
