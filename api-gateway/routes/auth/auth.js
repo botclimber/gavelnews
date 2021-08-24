@@ -1,8 +1,14 @@
+const bouncer = require('express-bouncer')(500, 600000, 5);
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const r = require('rethinkdb');
 const crypt = require('p4ssw0rd');
 const empty = require('../validations/chkIfEmpty');
+
+//bouncer.whitelist.push("127.0.0.1");
+bouncer.blocked = (req, res, next, remainig) => {
+    res.status(429).json("Too many requests have been made, " + "please wait " + remaining / 1000 + " seconds");
+};
 
 var con = null; 
 r.connect( {host: process.env.DB_HOST, port: process.env.DB_PORT, db: process.env.DB_NAME}, function(err, conn) {
@@ -10,13 +16,19 @@ r.connect( {host: process.env.DB_HOST, port: process.env.DB_PORT, db: process.en
     con = conn;
 })
 
+/**
 
+- feature: when successfully signed-up response must return also a token in order
+to the user be redirect to the users initial page;
+(not implemented)
+
+*/
 router.post('/local-sign-up', async (req, res) => {
 	
 	// validate if empty fields
 	if (await empty(req.body.name, req.body.email, req.body.password, req.body.user_type)) 
-		return res.status(204).json({msg: 'required fields not complete'});
-		
+		return res.status(400).json({msg: 'required fields not complete'});
+	
 	// hash password	
 	const hash = await crypt.hash(req.body.password);
 	const user = {
@@ -30,7 +42,7 @@ router.post('/local-sign-up', async (req, res) => {
 	
 	// verify if email already exists
 	await r.table("login").filter({email: user.email}).count().run(con).then( result => {
-		if(result) res.status(204).json({msg:'Email already registed'});	
+		if(result) res.status(400).json({msg:'Email already registed'});	
 		else{
 		
 			r.table('login').insert(user).run(con, function(err, result) {
@@ -42,7 +54,11 @@ router.post('/local-sign-up', async (req, res) => {
 	}); 
 });
 
-router.post('/local-sign-in', async (req, res) => {
+router.post('/local-sign-in', bouncer.blocked, async (req, res) => {
+	
+	// validate if empty fields
+	if (await empty(req.body.email, req.body.password)) 
+		return res.status(400).json({msg: 'required fields not complete'});
 	
 	const user = await r.table('login').filter({email: req.body.email}).run(con).then( cursor => cursor.toArray());
 	
@@ -54,15 +70,15 @@ router.post('/local-sign-in', async (req, res) => {
 			
 			// check if password matches
 			if(crypt.check(req.body.password, user[0].password)){
-				
+				bouncer.reset(req);
+							
 				// send token with user data 			
 				const token = jwt.sign(user[0], process.env.SECRET);
 				res.status(200).json({'token': token});
 
-			}else res.status(204).json({'msg': 'wrong password'})
-		}else res.status(204).json({msg: 'duplicated email'});	
-	
-	}else res.status(204).json({msg:'email not registed'})	
+			}else res.status(400).json({msg: 'wrong password'})
+		}else res.status(400).json({msg: 'duplicated email'});	
+	}else res.status(400).json({msg:'email not registed'})	
 });
 
 /**

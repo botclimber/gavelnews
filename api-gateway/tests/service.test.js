@@ -1,15 +1,7 @@
 const request = require('supertest');
 const url = 'http://localhost:3000';
 
-/*
-test("should respond with a 200 status code", async () => {
-        const response = await request(url).post("/gate/services/testAPI/create")
-        expect(response.statusCode).toBe(200)
-})
-*/
-
 var token = null;
-
 test("POST return token", async () => {
         const response = await request(url).post("/gate/auth/local-sign-in")
 	.set({'Content-Type': 'application/json'})
@@ -62,9 +54,60 @@ describe("GET requests", () => {
 	})
 });
 
-describe("POST requests", () => {
-	test("sending data and token", () => { })
-	test("sending data with no token", () => { })
-	test("not sending data", () => { })
+describe("POST/PUT/DELETE requests", () => {
+	test("POST sending data and token", async () => { 
+
+		const response = await request(url).post("/gate/services/testAPI/createPost")
+		.set({'Content-Type': 'application/json'})
+		.set({'auth-token': token})
+		.send({msg:'its lit'})
+		expect(response.status).toBe(200)
+		expect(response.body.data).toBe('its lit')
+	})
+	test("POST sending data with no token", async () => {
+	
+		const response = await request(url).post("/gate/services/testAPI/createPost")
+		.set({'Content-Type': 'application/json'})
+		.send({msg:'its lit'})
+		expect(response.status).toBe(403)
+	 })
+	test("POST not sending data", async () => {
+	
+		const response = await request(url).post("/gate/services/testAPI/createPost")
+		.set({'Content-Type': 'application/json'})
+		.set({'auth-token': token})
+		expect(response.status).toBe(200)
+	})
+	
+	test("PUT sending data and token", async () => {
+
+		const response = await request(url).put("/gate/services/testAPI/updatePost/1")
+		.set({'Content-Type': 'application/json'})
+		.set({'auth-token': token})
+		expect(response.status).toBe(200)
+	 })
+	test("PUT sending wrong url", async () => {
+
+		const response = await request(url).put("/gate/services/testAPI/updatePost")
+		.set({'Content-Type': 'application/json'})
+		.set({'auth-token': token})
+		expect(response.text).toBe('Request failed with status code 404')
+	 })
+	
+	test("DELETE sending data and token", async () => {
+	
+		const response = await request(url).delete("/gate/services/testAPI/delPost/1")
+		.set({'Content-Type': 'application/json'})
+		.set({'auth-token': token})
+		expect(response.status).toBe(200)
+	 })
+	test("DELETE sending wrong url", async () => {
+
+		const response = await request(url).delete("/gate/services/testAPI/delPost")
+		.set({'Content-Type': 'application/json'})
+		.set({'auth-token': token})
+		expect(response.text).toBe('Request failed with status code 404')
+	 })
 });
+
 
