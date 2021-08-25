@@ -4,15 +4,15 @@ API to be the middleware between front-end applications and services. Also handl
 ## Request Formats
 In order to request authentication or services here the 2 possible formats (usually PORT = 3000 || 3434):
 
-- (host):3000/gate/auth/
-	- local-sign-up
+- Auth
+	- (host):3000/gate/auth/local-sign-up
 		- params: ['name','email','password']
-	- local-sign-in
+	- (host):3000/gate/auth/local-sign-in
 		- params: ['email','password']
 
-- (host):3000/gate/services/
-	- :apiName/:path
-	- :apiName/:path/:id
+- Services
+	- (host):3000/gate/services/:apiName/:path
+	- (host):3000/gate/services/:apiName/:path/:id
 
 ## Code
 Here's the two routes u can request:
@@ -34,13 +34,14 @@ Regist file format:
 "services": {
 
 	"apiName": {
-		"apiName": string, 
-		"host": string,
-		"post": integer,
-		"url": string,
-		"reqTokenPaths": array
+		"apiName": "", 
+		"host": "",
+		"port": ,
+		"url": "",
+		"reqTokenPaths": []
 		}	
 	}
 }
 ```
 
+reqTokenPaths is every path where u must include a token. There are some requests available for all sources, but some request some kind of authorization, to do so we send a token containing info about whos requestin it.
