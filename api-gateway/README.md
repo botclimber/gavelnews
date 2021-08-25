@@ -28,7 +28,7 @@ app.use('/gate/services', servicesRoute);
 ```
 
 ### Services regist
-In order to the API Gateway use other services they must be registed in the [services.json](https://github.com/botclimber/gavelnews/tree/main/api-gateway/routes/services) file.
+In order to the API Gateway use other services they must be registed in the [services.json](https://github.com/botclimber/gavelnews/tree/main/api-gateway/routes/services/services.json) file.
 
 Regist fiel format:
 ```json 
