@@ -1,3 +1,8 @@
+/**
+- Middleware:
+	- control all the requests flow
+
+*/
 
 const express = require('express')
 const router = express.Router()
@@ -5,6 +10,13 @@ const axios = require('axios')
 const services = require('./services.json')
 const verifyToken = require('../validations/verifyToken');
 
+/**
+
+- two formats of requests, with and without id
+- API services must be listed in the services.json file
+- token required only for specific requests
+
+*/
 router.all(['/:apiName/:path', '/:apiName/:path/:id'], verifyToken, (req, res) => {
 	const service = services.services[req.params.apiName];
 	
