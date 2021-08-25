@@ -18,10 +18,12 @@ r.connect( {host: process.env.DB_HOST, port: process.env.DB_PORT, db: process.en
 
 /**
 
-- feature: when successfully signed-up response must return also a token in order
-to the user be redirect to the users initial page;
-(not implemented)
+MISSING:
+	- block update req
+	- verified_email update req
 
+	- local-sign-in:
+		- verify if user blocked
 */
 router.post('/local-sign-up', async (req, res) => {
 	
@@ -37,6 +39,7 @@ router.post('/local-sign-up', async (req, res) => {
 		verified_email: false,
 		password: hash,
 		user_type: req.body.user_type,
+		block: false,
 		date: new Date()
 	};
 	
@@ -49,7 +52,10 @@ router.post('/local-sign-up', async (req, res) => {
 				if (err) throw err;
 				console.log(JSON.stringify(result, null, 2));
 
-			}).then(() => {res.status(200).json({msg: 'user successfuly registed!'})} )
+			}).then(() => {
+			
+			const token = jwt.sign({email:user.email, user_type:user.user_type, date:user.date, verified_email:user.verified_email}, process.env.SECRET);
+			res.status(200).json({msg: 'user successfuly registed!', token: token, userName: user.name});
 		}	
 	}); 
 });
@@ -73,8 +79,8 @@ router.post('/local-sign-in', bouncer.blocked, async (req, res) => {
 				bouncer.reset(req);
 							
 				// send token with user data 			
-				const token = jwt.sign(user[0], process.env.SECRET);
-				res.status(200).json({'token': token});
+				const token = jwt.sign({email:user[0].email, user_type:user[0].user_type, date:user[0].date, verified_email:user[0].verified_email}, process.env.SECRET);
+				res.status(200).json({'token': token, 'userName': user[0].name});
 
 			}else res.status(400).json({msg: 'wrong password'})
 		}else res.status(400).json({msg: 'duplicated email'});	
