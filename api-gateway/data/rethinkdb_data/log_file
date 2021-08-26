@@ -159,3 +159,41 @@
 2021-08-24T18:39:45.166989000 5759.066625s notice: All client connections closed.
 2021-08-24T18:39:45.167000000 5759.066636s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
 2021-08-24T18:39:45.183602000 5759.083239s notice: Storage engine shut down.
+2021-08-26T17:23:57.488387000 0.215221s notice: Running rethinkdb 2.4.1 (CLANG 11.0.3 (clang-1103.0.32.62))...
+2021-08-26T17:23:57.520056000 0.246887s notice: Running on Darwin 17.7.0 x86_64
+2021-08-26T17:23:57.520124000 0.246954s notice: Loading data from directory /Users/danielsilva/Documents/gavelnews/api-gateway/data/rethinkdb_data
+2021-08-26T17:23:57.797986000 0.524822s info: Automatically using cache size of 8198 MB
+2021-08-26T17:23:57.798701000 0.525536s notice: Listening for intracluster connections on port 29015
+2021-08-26T17:23:57.882910000 0.609747s notice: Listening for client driver connections on port 28015
+2021-08-26T17:23:57.883017000 0.609854s notice: Listening for administrative HTTP connections on port 8080
+2021-08-26T17:23:57.883022000 0.609859s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2021-08-26T17:23:57.883026000 0.609863s notice: Listening on driver addresses: 127.0.0.1, ::1
+2021-08-26T17:23:57.883047000 0.609883s notice: Listening on http addresses: 127.0.0.1, ::1
+2021-08-26T17:23:57.883050000 0.609887s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2021-08-26T17:23:57.883054000 0.609891s notice: Server ready, "iMac_de_Daniel_local_i0n" 5e703839-0b37-4f86-a454-23a701c0e760
+2021-08-26T17:23:59.477280000 2.204147s info: Table 29f8f18c-d174-49dc-b6a1-d391523ff4a1: Starting a new Raft election for term 9.
+2021-08-26T17:23:59.561550000 2.288419s info: Table 29f8f18c-d174-49dc-b6a1-d391523ff4a1: This server is Raft leader for term 9. Latest log index is 32.
+2021-08-26T17:33:10.512848000 553.250187s notice: Server got SIGINT from pid 1730, uid 501; shutting down...
+2021-08-26T17:33:10.512980000 553.250319s notice: Shutting down client connections...
+2021-08-26T17:33:10.513273000 553.250612s notice: All client connections closed.
+2021-08-26T17:33:10.513286000 553.250624s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2021-08-26T17:33:10.537476000 553.274815s notice: Storage engine shut down.
+2021-08-26T17:36:01.444684000 0.016786s notice: Running rethinkdb 2.4.1 (CLANG 11.0.3 (clang-1103.0.32.62))...
+2021-08-26T17:36:01.449732000 0.021831s notice: Running on Darwin 17.7.0 x86_64
+2021-08-26T17:36:01.449774000 0.021873s notice: Loading data from directory /Users/danielsilva/Documents/gavelnews/api-gateway/data/rethinkdb_data
+2021-08-26T17:36:01.602132000 0.174233s info: Automatically using cache size of 7982 MB
+2021-08-26T17:36:01.602936000 0.175038s notice: Listening for intracluster connections on port 29015
+2021-08-26T17:36:01.624150000 0.196252s notice: Listening for client driver connections on port 28015
+2021-08-26T17:36:01.624272000 0.196374s notice: Listening for administrative HTTP connections on port 8080
+2021-08-26T17:36:01.624277000 0.196379s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2021-08-26T17:36:01.624444000 0.196546s notice: Listening on driver addresses: 127.0.0.1, ::1
+2021-08-26T17:36:01.624448000 0.196550s notice: Listening on http addresses: 127.0.0.1, ::1
+2021-08-26T17:36:01.624452000 0.196553s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2021-08-26T17:36:01.624465000 0.196567s notice: Server ready, "iMac_de_Daniel_local_i0n" 5e703839-0b37-4f86-a454-23a701c0e760
+2021-08-26T17:36:02.974778000 1.546906s info: Table 29f8f18c-d174-49dc-b6a1-d391523ff4a1: Starting a new Raft election for term 10.
+2021-08-26T17:36:03.058511000 1.630640s info: Table 29f8f18c-d174-49dc-b6a1-d391523ff4a1: This server is Raft leader for term 10. Latest log index is 36.
+2021-08-26T17:37:24.344254000 82.917928s notice: Server got SIGINT from pid 1730, uid 501; shutting down...
+2021-08-26T17:37:24.344386000 82.918060s notice: Shutting down client connections...
+2021-08-26T17:37:24.344648000 82.918321s notice: All client connections closed.
+2021-08-26T17:37:24.344661000 82.918334s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2021-08-26T17:37:24.347594000 82.921268s notice: Storage engine shut down.

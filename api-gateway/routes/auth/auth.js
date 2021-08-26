@@ -56,6 +56,7 @@ router.post('/local-sign-up', async (req, res) => {
 			
 			const token = jwt.sign({email:user.email, user_type:user.user_type, date:user.date, verified_email:user.verified_email}, process.env.SECRET);
 			res.status(200).json({msg: 'user successfuly registed!', token: token, userName: user.name});
+			});
 		}	
 	}); 
 });
