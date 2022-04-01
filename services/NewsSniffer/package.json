@@ -1,0 +1,22 @@
+{
+  "name": "newssniffer",
+  "version": "1.0.0",
+  "description": "service to webscrapp news form websites",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/botclimber/gavelnews.git"
+  },
+  "author": "botclimber",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/botclimber/gavelnews/issues"
+  },
+  "homepage": "https://github.com/botclimber/gavelnews#readme",
+  "dependencies": {
+    "puppeteer": "^13.5.2"
+  }
+}
