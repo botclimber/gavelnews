@@ -4,7 +4,9 @@ This is a web scrapper that intends to get news from different websites, it is o
 
 NOTE:
 Right now what we have is a simple example containing almost everything needed to know for the news scrap purpose, wht this is example is doing is scrapping some ecomerce book website and getting data from each selling book:
-	- first creating webpage instance
-	- second getting all urls
-	- third goind throughjt all urls and getting specific data
+- first creating webpage instance
+- second getting all urls
+- third goind throughjt all urls and getting specific data
 
+Current state:
+- It is already extracting data from websites and saving in a json file. the idea can be like order the extraction and saving and every time thats needed just import the file. It can be like a night/daily order scraping. so we must think of a security measure to ensure that only authorized requests get access to files.
