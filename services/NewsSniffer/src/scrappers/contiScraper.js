@@ -9,7 +9,7 @@ const scraperObject = {
 		await page.goto(this.url);
 		
 		let scrapedData = []; // where data will be stored
-		let max = 3 // max pages to be scrapped (at pagination level)
+		let max = 2 // max pages to be scrapped (at pagination level)
 		
 		// Wait for the required DOM to be rendered
 		async function scrapeCurrentPage(){
