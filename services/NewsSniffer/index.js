@@ -1,10 +1,8 @@
-const puppeteer = require('puppeteer');
+const browserObject = require('./src/browser');
+const scraperController = require('./src/pageController');
 
-(async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto('https://observador.pt/');
-  await page.screenshot({ path: 'test.png' });
+//Start the browser and create a browser instance
+let browserInstance = browserObject.startBrowser();
 
-  await browser.close();
-})();
+// Pass the browser instance to the scraper controller
+scraperController(browserInstance)
