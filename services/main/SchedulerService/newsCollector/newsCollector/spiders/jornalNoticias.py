@@ -9,6 +9,9 @@ class JornalNoticiasCollector(scrapy.Spider):
 	}
 
     # constants
+
+    # create requirements.txt
+    # push branch
 		
 	def parse(self, response):
         pass
