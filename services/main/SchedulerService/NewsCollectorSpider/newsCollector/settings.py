@@ -12,6 +12,7 @@ BOT_NAME = "newsCollector"
 SPIDER_MODULES = ["newsCollector.spiders"]
 NEWSPIDER_MODULE = "newsCollector.spiders"
 
+SPLASH_URL = 'http://192.168.59.103:8050'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "newsCollector (+http://www.yourdomain.com)"
