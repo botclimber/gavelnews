@@ -19,3 +19,13 @@ Data proposed structure, example:
         - (WEBSITE NAME 1)_2024_02_11.json
         - (WEBSITE NAME 2)_2024_02_11.json
         - (WEBSITE NAME 3)_2024_02_11.json
+
+# Target Websites:
+- jornal noticias | method: request (python3 jornalNoticias.py)
+- diario de noticias
+- correio da manha
+- observador | method: spider (scrapy crawl collectFrom_observador -o ../../Data/observador_(date).json)
+- cnn portugal
+- expresso
+- publico
+- sic noticias

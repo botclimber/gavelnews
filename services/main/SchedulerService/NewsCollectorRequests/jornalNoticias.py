@@ -29,13 +29,14 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
         print(f"Handling new ({new_metadata['title']})")
         
         dataset = {
-            "publicId":x["publicId"],
-            "title":new_metadata["title"],
-            "desc":new_metadata["description"],
-            "img":f"https://asset.skoiy.com/jnrcnjwljorqgsbu/{new_metadata['image']}?w=410&q=90&crop=5877,3918,62,0",
+            "new_publicId":x["publicId"], # use this to get more detailed info about new
+            "new_link": f"https://www.jn.pt/{x['publicId']}/{new_metadata['slug']}/"
+            "new_title":new_metadata["title"],
+            "new_desc":new_metadata["description"],
+            "new_img":f"https://asset.skoiy.com/jnrcnjwljorqgsbu/{new_metadata['image']}?w=410&q=90&crop=5877,3918,62,0",
             "created_at": x["createdAt"],
             "updated_at": x["updatedAt"],
-            "published_at": new_metadata['publishedAt']
+            "new_date": new_metadata['publishedAt']
         }
         
         print("\t",dataset, "\n")	
