@@ -25,7 +25,7 @@ Data proposed structure, example:
 - diario de noticias ?
 - correio da manha (use spider)
 - observador | method: spider (scrapy crawl collectFrom_observador -o ../../Data/observador_(date).json)
-- cnn portugal (use spider)
+- cnn portugal | method: spider (scrapy crawl collectFrom_cnnPortugal -o ../../Data/cnnPortugal_(date).json )
 - expresso (in progress)
 - publico (in progress)
 - sic noticias

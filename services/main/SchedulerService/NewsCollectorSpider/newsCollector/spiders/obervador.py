@@ -1,12 +1,13 @@
 # scrapy crawl collectFrom_observador -o ../../Data/observador_2024_3_18.json 
 # replace date in filename with current
 
+# !IMPORTANT : observador adds empty spaces on purpose to prevent scrapying
 import scrapy
 
 class ObservadorNewsCollector(scrapy.Spider):
 
 	name = "collectFrom_observador"
-	start_urls = ["https://observador.pt/ultimas/page/1/"] # url
+	start_urls = ["https://observador.pt/ultimas/"] # url
 	custom_settings = {
 		'ROBOTSTXT_OBEY': False,
   		'USER_AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
@@ -21,7 +22,7 @@ class ObservadorNewsCollector(scrapy.Spider):
 		print(response)
 		print( f"current page: {self.currentPage}")
 
-		news = response.xpath("//div[@class='mod mod-posttype-post   ']")
+		news = response.xpath("//div[@class='mod mod-posttype-post          ']")
 		print(f"news: {news}")
 
 		news_link = [link.strip() for link in news.xpath("//a[@class='obs-accent-color']/@href").getall()]
