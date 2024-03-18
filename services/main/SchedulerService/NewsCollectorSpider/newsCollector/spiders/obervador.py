@@ -6,7 +6,7 @@ import scrapy
 class ObservadorNewsCollector(scrapy.Spider):
 
 	name = "collectFrom_observador"
-	start_urls = ["https://observador.pt/ultimas/page/2/"] # url
+	start_urls = ["https://observador.pt/ultimas/page/1/"] # url
 	custom_settings = {
 		'ROBOTSTXT_OBEY': False,
   		'USER_AGENT': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
@@ -38,7 +38,7 @@ class ObservadorNewsCollector(scrapy.Spider):
 
 		else:
 			self.currentPage += 1
-			next_page = f"https://www.jn.pt/ultimas/p/{self.currentPage}/" # (next)
+			next_page = f"https://observador.pt/ultimas/page/{self.currentPage}/" # (next)
 			print(next_page)
 			yield response.follow(next_page, callback=self.parse)
 

@@ -22,10 +22,10 @@ Data proposed structure, example:
 
 # Target Websites:
 - jornal noticias | method: request (python3 jornalNoticias.py)
-- diario de noticias
-- correio da manha
+- diario de noticias ?
+- correio da manha (use spider)
 - observador | method: spider (scrapy crawl collectFrom_observador -o ../../Data/observador_(date).json)
-- cnn portugal
-- expresso
-- publico
+- cnn portugal (use spider)
+- expresso (in progress)
+- publico (in progress)
 - sic noticias
