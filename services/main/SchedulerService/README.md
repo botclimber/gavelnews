@@ -8,6 +8,14 @@ Idea would be to have a unique and fresh file for the latest collection of news 
 Data proposed structure, example:
 - data/
     - backup/
-        - dailyNews_2024_02_09.json
-        - dailyNews_2024_02_10.json
-    - dailyNews_2024_02_11.json
+        - 2024_02_09/
+            - (WEBSITE NAME 1)DailyNews_2024_02_09.json
+            - (WEBSITE NAME 2)DailyNews_2024_02_09.json
+            - (WEBSITE NAME 3)DailyNews_2024_02_09.json
+        - 2024_02_10/
+            - (WEBSITE NAME 1)DailyNews_2024_02_10.json
+            - (WEBSITE NAME 2)DailyNews_2024_02_10.json
+            - (WEBSITE NAME 3)DailyNews_2024_02_10.json
+        - (WEBSITE NAME 1)_2024_02_11.json
+        - (WEBSITE NAME 2)_2024_02_11.json
+        - (WEBSITE NAME 3)_2024_02_11.json
