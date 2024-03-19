@@ -23,7 +23,7 @@ def generateFile(filename, ext, pagestoread, news_per_page_limit, url):
             
             for x in data["contents"]:
                 dataset = {
-                    "new_code":x["code"], # use this to get more detailed info about new
+                    "new_id":x["code"], # use this to get more detailed info about new
                     "new_link": f"https://expresso.pt{x['link']}",
                     "new_title":x["title"],
                     "new_desc": x["lead"],
