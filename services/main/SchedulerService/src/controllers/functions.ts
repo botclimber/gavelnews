@@ -16,3 +16,6 @@ export async function triggerFullScrap(): Promise<void> {
         console.log(`Script execution finished with code ${code}`);
     });
 }
+
+// load data from all files, generate a file with the data cleaned and joined
+// export async function transformExtractedData(): Promise<void>{}
