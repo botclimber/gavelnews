@@ -15,15 +15,14 @@ class ObservadorNewsCollector(scrapy.Spider):
 
 	# constants
 	NEWSPERPAGE = 10
-	PAGESTOREAD = 1
+	PAGESTOREAD = 2
 
 	currentPage = 1
 	def parse(self, response):
 		print(response)
 		print( f"current page: {self.currentPage}")
 
-		news = response.xpath("//div[@class='mod mod-posttype-post          ']")
-		print(f"news: {news}")
+		news = response.xpath("//div[@class='results']")
 
 		news_link = [link.strip() for link in news.xpath("//a[@class='obs-accent-color']/@href").getall()]
 		news_title = [title.strip() for title in news.xpath("//a[@class='obs-accent-color']/text()").getall()]

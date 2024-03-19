@@ -12,7 +12,7 @@ EXT = "json"
 API_TOKEN = "jnrcnjwljorqgsbu"
 API_KEY = "k25m0hEKYbk1xQp6"
 PER_PAGE = 12
-PAGE = 1
+PAGESTOREAD = 1
 
 with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
     
@@ -22,7 +22,7 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
     f.write("{ \"data\": [ \n")
     
     while current_page <= PAGESTOREAD:
-        response = requests.get(f"https://gmg-posts-api.global.ssl.fastly.net/1/posts?apikey={API_KEY}&apitoken={API_TOKEN}&per_page={PER_PAGE}&page={PAGE}&filter[isoLanguage]=pt&sort=-publishedAt")
+        response = requests.get(f"https://gmg-posts-api.global.ssl.fastly.net/1/posts?apikey={API_KEY}&apitoken={API_TOKEN}&per_page={PER_PAGE}&page={current_page}&filter[isoLanguage]=pt&sort=-publishedAt")
 
         data = response.json()  
         print(f"Available data has size of {len(data['data'])}")
@@ -35,7 +35,7 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
             
             dataset = {
                 "new_publicId":x["publicId"], # use this to get more detailed info about new
-                "new_link": f"https://www.jn.pt/{x['publicId']}/{new_metadata['slug']}/"
+                "new_link": f"https://www.jn.pt/{x['publicId']}/{new_metadata['slug']}/",
                 "new_title":new_metadata["title"],
                 "new_desc":new_metadata["description"],
                 "new_img":f"https://asset.skoiy.com/jnrcnjwljorqgsbu/{new_metadata['image']}?w=410&q=90&crop=5877,3918,62,0",
