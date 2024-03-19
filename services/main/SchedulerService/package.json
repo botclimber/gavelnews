@@ -1,0 +1,22 @@
+{
+  "name": "schedulerservice",
+  "version": "1.0.0",
+  "description": "Scheduler",
+  "main": "index.js",
+  "scripts": {
+    "compile": "npx tsc",
+    "start": "node dist/SchedulerService/src/index.js",
+    "test": "test"
+  },
+  "author": "botclimber",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node-schedule": "2.1.0",
+    "@types/node": "20.8.4",
+    "date-and-time": "2.4.2",
+    "node-schedule": "2.1.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.2"
+  }
+}
