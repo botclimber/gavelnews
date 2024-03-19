@@ -14,7 +14,6 @@ class ObservadorNewsCollector(scrapy.Spider):
 	}
 
 	# constants
-	NEWSPERPAGE = 10
 	PAGESTOREAD = 2
 
 	currentPage = 1
@@ -24,12 +23,17 @@ class ObservadorNewsCollector(scrapy.Spider):
 
 		news = response.xpath("//div[@class='results']")
 
-		news_link = [link.strip() for link in news.xpath("//a[@class='obs-accent-color']/@href").getall()]
-		news_title = [title.strip() for title in news.xpath("//a[@class='obs-accent-color']/text()").getall()]
-		news_date = [date.strip() for date in news.xpath("//time[@class='timeago']/text()").getall()]
-		news_img = [img.strip() for img in news.xpath("//img[@class='img_16x9']/@src").getall()]
+		news_link = [link.strip() for link in news.xpath(".//a[@class='obs-accent-color']/@href").getall()]
+		news_title = list( filter(lambda x: x != "" , [title.strip() for title in news.xpath(".//a[@class='obs-accent-color']/text()").getall()]))
+		news_date = [date.strip() for date in news.xpath(".//time[@class='timeago']/text()").getall()]
+		news_img = [img.strip() for img in news.xpath(".//img[@class='img_16x9']/@src").getall()]
+  
+		data = []
+		for x in range(len(news_title)):
+			print(f"index is {x}")
+			data.append({"new_link": news_link[x], "new_title": news_title[x], "new_desc": "", "new_date": news_date[x], "new_img": news_img[x]})
 		
-		yield {f"data": {"news_title": news_title, "news_date": news_date, "news_link": news_link, "news_img": news_img}}
+		yield {"data": data}
 			
 		# go to next page
 		if(self.currentPage >= self.PAGESTOREAD):
