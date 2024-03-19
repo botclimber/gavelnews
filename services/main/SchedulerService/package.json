@@ -5,15 +5,16 @@
   "main": "index.js",
   "scripts": {
     "compile": "npx tsc",
-    "start": "node dist/SchedulerService/src/index.js",
+    "start": "node dist/index.js",
     "test": "test"
   },
   "author": "botclimber",
   "license": "ISC",
   "dependencies": {
-    "@types/node-schedule": "2.1.0",
     "@types/node": "20.8.4",
+    "@types/node-schedule": "2.1.0",
     "date-and-time": "2.4.2",
+    "node": "21.7.1",
     "node-schedule": "2.1.1"
   },
   "devDependencies": {

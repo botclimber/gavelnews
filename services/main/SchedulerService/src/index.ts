@@ -13,11 +13,13 @@ const week = {
 
 const rule = new schedule.RecurrenceRule();
 
-rule.dayOfWeek = [week.monday, week.wednesday, week.saturday];
-rule.hour = 21;
-rule.minute = 30;
+rule.dayOfWeek = [week.monday, week.tuesday, week.wednesday, week.thursday, week.friday, week.saturday, week.sunday];
+rule.hour = 22;
+rule.minute = 17;
 
 schedule.scheduleJob(rule, async function(){
   // await for scrap of all platforms
+  await job.triggerFullScrap()
+  console.log("job finished.")
   // transform scraped data and generate an unified file with all extracted/downdload data
 });
