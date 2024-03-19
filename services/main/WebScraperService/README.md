@@ -23,9 +23,8 @@ Data proposed structure, example:
 # Target Websites:
 - jornal noticias | method: request (python3 jornalNoticias.py)
 - diario de noticias ?
-- correio da manha (use spider)
+- correio da manha (use spider) (in progress ...) 
 - observador | method: spider (scrapy crawl collectFrom_observador -o ../../Data/observador_(date).json)
 - cnn portugal | method: spider (scrapy crawl collectFrom_cnnPortugal -o ../../Data/cnnPortugal_(date).json )
-- expresso (in progress)
-- publico (in progress)
-- sic noticias
+- expresso and sic noticias method: request (python3 expresso_e_sicNoticias.py)
+- publico method: request (python3 publico.py)
