@@ -1,4 +1,4 @@
-# scrapy crawl collectFrom_observador -o ../../Data/observador_2024_3_18.json 
+# scrapy crawl collectFrom_observador -o ../../Data/observador_2024-03-18.json 
 # replace date in filename with current
 
 # !IMPORTANT : observador adds empty spaces on purpose to prevent scrapying

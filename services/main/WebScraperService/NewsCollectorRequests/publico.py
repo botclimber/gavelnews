@@ -2,10 +2,9 @@
 
 import requests
 import json
-import datetime
+from datetime import timedelta, date
 
-TIME_NOW = datetime.datetime.now()
-CURRENT_DATE = f"{TIME_NOW.year}_{TIME_NOW.month}_{TIME_NOW.day}"
+CURRENT_DATE = date.today() - timedelta(days=1)
 
 FILE_NAME = f"publico_{CURRENT_DATE}"
 EXT = "json"

@@ -4,10 +4,9 @@
 
 import requests
 import json
-import datetime
+from datetime import timedelta, date
 
-TIME_NOW = datetime.datetime.now()
-CURRENT_DATE = f"{TIME_NOW.year}_{TIME_NOW.month}_{TIME_NOW.day}"
+CURRENT_DATE = date.today() - timedelta(days=1)
 
 def generateFile(filename, ext, pagestoread, news_per_page_limit, url):
     with open(f"../../Data/{filename}.{ext}", "w", encoding="utf-8") as f:
@@ -48,7 +47,7 @@ expresso_filename = f"expresso_{CURRENT_DATE}"
 expresso_ext = "json"
 expresso_pagestoread = 2
 expresso_newsPerPageLimit = 5
-expresso_newsUntil = "2024-03-18T12"
+expresso_newsUntil = f"{CURRENT_DATE}T12"
 
 expresso_url = f"https://expresso.pt/api/gs/expresso/v1/molecule/feed?categories=%2F&category=%2F&contentTypes=ARTICLE%2CSTREAM%2CNEWSLETTER&limit={expresso_newsPerPageLimit}&until={expresso_newsUntil}"
 
@@ -59,7 +58,7 @@ sic_filename = f"sicNoticias_{CURRENT_DATE}"
 sic_ext = "json"
 sic_pagestoread = 2
 sic_newsPerPageLimit = 5
-sic_newsUntil = "2024-03-18T12"
+sic_newsUntil = f"{CURRENT_DATE}T12"
 
 sic_url = f"https://sicnoticias.pt/api/gs/expresso/v1/molecule/feed?categories=%2F&category=%2F&contentTypes=ARTICLE%2CSTREAM%2CNEWSLETTER&limit={sic_newsPerPageLimit}&until={sic_newsUntil}"
 

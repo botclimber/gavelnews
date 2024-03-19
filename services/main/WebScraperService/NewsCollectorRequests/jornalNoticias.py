@@ -1,12 +1,10 @@
 import requests
 import json
-import datetime
+from datetime import timedelta, date
 
 #https://gmg-posts-api.global.ssl.fastly.net/1/posts?apikey=k25m0hEKYbk1xQp6&apitoken=jnrcnjwljorqgsbu&per_page=12&page=1&filter[isoLanguage]=pt&include=dossiers,labels,authors&sort=-publishedAt
 
-
-TIME_NOW = datetime.datetime.now()
-CURRENT_DATE = f"{TIME_NOW.year}_{TIME_NOW.month}_{TIME_NOW.day}"
+CURRENT_DATE = date.today() - timedelta(days=1)
 
 FILE_NAME = f"jornalNoticias_{CURRENT_DATE}"
 EXT = "json"

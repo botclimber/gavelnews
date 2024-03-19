@@ -1,4 +1,4 @@
-# scrapy crawl collectFrom_cnnPortugal -o ../../Data/cnnPortugal_2024_3_18.json 
+# scrapy crawl collectFrom_cnnPortugal -o ../../Data/cnnPortugal_2024-03-18.json 
 # replace date in filename with current
 
 import scrapy
