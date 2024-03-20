@@ -1,4 +1,5 @@
-import {fromRequestJsonFileFormat, new_object} from "../../../CommonStuff/src/types/types"
+import {fromRequestJsonFileFormat, new_object, opinion} from "../../../CommonStuff/src/types/types"
+import * as eva from "eva-functional-utils"
 
 export class NewsManipulator {
     data: fromRequestJsonFileFormat
@@ -7,8 +8,28 @@ export class NewsManipulator {
         this.data = dataFromFile
     }
 
-    // sum one to True
-    // sum one to False
-    // sum one to Unclear
+    async updateNewVeracity(newId: string, op: opinion, ip: string | undefined ): Promise<new_object | undefined>{
 
+        try{
+            
+            var new_object = undefined
+
+            for (let x in this.data.data){
+                if(this.data.data[x].new_id == newId){
+                    
+                    // check if ip is included
+                    if(ip !== undefined && !this.data.data[x].new_votedIps.includes(ip)){
+
+                        this.data.data[x][op] += 1;
+                        this.data.data[x].new_votedIps.push(ip);
+                        new_object = this.data.data[x]
+
+                    }else throw Error("This user already voted!")
+                }
+            }
+
+            return new_object
+
+        }catch(e) { console.log(e); throw e;}
+    }
 }

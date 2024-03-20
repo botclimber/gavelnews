@@ -3,14 +3,14 @@
 // load to memory current day only
 // previous days are load on request and sent
 
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
 import * as dateAndTime from "date-and-time";
 import cors from "cors";
 
 import { NewsManipulator } from './controllers/NewsManipulator';
 
-import {new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat} from "../../CommonStuff/src/types/types"
+import {new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat, opinion} from "../../CommonStuff/src/types/types"
 import {dateFormat} from "../../CommonStuff/src/consts/consts"
 import {getYesterdayDate} from "../../CommonStuff/src/functions/functions"
 
@@ -33,9 +33,31 @@ jsonData = new NewsManipulator(loadData())
 
 // Define API endpoints
 
+// Middleware to log IP address
+app.use((req: Request, res: Response, next: NextFunction) => {
+    const ip = req.ip;
+    console.log(`Request from IP: ${ip}`);
+    next(); // Pass the request to the next middleware or route handler
+});
+
 app.get("/", (req: Request, res: Response) => {
 
     res.status(200).json(jsonData.data)
+})
+
+app.patch("/new/:newId/:opinion", (req: Request, res: Response) => {
+
+    const ip = req.ip
+    const newId = req.params.newId
+    const opinion = req.params.opinion as opinion
+
+    jsonData.updateNewVeracity(newId, opinion, ip)
+    .then( response => {
+
+        if(response !== undefined) res.status(200).json(response);
+        else res.status(401).json({"msg": "new not found in our db."})
+    })
+    .catch( e => {console.log(e); res.status(400).json({"msg": e.message}) })
 })
 
 /*app.get("/old/:date", (req: Request, res: Response) => {
