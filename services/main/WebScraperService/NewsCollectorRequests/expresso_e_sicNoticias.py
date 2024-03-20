@@ -8,7 +8,7 @@ from datetime import timedelta, date
 
 CURRENT_DATE = date.today() - timedelta(days=1)
 
-def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url):
+def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url, source):
     with open(f"../../Data/{filename}.{ext}", "w", encoding="utf-8") as f:
     
         current_page = 1
@@ -29,7 +29,12 @@ def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url)
                     "new_desc": x["lead"],
                     "new_img": x["picture"]["urlOriginal"],
                     "new_type": x["mainCategory"]["name"],
-                    "new_date": x['publishedDate']
+                    "new_date": x['publishedDate'],
+                    "new_source": source,
+                    "new_isTrue": 0,
+                    "new_isFalse": 0,
+                    "new_isUnclear": 0,
+                    "new_votedIps": []
                 }
                 
                 print("\t",dataset, "\n")	
@@ -45,23 +50,25 @@ def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url)
 # expresso
 expresso_filename = f"expresso_{CURRENT_DATE}"
 expresso_ext = "json"
-expresso_pagestoread = 2
-expresso_newsPerPageLimit = 5
+expresso_pagestoread = 1
+expresso_newsPerPageLimit = 10
 expresso_newsUntil = f"{CURRENT_DATE}T12"
+source = "expresso"
 
 expresso_url = f"https://expresso.pt/api/gs/expresso/v1/molecule/feed?categories=%2F&category=%2F&contentTypes=ARTICLE%2CSTREAM%2CNEWSLETTER&limit={expresso_newsPerPageLimit}&until={expresso_newsUntil}"
 express_base_url = "https://expresso.pt"
 
-generateFile(expresso_filename, expresso_ext, expresso_pagestoread, expresso_newsPerPageLimit, express_base_url, expresso_url)
+generateFile(expresso_filename, expresso_ext, expresso_pagestoread, expresso_newsPerPageLimit, express_base_url, expresso_url, source)
 
 # sic noticias
 sic_filename = f"sicNoticias_{CURRENT_DATE}"
 sic_ext = "json"
-sic_pagestoread = 2
-sic_newsPerPageLimit = 5
+sic_pagestoread = 1
+sic_newsPerPageLimit = 10
 sic_newsUntil = f"{CURRENT_DATE}T12"
+source = "sic noticias"
 
 sic_url = f"https://sicnoticias.pt/api/gs/expresso/v1/molecule/feed?categories=%2F&category=%2F&contentTypes=ARTICLE%2CSTREAM%2CNEWSLETTER&limit={sic_newsPerPageLimit}&until={sic_newsUntil}"
 sic_base_url = "https://sicnoticias.pt"
 
-generateFile(sic_filename, sic_ext, sic_pagestoread, sic_newsPerPageLimit, sic_base_url, sic_url)
+generateFile(sic_filename, sic_ext, sic_pagestoread, sic_newsPerPageLimit, sic_base_url, sic_url, source)

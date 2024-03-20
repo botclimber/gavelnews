@@ -2,7 +2,9 @@ import { spawn } from "child_process";
 import * as fs from "fs";
 import * as dateAndTime from "date-and-time";
 import * as eva from "eva-functional-utils";
-import {new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat} from "./types"
+import {new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat} from "../../../CommonStuff/src/types/types"
+import {dateFormat} from "../../../CommonStuff/src/consts/consts"
+import {getYesterdayDate} from "../../../CommonStuff/src/functions/functions"
 import exp from "constants";
 
 export async function triggerFullScrap(): Promise<void> {
@@ -47,17 +49,16 @@ async function flatScrayObject(dataToFlatten: fromScrapyJsonFileFormat): Promise
 
 export async function transformExtractedData(): Promise<void>{
 
-    const date = dateAndTime.addDays(new Date(new Date()), -1)
-    const dateFormat = "YYYY-MM-DD"
+    const yesterdayDate = getYesterdayDate()
 
-    const mergedDataFilePathName = `../Data/allData_${dateAndTime.format(date, dateFormat)}.json`
+    const mergedDataFilePathName = `../Data/allData_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
 
-    const expressoFilePath = `../Data/expresso_${dateAndTime.format(date, dateFormat)}.json`
-    const sicNoticiasFilePath = `../Data/sicNoticias_${dateAndTime.format(date, dateFormat)}.json`
-    const publicoFilePath = `../Data/publico_${dateAndTime.format(date, dateFormat)}.json`
-    const jornalNoticiasFilePath = `../Data/jornalNoticias_${dateAndTime.format(date, dateFormat)}.json`
-    const observadorFilePath = `../Data/observador_${dateAndTime.format(date, dateFormat)}.json`
-    const cnnFilePath = `../Data/cnnPortugal_${dateAndTime.format(date, dateFormat)}.json`
+    const expressoFilePath = `../Data/expresso_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
+    const sicNoticiasFilePath = `../Data/sicNoticias_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
+    const publicoFilePath = `../Data/publico_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
+    const jornalNoticiasFilePath = `../Data/jornalNoticias_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
+    const observadorFilePath = `../Data/observador_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
+    const cnnFilePath = `../Data/cnnPortugal_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
 
     const expressoData = await readJSONFile<fromRequestJsonFileFormat>(expressoFilePath)
     const sicNoticiasData = await readJSONFile<fromRequestJsonFileFormat>(sicNoticiasFilePath)
@@ -72,7 +73,7 @@ export async function transformExtractedData(): Promise<void>{
 
     const mergedData: new_object[] = [...expressoData.data, ...sicNoticiasData.data, ...publicoData.data, ...jornalNoticiasData.data, ...flattenObservadorData, ...flattenCnnData]
     
-    fs.writeFile(mergedDataFilePathName, JSON.stringify({"data": mergedData}), 'utf8', (err) => {
+    fs.writeFile(mergedDataFilePathName, JSON.stringify({"data": mergedData}), 'utf-8', (err) => {
         if (err) {
             console.error('Error writing to file:', err);
           } else {

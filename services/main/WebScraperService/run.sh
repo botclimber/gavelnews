@@ -5,6 +5,7 @@ yesterday=$(python -c "from dateutil.relativedelta import relativedelta; from da
 
 echo "Executing crawler commands ..."
 
+# move old data files to backup folder
 cd /Users/danielsilva/Documents/gavelNews/services/main/WebScraperService
 cd NewsCollectorSpider
 scrapy crawl collectFrom_observador -o ../../Data/observador_$yesterday.json

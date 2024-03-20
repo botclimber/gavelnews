@@ -32,7 +32,12 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
                 "new_desc": x["descricao"],
                 "new_img": x["multimediaPrincipal"],
                 "new_type": x["rubrica"],
-                "new_date": x['data']
+                "new_date": x['data'],
+                "new_source": "publico",
+                "new_isTrue": 0,
+                "new_isFalse": 0,
+                "new_isUnclear": 0,
+                "new_votedIps": []
             }
             
             print("\t",dataset, "\n")	

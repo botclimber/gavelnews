@@ -41,7 +41,12 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
                 "new_img":f"https://asset.skoiy.com/jnrcnjwljorqgsbu/{new_metadata['image']}?w=410&q=90&crop=5877,3918,62,0",
                 "created_at": x["createdAt"],
                 "updated_at": x["updatedAt"],
-                "new_date": new_metadata['publishedAt']
+                "new_date": new_metadata['publishedAt'],
+                "new_source": "jornal noticias",
+                "new_isTrue": 0,
+                "new_isFalse": 0,
+                "new_isUnclear": 0,
+                "new_votedIps": []
             }
             
             print("\t",dataset, "\n")	
