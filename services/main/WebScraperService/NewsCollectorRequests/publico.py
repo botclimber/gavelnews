@@ -26,7 +26,7 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
         
         for x in data:
             dataset = {
-                "new_id":x["id"], # use this to get more detailed info about new
+                "new_id": str(x["id"]), # use this to get more detailed info about new
                 "new_link": x["url"],
                 "new_title":x["titulo"],
                 "new_desc": x["descricao"],

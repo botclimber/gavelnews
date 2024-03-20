@@ -20,7 +20,7 @@ rule.minute = 17;
 schedule.scheduleJob(rule, async function(){
   // await for scrap of all platforms
   await job.triggerFullScrap()
-  console.log("job finished.")
-  
+
   // transform scraped data and generate an unified file with all extracted/downdload data
+  await job.transformExtractedData()
 });

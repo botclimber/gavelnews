@@ -34,7 +34,7 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
             print(f"Handling new ({new_metadata['title']})")
             
             dataset = {
-                "new_id":x["publicId"], # use this to get more detailed info about new
+                "new_id": str(x["publicId"]), # use this to get more detailed info about new
                 "new_link": f"https://www.jn.pt/{x['publicId']}/{new_metadata['slug']}/",
                 "new_title":new_metadata["title"],
                 "new_desc":new_metadata["description"],
