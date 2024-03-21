@@ -7,3 +7,12 @@ package-lock.json
 
 # ignore All files in any dir node_modules/
 node_modules/
+
+# ignore python enviornments
+.packages/
+
+# don load data
+Data/
+
+# dont commit dist/ folders
+dist/
