@@ -37,6 +37,13 @@ loadDataFromServer = async () => {
           </div>
         </div>
 
+        <!-- Buttons for user feedback -->
+        <div class="flex justify-between">
+            <button class="rounded-md px-3 py-1 bg-green-500 text-white font-bold mr-2">True</button>
+            <button class="rounded-md px-3 py-1 bg-red-500 text-white font-bold mr-2">False</button>
+            <button class="rounded-md px-3 py-1 bg-orange-500 text-white font-bold">Unclear</button>
+        </div>
+
           <h5 class="mb-3 text-lg font-bold">${r.new_title}</h5>
           <div class="mb-3 flex items-center justify-center text-sm font-medium text-yellow-600">
             ${newType}

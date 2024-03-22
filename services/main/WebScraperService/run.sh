@@ -1,11 +1,21 @@
 # chmod +x script.sh (necessary)
 
 # Get yesterday's date in the format YYYY-MM-DD
+twodaysbefore=$(python -c "from dateutil.relativedelta import relativedelta; from datetime import datetime; print((datetime.now() - relativedelta(days=2)).strftime('%Y-%m-%d'))")
 yesterday=$(python -c "from dateutil.relativedelta import relativedelta; from datetime import datetime; print((datetime.now() - relativedelta(days=1)).strftime('%Y-%m-%d'))")
 
 echo "Executing crawler commands ..."
 
 # move old data files to backup folder
+cd /Users/danielsilva/Documents/gavelNews/services/main/Data
+mkdir backup/$twodaysbefore
+mv allData_$twodaysbefore.json backup/$twodaysbefore/
+mv cnnPortugal_$twodaysbefore.json backup/$twodaysbefore/
+mv jornalNoticias_$twodaysbefore.json backup/$twodaysbefore/
+mv publico_$twodaysbefore.json backup/$twodaysbefore/
+mv expresso_$twodaysbefore.json backup/$twodaysbefore/
+mv observador_$twodaysbefore.json backup/$twodaysbefore/
+mv sicNoticias_$twodaysbefore.json backup/$twodaysbefore/
 cd /Users/danielsilva/Documents/gavelNews/services/main/WebScraperService
 cd NewsCollectorSpider
 scrapy crawl collectFrom_observador -o ../../Data/observador_$yesterday.json
