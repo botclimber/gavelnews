@@ -54,7 +54,7 @@ app.patch("/new/:newId/:opinion", (req: Request, res: Response) => {
     jsonData.updateNewVeracity(newId, opinion, ip)
     .then( response => {
 
-        if(response !== undefined) res.status(200).json(response);
+        if(response !== undefined) res.status(200).json({"new_data": response, "allData": jsonData});
         else res.status(401).json({"msg": "new not found in our db."})
     })
     .catch( e => {console.log(e); res.status(400).json({"msg": e.message}) })
