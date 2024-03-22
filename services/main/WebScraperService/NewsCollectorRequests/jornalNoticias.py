@@ -46,6 +46,7 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
                 "new_isTrue": 0,
                 "new_isFalse": 0,
                 "new_isUnclear": 0,
+                "new_noOpinion": 0,
                 "new_votedIps": []
             }
             

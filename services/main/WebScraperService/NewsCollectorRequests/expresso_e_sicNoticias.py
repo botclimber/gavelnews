@@ -34,6 +34,7 @@ def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url,
                     "new_isTrue": 0,
                     "new_isFalse": 0,
                     "new_isUnclear": 0,
+                    "new_noOpinion": 0,
                     "new_votedIps": []
                 }
                 

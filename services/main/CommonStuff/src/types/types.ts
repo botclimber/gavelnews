@@ -10,6 +10,7 @@ export type new_object = {
     "new_isTrue": number,
     "new_isFalse": number,
     "new_isUnclear": number,
+    "new_noOpinion": number,
     "new_votedIps": string[],
     "created_at"?: string,
     "updated_at"?: string
@@ -20,4 +21,4 @@ export type fromRequestJsonFileFormat = {
 
 export type fromScrapyJsonFileFormat = fromRequestJsonFileFormat[]
 
-export type opinion = "new_isTrue" | "new_isFalse" | "new_isUnclear"
+export type opinion = "new_isTrue" | "new_isFalse" | "new_isUnclear" | "new_noOpinion"
