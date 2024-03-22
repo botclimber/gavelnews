@@ -37,6 +37,7 @@ jsonData = new NewsManipulator(loadData())
 app.use((req: Request, res: Response, next: NextFunction) => {
     const ip = req.ip;
     console.log(`Request from IP: ${ip}`);
+    console.log(`Request Endpoint: ${req.path}`)
     next(); // Pass the request to the next middleware or route handler
 });
 

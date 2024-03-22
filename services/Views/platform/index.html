@@ -169,6 +169,45 @@
         .loading-gavel svg {
             animation: knock 1s ease infinite;
         }
+
+        /*dates*/
+        .date-option {
+            width: 150px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            padding: 2px 10px;
+            /* Adjust padding as needed */
+            border: 2px solid #B9785F;
+            /* Border color */
+            border-radius: 10px;
+            /* Round border to create circular shape */
+            background-color: #FFC36E;
+            /* Background color */
+            color: #FFFFFF;
+            /* Text color */
+            font-size: 12px;
+            /* Adjust font size as needed */
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .date-option:hover {
+            background-color: #B9785F;
+            /* Hover background color */
+            border-color: #FFC36E;
+            /* Hover border color */
+            color: #FFFFFF;
+            /* Hover text color */
+        }
+
+        .active-date {
+            background-color: #B9785F;
+            /* Background color for the active date */
+            border-color: #FFC36E;
+            /* Border color for the active date */
+            color: #FFFFFF;
+            /* Text color for the active date */
+        }
     </style>
 </head>
 
@@ -177,6 +216,67 @@
     <div class="p-10">
         <!-- Section: Design Block -->
         <section class="mb-32 text-center">
+            <div class="flex space-x-1 mb-4 overflow-x-auto"> <!-- Add a container for the menu -->
+                <!-- Add menu options with dates -->
+                <button class="date-option active-date"><span style="color:rgb(110, 255, 110);">(Open)</span> 2024-03-20</button>
+                <button class="date-option">2024-03-19</button>
+                <button class="date-option">2024-03-18</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <button class="date-option">YYYY-MM-DD</button>
+                <!-- Add more date options as needed -->
+            </div>
             <div class="mb-12 text-center flex items-center justify-center">
                 <svg class="h-10 w-10 mr-2" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
@@ -257,8 +357,7 @@
                     <button onclick="withLoadScreen(() => sortBy('new_isFalse'))"
                         class="filter-btn bg-red-500">False</button>
                 </div>
-                <input id = "searchComponent" type="text" value=""
-                    class="search-box" placeholder="Search...">
+                <input id="searchComponent" type="text" value="" class="search-box" placeholder="Search...">
                 <div class="dropdown">
                     <button class="filter-btn" style="color:black; background-color: white;">News Source</button>
                     <div class="dropdown-content">
@@ -276,7 +375,67 @@
             <div id="loading-container" class="loading-container">
                 <div class="loading-gavel">
                     <!-- SVG code for gavel -->
-                    <svg class="w-20 h-20" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000" transform="rotate(0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path style="fill:#B9785F;" d="M8.2,404.808c-4.917,4.917-8.003,11.476-8.191,18.428c-0.241,8.987,3.959,17.364,11.569,22.64 c3.005,2.083,6.449,3.499,10.051,4.134c8.819,1.554,17.421-1.199,23.544-7.327l214.922-214.918l-37.425-37.425L8.2,404.808z"></path> <path style="fill:#AA6955;" d="M253.859,234l-37.425-37.425c-3.445-3.445-3.445-9.031,0-12.475l24.95-24.95l49.901,49.901 L266.335,234C262.89,237.444,257.305,237.444,253.859,234z"></path> <g> <path style="fill:#B9785F;" d="M222.672,165.387L222.672,165.387c-3.445-3.445-3.445-9.031,0-12.475l49.901-49.901 c3.445-3.445,9.03-3.445,12.475,0l0,0c3.445,3.445,3.445,9.031,0,12.475l-49.901,49.901 C231.702,168.832,226.116,168.832,222.672,165.387z"></path> <path style="fill:#B9785F;" d="M285.048,227.762L285.048,227.762c-3.445-3.445-3.445-9.031,0-12.475l49.901-49.901 c3.445-3.445,9.031-3.445,12.475,0l0,0c3.445,3.445,3.445,9.03,0,12.475l-49.901,49.901 C294.077,231.208,288.492,231.208,285.048,227.762z"></path> </g> <rect x="249.757" y="130.103" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 369.6502 483.8887)" style="fill:#FFD782;" width="70.569" height="70.569"></rect> <rect x="231.046" y="175.278" transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 324.4771 502.6016)" style="fill:#FFC36E;" width="70.569" height="17.642"></rect> <g> <path style="fill:#B9785F;" d="M160.296,127.962L160.296,127.962c-6.889-6.889-6.889-18.06,0-24.95l62.376-62.376 c6.889-6.889,18.06-6.889,24.95,0l0,0c6.889,6.889,6.889,18.06,0,24.95l-62.376,62.376 C178.357,134.851,167.186,134.851,160.296,127.962z"></path> <path style="fill:#B9785F;" d="M322.473,290.138L322.473,290.138c-6.889-6.889-6.889-18.06,0-24.95l62.376-62.376 c6.889-6.889,18.06-6.889,24.95,0l0,0c6.889,6.889,6.889,18.06,0,24.95l-62.376,62.376 C340.533,297.028,329.362,297.028,322.473,290.138z"></path> </g> <g> <rect x="209.972" y="77.083" transform="matrix(0.7071 0.7071 -0.7071 0.7071 147.4142 -131.1546)" style="fill:#AA6955;" width="44.106" height="70.569"></rect> <rect x="316.017" y="183.134" transform="matrix(0.7071 0.7071 -0.7071 0.7071 253.464 -175.0778)" style="fill:#AA6955;" width="44.106" height="70.569"></rect> </g> <g> <path style="fill:#FFC36E;" d="M191.484,134.199L191.484,134.199c-3.445-3.445-3.445-9.031,0-12.475l49.901-49.901 c3.445-3.445,9.03-3.445,12.475,0l0,0c3.445,3.445,3.445,9.031,0,12.475l-49.901,49.901 C200.514,137.644,194.929,137.644,191.484,134.199z"></path> <path style="fill:#FFC36E;" d="M316.235,258.951L316.235,258.951c-3.445-3.445-3.445-9.031,0-12.475l49.901-49.901 c3.445-3.445,9.031-3.445,12.475,0l0,0c3.445,3.445,3.445,9.03,0,12.475l-49.901,49.901 C325.265,262.395,319.68,262.395,316.235,258.951z"></path> </g> <path style="fill:#B9785F;" d="M485.536,441.246H291.469v-26.464c0-4.872,3.95-8.821,8.821-8.821h176.425 c4.872,0,8.821,3.95,8.821,8.821V441.246z"></path> <path style="fill:#AA6955;" d="M503.179,467.71H273.826v-17.643c0-9.744,7.898-17.643,17.643-17.643h194.068 c9.744,0,17.643,7.898,17.643,17.643V467.71z"></path> <path style="fill:#FFC36E;" d="M503.179,476.531H273.826c-4.872,0-8.821-3.95-8.821-8.821l0,0c0-4.872,3.95-8.821,8.821-8.821 h229.353c4.872,0,8.821,3.95,8.821,8.821l0,0C512,472.582,508.05,476.531,503.179,476.531z"></path> </g></svg>
+                    <svg class="w-20 h-20" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
+                        fill="#000000" transform="rotate(0)">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path style="fill:#B9785F;"
+                                d="M8.2,404.808c-4.917,4.917-8.003,11.476-8.191,18.428c-0.241,8.987,3.959,17.364,11.569,22.64 c3.005,2.083,6.449,3.499,10.051,4.134c8.819,1.554,17.421-1.199,23.544-7.327l214.922-214.918l-37.425-37.425L8.2,404.808z">
+                            </path>
+                            <path style="fill:#AA6955;"
+                                d="M253.859,234l-37.425-37.425c-3.445-3.445-3.445-9.031,0-12.475l24.95-24.95l49.901,49.901 L266.335,234C262.89,237.444,257.305,237.444,253.859,234z">
+                            </path>
+                            <g>
+                                <path style="fill:#B9785F;"
+                                    d="M222.672,165.387L222.672,165.387c-3.445-3.445-3.445-9.031,0-12.475l49.901-49.901 c3.445-3.445,9.03-3.445,12.475,0l0,0c3.445,3.445,3.445,9.031,0,12.475l-49.901,49.901 C231.702,168.832,226.116,168.832,222.672,165.387z">
+                                </path>
+                                <path style="fill:#B9785F;"
+                                    d="M285.048,227.762L285.048,227.762c-3.445-3.445-3.445-9.031,0-12.475l49.901-49.901 c3.445-3.445,9.031-3.445,12.475,0l0,0c3.445,3.445,3.445,9.03,0,12.475l-49.901,49.901 C294.077,231.208,288.492,231.208,285.048,227.762z">
+                                </path>
+                            </g>
+                            <rect x="249.757" y="130.103"
+                                transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 369.6502 483.8887)"
+                                style="fill:#FFD782;" width="70.569" height="70.569"></rect>
+                            <rect x="231.046" y="175.278"
+                                transform="matrix(-0.7071 -0.7071 0.7071 -0.7071 324.4771 502.6016)"
+                                style="fill:#FFC36E;" width="70.569" height="17.642"></rect>
+                            <g>
+                                <path style="fill:#B9785F;"
+                                    d="M160.296,127.962L160.296,127.962c-6.889-6.889-6.889-18.06,0-24.95l62.376-62.376 c6.889-6.889,18.06-6.889,24.95,0l0,0c6.889,6.889,6.889,18.06,0,24.95l-62.376,62.376 C178.357,134.851,167.186,134.851,160.296,127.962z">
+                                </path>
+                                <path style="fill:#B9785F;"
+                                    d="M322.473,290.138L322.473,290.138c-6.889-6.889-6.889-18.06,0-24.95l62.376-62.376 c6.889-6.889,18.06-6.889,24.95,0l0,0c6.889,6.889,6.889,18.06,0,24.95l-62.376,62.376 C340.533,297.028,329.362,297.028,322.473,290.138z">
+                                </path>
+                            </g>
+                            <g>
+                                <rect x="209.972" y="77.083"
+                                    transform="matrix(0.7071 0.7071 -0.7071 0.7071 147.4142 -131.1546)"
+                                    style="fill:#AA6955;" width="44.106" height="70.569"></rect>
+                                <rect x="316.017" y="183.134"
+                                    transform="matrix(0.7071 0.7071 -0.7071 0.7071 253.464 -175.0778)"
+                                    style="fill:#AA6955;" width="44.106" height="70.569"></rect>
+                            </g>
+                            <g>
+                                <path style="fill:#FFC36E;"
+                                    d="M191.484,134.199L191.484,134.199c-3.445-3.445-3.445-9.031,0-12.475l49.901-49.901 c3.445-3.445,9.03-3.445,12.475,0l0,0c3.445,3.445,3.445,9.031,0,12.475l-49.901,49.901 C200.514,137.644,194.929,137.644,191.484,134.199z">
+                                </path>
+                                <path style="fill:#FFC36E;"
+                                    d="M316.235,258.951L316.235,258.951c-3.445-3.445-3.445-9.031,0-12.475l49.901-49.901 c3.445-3.445,9.031-3.445,12.475,0l0,0c3.445,3.445,3.445,9.03,0,12.475l-49.901,49.901 C325.265,262.395,319.68,262.395,316.235,258.951z">
+                                </path>
+                            </g>
+                            <path style="fill:#B9785F;"
+                                d="M485.536,441.246H291.469v-26.464c0-4.872,3.95-8.821,8.821-8.821h176.425 c4.872,0,8.821,3.95,8.821,8.821V441.246z">
+                            </path>
+                            <path style="fill:#AA6955;"
+                                d="M503.179,467.71H273.826v-17.643c0-9.744,7.898-17.643,17.643-17.643h194.068 c9.744,0,17.643,7.898,17.643,17.643V467.71z">
+                            </path>
+                            <path style="fill:#FFC36E;"
+                                d="M503.179,476.531H273.826c-4.872,0-8.821-3.95-8.821-8.821l0,0c0-4.872,3.95-8.821,8.821-8.821 h229.353c4.872,0,8.821,3.95,8.821,8.821l0,0C512,472.582,508.05,476.531,503.179,476.531z">
+                            </path>
+                        </g>
+                    </svg>
                     <!-- End of SVG code -->
                 </div>
             </div>

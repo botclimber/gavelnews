@@ -41,27 +41,27 @@ async function setContent(dataList) {
                 </div>
       
                 <!-- Colored bar based on user votes -->
-                <div class="flex justify-center mb-2">
-                <div class="w-full h-4 bg-green-500 rounded-l-full relative" style="width: ${isTruePerc}%;">
-                  <span class="tooltip-text">${isTruePerc}% (${r.new_isTrue})</span>
-                </div>
-                <div class="w-full h-4 bg-gray-500 relative" style="width: ${noOpinionPerc}%;">
-                  <span class="tooltip-text">${noOpinionPerc}% (${r.new_noOpinion})</span>
-                </div>
-                <div class="w-full h-4 bg-orange-500 relative" style="width: ${isUnclearPerc}%;">
-                  <span class="tooltip-text">${isUnclearPerc}% (${r.new_isUnclear})</span>
-                </div>
-                <div class="w-full h-4 bg-red-500 rounded-r-full relative" style="width: ${isFalsePerc}%;">
-                  <span class="tooltip-text">${isFalsePerc}% (${r.new_isFalse})</span>
-                </div>
+                <div class="flex justify-center mb-2" id="bar-${r.new_id}">
+                  <div class="w-full h-4 bg-green-500 rounded-l-full relative" style="width: ${isTruePerc}%;">
+                    <span class="tooltip-text">${isTruePerc}% (${r.new_isTrue})</span>
+                  </div>
+                  <div class="w-full h-4 bg-gray-500 relative" style="width: ${noOpinionPerc}%;">
+                    <span class="tooltip-text">${noOpinionPerc}% (${r.new_noOpinion})</span>
+                  </div>
+                  <div class="w-full h-4 bg-orange-500 relative" style="width: ${isUnclearPerc}%;">
+                    <span class="tooltip-text">${isUnclearPerc}% (${r.new_isUnclear})</span>
+                  </div>
+                  <div class="w-full h-4 bg-red-500 rounded-r-full relative" style="width: ${isFalsePerc}%;">
+                    <span class="tooltip-text">${isFalsePerc}% (${r.new_isFalse})</span>
+                  </div>
               </div>
       
               <!-- Buttons for user feedback -->
-              <div class="flex justify-between mb-5">
-                  <button class="text-sm px-2 py-1 rounded-md bg-green-500 text-white font-bold mr-1">True</button>
-                  <button class="text-sm px-2 py-1 rounded-md bg-gray-500 text-white font-bold mr-1">No Opinion</button>
-                  <button class="text-sm px-2 py-1 rounded-md bg-orange-500 text-white font-bold mr-1">Unclear</button>
-                  <button class="text-sm px-2 py-1 rounded-md bg-red-500 text-white font-bold">False</button>
+              <div class="flex justify-between mb-5" id = "toVoteButtons-${r.new_id}">
+                  <button onclick="vote('new_isTrue','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-green-500 text-white font-bold mr-1">True</button>
+                  <button onclick="vote('new_noOpinion','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-gray-500 text-white font-bold mr-1">No Opinion</button>
+                  <button onclick="vote('new_isUnclear','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-orange-500 text-white font-bold mr-1">Unclear</button>
+                  <button onclick="vote('new_isFalse','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-red-500 text-white font-bold">False</button>
               </div>
       
                 <h5 class="mb-3 text-lg font-bold">${r.new_title}</h5>
@@ -78,6 +78,36 @@ async function setContent(dataList) {
               </div>
             </div>`
   })
+
+}
+
+async function setBarsContent(new_data) {
+
+  const bar = document.getElementById(`bar-${new_data.new_id}`)
+  const btns = document.getElementById(`toVoteButtons-${new_data.new_id}`)
+
+  const totalVotes = (new_data.new_isTrue) + (new_data.new_isFalse) + (new_data.new_isUnclear) + (new_data.new_noOpinion)
+
+  const isTruePerc = computeAvg(new_data.new_isTrue, totalVotes)
+  const isFalsePerc = computeAvg(new_data.new_isFalse, totalVotes)
+  const noOpinionPerc = computeAvg(new_data.new_noOpinion, totalVotes)
+  const isUnclearPerc = computeAvg(new_data.new_isUnclear, totalVotes)
+
+  btns.style.display = "none"
+  bar.innerHTML = `
+  <div class="w-full h-4 bg-green-500 rounded-l-full relative" style="width: ${isTruePerc}%;">
+                  <span class="tooltip-text">${isTruePerc}% (${new_data.new_isTrue})</span>
+                </div>
+                <div class="w-full h-4 bg-gray-500 relative" style="width: ${noOpinionPerc}%;">
+                  <span class="tooltip-text">${noOpinionPerc}% (${new_data.new_noOpinion})</span>
+                </div>
+                <div class="w-full h-4 bg-orange-500 relative" style="width: ${isUnclearPerc}%;">
+                  <span class="tooltip-text">${isUnclearPerc}% (${new_data.new_isUnclear})</span>
+                </div>
+                <div class="w-full h-4 bg-red-500 rounded-r-full relative" style="width: ${isFalsePerc}%;">
+                  <span class="tooltip-text">${isFalsePerc}% (${new_data.new_isFalse})</span>
+                </div>
+  `
 
 }
 
@@ -124,7 +154,7 @@ async function serachByTextInTitle(textValue) {
 
 }
 
-document.getElementById("searchComponent").addEventListener("input", function(event) {
+document.getElementById("searchComponent").addEventListener("input", function (event) {
   withLoadScreen(() => serachByTextInTitle(event.target.value))
 });
 
@@ -139,5 +169,47 @@ async function withLoadScreen(func) {
 
 }
 
-// async function markNewAsVoted(newId){}
-// async function vote(){}
+async function markNewAsVoted(newId) {
+  const getVotedList = localStorage.getItem("votedNews")
+  console.log(getVotedList)
+  if (getVotedList !== null) {
+
+    var votedList = JSON.parse(getVotedList)
+    votedList.newIds.push(newId)
+    localStorage.setItem("votedNews", JSON.stringify(votedList))
+
+  } else {
+    const votedList = JSON.stringify({ "newIds": [newId] })
+    localStorage.setItem("votedNews", votedList)
+  }
+}
+
+async function vote(voteValue, newId) {
+
+  // Make the PATCH request
+  fetch(`${api}/new/${newId}/${voteValue}`, {
+    method: 'PATCH',
+  })
+    .then(async response => { 
+
+      const data = await response.json()
+
+      if(response.ok){
+        console.log(data)
+        allData = data.allData.data.data // ? strange ...
+  
+        await markNewAsVoted(newId)
+        await setBarsContent(data.new_data)
+
+      }else{
+
+        throw Error(data.msg)
+      }
+    })
+    .catch(error => {
+      console.error('Error during PATCH request:', error);
+    });
+
+}
+
+markNewAsVoted("8asdjaksd")
