@@ -27,10 +27,13 @@ loadDataFromServer = async () => {
           <!-- Colored bar based on user votes -->
           <div class="flex justify-center mb-2">
           <div class="w-full h-4 bg-green-500 rounded-l-full relative" style="width: 70%;">
-            <span class="tooltip-text">70%</span>
+            <span class="tooltip-text">65%</span>
           </div>
           <div class="w-full h-4 bg-yellow-500 relative" style="width: 1%;">
             <span class="tooltip-text">1%</span>
+          </div>
+          <div class="w-full h-4 bg-gray-500 relative" style="width: 5%;">
+            <span class="tooltip-text">5%</span>
           </div>
           <div class="w-full h-4 bg-red-500 rounded-r-full relative" style="width: 29%;">
             <span class="tooltip-text">29%</span>
@@ -38,10 +41,11 @@ loadDataFromServer = async () => {
         </div>
 
         <!-- Buttons for user feedback -->
-        <div class="flex justify-between">
-            <button class="rounded-md px-3 py-1 bg-green-500 text-white font-bold mr-2">True</button>
-            <button class="rounded-md px-3 py-1 bg-red-500 text-white font-bold mr-2">False</button>
-            <button class="rounded-md px-3 py-1 bg-orange-500 text-white font-bold">Unclear</button>
+        <div class="flex justify-between mb-5">
+            <button class="text-sm px-2 py-1 rounded-md bg-green-500 text-white font-bold mr-1">True</button>
+            <button class="text-sm px-2 py-1 rounded-md bg-orange-500 text-white font-bold mr-1">Unclear</button>
+            <button class="text-sm px-2 py-1 rounded-md bg-gray-500 text-white font-bold mr-1">No Opinion</button>
+            <button class="text-sm px-2 py-1 rounded-md bg-red-500 text-white font-bold">False</button>
         </div>
 
           <h5 class="mb-3 text-lg font-bold">${r.new_title}</h5>
