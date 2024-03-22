@@ -6,6 +6,17 @@ function hideLoading() {
   document.getElementById("loading-container").style.display = "none";
 }
 
+function showErrorMessage(message) {
+  Toastify({
+      text: message,
+      duration: 5000, // Duration in milliseconds (5 seconds in this example)
+      gravity: 'top', // Display position: 'top', 'center', 'bottom'
+      position: 'right', // Toast position: 'left', 'center', 'right'
+      backgroundColor: 'linear-gradient(to right, #FF6C6C, #FF0000)', // Background color
+      stopOnFocus: true // Stop the toast when focused
+  }).showToast();
+}
+
 function computeAvg(rawValue, totalValue) {
   const comp = ((rawValue / totalValue) * 100).toFixed(2)
 
@@ -26,6 +37,8 @@ async function setContent(dataList) {
     const isFalsePerc = computeAvg(r.new_isFalse, totalVotes)
     const noOpinionPerc = computeAvg(r.new_noOpinion, totalVotes)
     const isUnclearPerc = computeAvg(r.new_isUnclear, totalVotes)
+
+    const isVoted = (checkVote(r.new_id))? "hidden" : ""
 
     news_div.innerHTML += /* html */
       `<div class="mb-6 lg:mb-0">
@@ -57,7 +70,7 @@ async function setContent(dataList) {
               </div>
       
               <!-- Buttons for user feedback -->
-              <div class="flex justify-between mb-5" id = "toVoteButtons-${r.new_id}">
+              <div class=" ${isVoted} flex justify-between mb-5" id = "toVoteButtons-${r.new_id}">
                   <button onclick="vote('new_isTrue','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-green-500 text-white font-bold mr-1">True</button>
                   <button onclick="vote('new_noOpinion','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-gray-500 text-white font-bold mr-1">No Opinion</button>
                   <button onclick="vote('new_isUnclear','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-orange-500 text-white font-bold mr-1">Unclear</button>
@@ -81,10 +94,14 @@ async function setContent(dataList) {
 
 }
 
+async function hideButtons(newId){
+  const btns = document.getElementById(`toVoteButtons-${newId}`)
+  btns.style.display = "none"
+}
+
 async function setBarsContent(new_data) {
 
   const bar = document.getElementById(`bar-${new_data.new_id}`)
-  const btns = document.getElementById(`toVoteButtons-${new_data.new_id}`)
 
   const totalVotes = (new_data.new_isTrue) + (new_data.new_isFalse) + (new_data.new_isUnclear) + (new_data.new_noOpinion)
 
@@ -93,7 +110,6 @@ async function setBarsContent(new_data) {
   const noOpinionPerc = computeAvg(new_data.new_noOpinion, totalVotes)
   const isUnclearPerc = computeAvg(new_data.new_isUnclear, totalVotes)
 
-  btns.style.display = "none"
   bar.innerHTML = `
   <div class="w-full h-4 bg-green-500 rounded-l-full relative" style="width: ${isTruePerc}%;">
                   <span class="tooltip-text">${isTruePerc}% (${new_data.new_isTrue})</span>
@@ -108,7 +124,6 @@ async function setBarsContent(new_data) {
                   <span class="tooltip-text">${isFalsePerc}% (${new_data.new_isFalse})</span>
                 </div>
   `
-
 }
 
 async function sortBy(veracityValue) {
@@ -169,15 +184,29 @@ async function withLoadScreen(func) {
 
 }
 
+function checkVote(newId){
+  const getVotedList = localStorage.getItem("votedNews")
+
+  if(getVotedList !== null){
+    const votedList = JSON.parse(getVotedList)
+
+    console.log(newId, votedList.newIds.includes(newId))
+    return votedList.newIds.includes(newId)
+  }
+
+  return false
+}
+
 async function markNewAsVoted(newId) {
   const getVotedList = localStorage.getItem("votedNews")
-  console.log(getVotedList)
+  
   if (getVotedList !== null) {
 
-    var votedList = JSON.parse(getVotedList)
-    votedList.newIds.push(newId)
-    localStorage.setItem("votedNews", JSON.stringify(votedList))
-
+    if( !checkVote(newId) ){
+      var votedList = JSON.parse(getVotedList)
+      votedList.newIds.push(newId)
+      localStorage.setItem("votedNews", JSON.stringify(votedList))
+    }
   } else {
     const votedList = JSON.stringify({ "newIds": [newId] })
     localStorage.setItem("votedNews", votedList)
@@ -192,24 +221,21 @@ async function vote(voteValue, newId) {
   })
     .then(async response => { 
 
+      await hideButtons(newId)
+      await markNewAsVoted(newId)
+
       const data = await response.json()
 
       if(response.ok){
         console.log(data)
         allData = data.allData.data.data // ? strange ...
-  
-        await markNewAsVoted(newId)
+
         await setBarsContent(data.new_data)
-
-      }else{
-
-        throw Error(data.msg)
-      }
+      }else throw Error(data.msg)
+    
     })
     .catch(error => {
       console.error('Error during PATCH request:', error);
+      showErrorMessage(error)
     });
-
 }
-
-markNewAsVoted("8asdjaksd")

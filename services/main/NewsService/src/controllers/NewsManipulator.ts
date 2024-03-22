@@ -24,12 +24,12 @@ export class NewsManipulator {
                         this.data.data[x].new_votedIps.push(ip);
                         new_object = this.data.data[x]
 
-                    }else throw Error("This user already voted!")
+                    }else throw Error(`User already voted for the specified New (${newId})!`)
                 }
             }
 
             return new_object
 
-        }catch(e) { console.log(e); throw e;}
+        }catch(e) { if(e instanceof Error) console.log(e.message); throw e;}
     }
 }

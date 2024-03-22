@@ -58,13 +58,19 @@ app.patch("/new/:newId/:opinion", (req: Request, res: Response) => {
         if(response !== undefined) res.status(200).json({"new_data": response, "allData": jsonData});
         else res.status(401).json({"msg": "new not found in our db."})
     })
-    .catch( e => {console.log(e); res.status(400).json({"msg": e.message}) })
+    .catch( e => { console.log(e.message); res.status(400).json({"msg": e.message}) })
 })
 
 /*app.get("/old/:date", (req: Request, res: Response) => {
     
     res.status(200).json({"msg": "something old"})
 })*/
+
+
+/**
+ * CRON JOB
+ */
+
 
 // Start the server
 app.listen(PORT, () => {
