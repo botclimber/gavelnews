@@ -1,26 +1,39 @@
 import { spawn } from "child_process";
 import * as fs from "fs";
 import * as dateAndTime from "date-and-time";
-import * as eva from "eva-functional-utils";
-import {new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat} from "../../../CommonStuff/src/types/types"
-import {dateFormat} from "../../../CommonStuff/src/consts/consts"
-import {getYesterdayDate} from "../../../CommonStuff/src/functions/functions"
-import exp from "constants";
+import { new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat } from "../../../CommonStuff/src/types/types"
+import { dateFormat } from "../../../CommonStuff/src/consts/consts"
+import { getYesterdayDate } from "../../../CommonStuff/src/functions/functions"
 
-export async function triggerFullScrap(): Promise<void> {
-    const scriptPath = "../WebScraperService/run.sh"
-    const childProcess = spawn('sh', [scriptPath]);
+/**
+ * This may take some time, however is hard to exactly determine it
+ */
+export function triggerFullScrap(): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const scriptPath = "../WebScraperService/run.sh"
+        const childProcess = spawn('sh', [scriptPath]);
 
-    childProcess.stdout.on('data', (data) => {
-        console.log(`Script output: ${data}`);
-    });
+        childProcess.stdout.on('data', (data) => {
+            console.log(`Script output: ${data}`);
+        });
 
-    childProcess.stderr.on('data', (data) => {
-        console.error(`Script error: ${data}`);
-    });
+        childProcess.stderr.on('data', (data) => {
+            console.error(`Script error: ${data}`);
+        });
 
-    childProcess.on('close', (code) => {
-        console.log(`Script execution finished with code ${code}`);
+        childProcess.on('close', (code) => {
+            console.log(`Script execution finished with code ${code}`);
+            if (code === 0) {
+                resolve(); // Resolve the promise when the script execution is successful
+            } else {
+                reject(`Script execution failed with code ${code}`);
+            }
+        });
+
+        childProcess.on('error', (err) => {
+            console.error(`Error executing script: ${err}`);
+            reject(err);
+        });
     });
 }
 
@@ -43,11 +56,11 @@ async function readJSONFile<T>(filePath: string): Promise<T> {
 }
 
 async function flatScrayObject(dataToFlatten: fromScrapyJsonFileFormat): Promise<new_object[]> {
-    const transformedData = dataToFlatten.flatMap( r => r.data)
+    const transformedData = dataToFlatten.flatMap(r => r.data)
     return transformedData
 }
 
-export async function transformExtractedData(): Promise<void>{
+export async function transformExtractedData(): Promise<void> {
 
     const yesterdayDate = getYesterdayDate()
 
@@ -72,12 +85,12 @@ export async function transformExtractedData(): Promise<void>{
     const flattenCnnData: new_object[] = await flatScrayObject(cnnData)
 
     const mergedData: new_object[] = [...expressoData.data, ...sicNoticiasData.data, ...publicoData.data, ...jornalNoticiasData.data, ...flattenObservadorData, ...flattenCnnData]
-    
-    fs.writeFile(mergedDataFilePathName, JSON.stringify({"data": mergedData}), 'utf-8', (err) => {
+
+    fs.writeFile(mergedDataFilePathName, JSON.stringify({ "data": mergedData }), 'utf-8', (err) => {
         if (err) {
             console.error('Error writing to file:', err);
-          } else {
+        } else {
             console.log('Data has been written to', mergedDataFilePathName);
-          }
+        }
     });
 }

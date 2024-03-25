@@ -15,7 +15,7 @@ EXT = "json"
 
 API_TOKEN = "jnrcnjwljorqgsbu"
 API_KEY = "k25m0hEKYbk1xQp6"
-PER_PAGE = 10
+PER_PAGE = 5
 
 PAGESTOREAD = PAGES_TO_READ
 
@@ -32,11 +32,8 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
         data = response.json()  
         print(f"Available data has size of {len(data['data'])}")
     
-        for index, x in enumerate(data["data"]):
-            print(index)
+        for x in data["data"]:
             new_metadata = x['l10n'][0]
-            print(x)
-            print(f"Handling new ({new_metadata['title']})")
             
             dataset = {
                 "new_id": str(x.get("publicId", strDefaultValue)), # use this to get more detailed info about new
@@ -57,7 +54,7 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
             
             print("\t",dataset, "\n")	
             
-            separator = "," if index < (PER_PAGE * PAGESTOREAD) -1 else ""
+            separator = "," if total_read_data < (PER_PAGE * PAGESTOREAD) -1 else ""
             f.write(json.dumps(dataset, ensure_ascii=False) + f"{separator}\n")
             
             total_read_data += 1

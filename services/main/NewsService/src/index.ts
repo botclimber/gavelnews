@@ -10,9 +10,9 @@ import cors from "cors";
 
 import { NewsManipulator } from './controllers/NewsManipulator';
 
-import {new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat, opinion} from "../../CommonStuff/src/types/types"
-import {dateFormat} from "../../CommonStuff/src/consts/consts"
-import {getYesterdayDate} from "../../CommonStuff/src/functions/functions"
+import { new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat, opinion } from "../../CommonStuff/src/types/types"
+import { dateFormat } from "../../CommonStuff/src/consts/consts"
+import { getYesterdayDate } from "../../CommonStuff/src/functions/functions"
 
 const app = express();
 const PORT = 3000;
@@ -21,15 +21,14 @@ app.use(cors())
 
 var jsonData: NewsManipulator
 
-function loadData(): fromRequestJsonFileFormat {
+function loadData(path: string, date: Date): fromRequestJsonFileFormat {
 
-    const yesterdayDate = getYesterdayDate()
-    const filePath = `../Data/allData_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
+    const filePath = `${path}allData_${dateAndTime.format(date, dateFormat)}.json`
     return JSON.parse(fs.readFileSync(filePath, "utf-8"))
 }
 
 // Read JSON data from file | TODO: put this to a cron job or check if 
-jsonData = new NewsManipulator(loadData())
+jsonData = new NewsManipulator(loadData("../Data/", getYesterdayDate()))
 
 // Define API endpoints
 
@@ -53,18 +52,31 @@ app.patch("/new/:newId/:opinion", (req: Request, res: Response) => {
     const opinion = req.params.opinion as opinion
 
     jsonData.updateNewVeracity(newId, opinion, ip)
-    .then( response => {
+        .then(response => {
 
-        if(response !== undefined) res.status(200).json({"new_data": response, "allData": jsonData});
-        else res.status(401).json({"msg": "new not found in our db."})
-    })
-    .catch( e => { console.log(e.message); res.status(400).json({"msg": e.message}) })
+            if (response !== undefined) res.status(200).json({ "new_data": response, "allData": jsonData });
+            else res.status(401).json({ "msg": "new not found in our db." })
+        })
+        .catch(e => { console.log(e.message); res.status(400).json({ "msg": e.message }) })
 })
 
-/*app.get("/old/:date", (req: Request, res: Response) => {
-    
-    res.status(200).json({"msg": "something old"})
-})*/
+app.get("/old/:date", (req: Request, res: Response) => {
+
+    const date = req.params.date
+
+    if (date) {
+
+        try {
+            const oldJsonData = new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))
+            res.status(200).json(oldJsonData.data)
+
+        } catch (e) {
+            res.status(500).json({ "msg": `Error: (Most likely) No data found for the specified date`})
+        }
+    } else {
+        res.status(400).json({ "msg": "date must be included in the request params!" })
+    }
+})
 
 
 /**

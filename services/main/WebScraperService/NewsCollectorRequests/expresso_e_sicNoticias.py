@@ -5,7 +5,7 @@
 import sys
 
 sys.path.append('../CommonUtils')
-from utils import randomVeracityValue, strDefaultValue, objDefaultValue, getSubtractedDate
+from utils import randomVeracityValue, strDefaultValue, objDefaultValue, getSubtractedDate, PER_PAGE_LIMIT
 
 import requests
 import json
@@ -57,7 +57,7 @@ def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url,
 expresso_filename = f"expresso_{CURRENT_DATE}"
 expresso_ext = "json"
 expresso_pagestoread = 1
-expresso_newsPerPageLimit = 100
+expresso_newsPerPageLimit = PER_PAGE_LIMIT
 expresso_newsUntil = f"{CURRENT_DATE}T12"
 source = "expresso"
 
@@ -70,7 +70,7 @@ generateFile(expresso_filename, expresso_ext, expresso_pagestoread, expresso_new
 sic_filename = f"sicNoticias_{CURRENT_DATE}"
 sic_ext = "json"
 sic_pagestoread = 1
-sic_newsPerPageLimit = 100
+sic_newsPerPageLimit = PER_PAGE_LIMIT
 sic_newsUntil = f"{CURRENT_DATE}T12"
 source = "sic noticias"
 

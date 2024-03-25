@@ -2,18 +2,18 @@
 import sys
 
 sys.path.append('../CommonUtils')
-from utils import randomVeracityValue, strDefaultValue 
+from utils import randomVeracityValue, strDefaultValue, getSubtractedDate, PAGES_TO_READ
 
 import requests
 import json
-from datetime import timedelta, date, getSubtractedDate
+from datetime import timedelta, date
 
 CURRENT_DATE = getSubtractedDate(1)
 
 FILE_NAME = f"publico_{CURRENT_DATE}"
 EXT = "json"
 
-PAGESTOREAD = 2
+PAGESTOREAD = PAGES_TO_READ
 NEWS_PER_PAGE = 10
 
 with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
@@ -38,10 +38,10 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
                 "new_type": x.get("rubrica", strDefaultValue),
                 "new_date": x.get("data", strDefaultValue),
                 "new_source": "publico",
-                "new_isTrue": randomVeracityValue,
-                "new_isFalse": randomVeracityValue,
-                "new_isUnclear": randomVeracityValue,
-                "new_noOpinion": randomVeracityValue,
+                "new_isTrue": randomVeracityValue(),
+                "new_isFalse": randomVeracityValue(),
+                "new_isUnclear": randomVeracityValue(),
+                "new_noOpinion": randomVeracityValue(),
                 "new_votedIps": []
             }
             
