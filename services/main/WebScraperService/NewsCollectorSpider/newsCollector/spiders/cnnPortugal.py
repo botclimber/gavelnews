@@ -1,5 +1,9 @@
 # scrapy crawl collectFrom_cnnPortugal -o ../../Data/cnnPortugal_2024-03-18.json 
 # replace date in filename with current
+import sys
+
+sys.path.append('../../../CommonUtils')
+from utils import randomVeracityValue, PAGES_TO_READ
 
 import scrapy
 import uuid
@@ -15,7 +19,7 @@ class CnnPortugalNewsCollector(scrapy.Spider):
 
 	# constants
 	NEWSPERPAGE = 15
-	PAGESTOREAD = 1
+	PAGESTOREAD = PAGES_TO_READ
 
 	currentPage = 1
 	def parse(self, response):
@@ -33,7 +37,7 @@ class CnnPortugalNewsCollector(scrapy.Spider):
 		data = []
 		for x in range(len(news_title)):
 			print(f"index is {x}")
-			data.append({"new_id":str(uuid.uuid4()), "new_link": news_link[x], "new_title": news_title[x], "new_desc": "", "new_date": news_date[x], "new_img": news_img[x], "new_source": "cnnPortugal", "new_isTrue": 0, "new_isFalse": 0, "new_isUnclear": 0, "new_noOpinion": 0, "new_votedIps": []})
+			data.append({"new_id":str(uuid.uuid4()), "new_link": news_link[x], "new_title": news_title[x], "new_desc": "", "new_date": news_date[x], "new_img": news_img[x], "new_source": "cnnPortugal", "new_isTrue": randomVeracityValue, "new_isFalse": randomVeracityValue, "new_isUnclear": randomVeracityValue, "new_noOpinion": randomVeracityValue, "new_votedIps": []})
 		
 		yield {"data": data}
 			

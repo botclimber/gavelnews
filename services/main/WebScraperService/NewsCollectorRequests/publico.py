@@ -1,10 +1,14 @@
 # https://www.publico.pt/api/list/ultimas?page=2
+import sys
+
+sys.path.append('../CommonUtils')
+from utils import randomVeracityValue, strDefaultValue 
 
 import requests
 import json
-from datetime import timedelta, date
+from datetime import timedelta, date, getSubtractedDate
 
-CURRENT_DATE = date.today() - timedelta(days=1)
+CURRENT_DATE = getSubtractedDate(1)
 
 FILE_NAME = f"publico_{CURRENT_DATE}"
 EXT = "json"
@@ -26,18 +30,18 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
         
         for x in data:
             dataset = {
-                "new_id": str(x["id"]), # use this to get more detailed info about new
-                "new_link": x["url"],
-                "new_title":x["titulo"],
-                "new_desc": x["descricao"],
-                "new_img": x["multimediaPrincipal"],
-                "new_type": x["rubrica"],
-                "new_date": x['data'],
+                "new_id": str(x.get("id", strDefaultValue)), # use this to get more detailed info about new
+                "new_link": x.get("url", strDefaultValue),
+                "new_title":x.get("titulo", strDefaultValue),
+                "new_desc": x.get("descricao", strDefaultValue),
+                "new_img": x.get("multimediaPrincipal", strDefaultValue),
+                "new_type": x.get("rubrica", strDefaultValue),
+                "new_date": x.get("data", strDefaultValue),
                 "new_source": "publico",
-                "new_isTrue": 0,
-                "new_isFalse": 0,
-                "new_isUnclear": 0,
-                "new_noOpinion": 0,
+                "new_isTrue": randomVeracityValue,
+                "new_isFalse": randomVeracityValue,
+                "new_isUnclear": randomVeracityValue,
+                "new_noOpinion": randomVeracityValue,
                 "new_votedIps": []
             }
             

@@ -2,11 +2,15 @@
 # https://sicnoticias.pt/api/gs/sicnot/v1/molecule/feed?categories=%2F&category=%2F&contentTypes=ARTICLE%2CVIDEO%2CPLAYLIST%2CGALLERY%2CSTREAM%2CEVENT&limit=12&until=2024-03-19T11%3A29%3A45.498Z
 # Both websites use same API
 
+import sys
+
+sys.path.append('../CommonUtils')
+from utils import randomVeracityValue, strDefaultValue, objDefaultValue, getSubtractedDate
+
 import requests
 import json
-from datetime import timedelta, date
 
-CURRENT_DATE = date.today() - timedelta(days=1)
+CURRENT_DATE = getSubtractedDate(1)
 
 def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url, source):
     with open(f"../../Data/{filename}.{ext}", "w", encoding="utf-8") as f:
@@ -20,21 +24,22 @@ def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url,
             response = requests.get(url)
             data = response.json()
             print(f"Available data has size of {len(data['contents'])}")
+            print(url)
             
             for x in data["contents"]:
                 dataset = {
-                    "new_id":x["code"],
-                    "new_link": f"{base_url}{x['link']}",
-                    "new_title":x["title"],
-                    "new_desc": x["lead"],
-                    "new_img": x["picture"]["urlOriginal"],
-                    "new_type": x["mainCategory"]["name"],
-                    "new_date": x['publishedDate'],
+                    "new_id": x.get("code", strDefaultValue),
+                    "new_link": f"{base_url}{x.get('link', strDefaultValue)}",
+                    "new_title":x.get("title", strDefaultValue),
+                    "new_desc": x.get("lead", strDefaultValue),
+                    "new_img": x.get("picture", objDefaultValue).get("urlOriginal", strDefaultValue),
+                    "new_type": x.get("mainCategory", objDefaultValue).get("name", strDefaultValue),
+                    "new_date": x.get("publishedData", strDefaultValue),
                     "new_source": source,
-                    "new_isTrue": 0,
-                    "new_isFalse": 0,
-                    "new_isUnclear": 0,
-                    "new_noOpinion": 0,
+                    "new_isTrue": randomVeracityValue(),
+                    "new_isFalse": randomVeracityValue(),
+                    "new_isUnclear": randomVeracityValue(),
+                    "new_noOpinion": randomVeracityValue(),
                     "new_votedIps": []
                 }
                 
@@ -52,7 +57,7 @@ def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url,
 expresso_filename = f"expresso_{CURRENT_DATE}"
 expresso_ext = "json"
 expresso_pagestoread = 1
-expresso_newsPerPageLimit = 10
+expresso_newsPerPageLimit = 100
 expresso_newsUntil = f"{CURRENT_DATE}T12"
 source = "expresso"
 
@@ -65,7 +70,7 @@ generateFile(expresso_filename, expresso_ext, expresso_pagestoread, expresso_new
 sic_filename = f"sicNoticias_{CURRENT_DATE}"
 sic_ext = "json"
 sic_pagestoread = 1
-sic_newsPerPageLimit = 10
+sic_newsPerPageLimit = 100
 sic_newsUntil = f"{CURRENT_DATE}T12"
 source = "sic noticias"
 

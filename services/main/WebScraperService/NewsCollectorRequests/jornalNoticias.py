@@ -1,18 +1,23 @@
+import sys
+
+sys.path.append('../CommonUtils')
+from utils import randomVeracityValue, strDefaultValue , PAGES_TO_READ, getSubtractedDate
+
 import requests
 import json
-from datetime import timedelta, date
 
 #https://gmg-posts-api.global.ssl.fastly.net/1/posts?apikey=k25m0hEKYbk1xQp6&apitoken=jnrcnjwljorqgsbu&per_page=12&page=1&filter[isoLanguage]=pt&include=dossiers,labels,authors&sort=-publishedAt
 
-CURRENT_DATE = date.today() - timedelta(days=1)
+CURRENT_DATE = getSubtractedDate(1)
 
 FILE_NAME = f"jornalNoticias_{CURRENT_DATE}"
 EXT = "json"
 
 API_TOKEN = "jnrcnjwljorqgsbu"
 API_KEY = "k25m0hEKYbk1xQp6"
-PER_PAGE = 12
-PAGESTOREAD = 1
+PER_PAGE = 10
+
+PAGESTOREAD = PAGES_TO_READ
 
 with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
     
@@ -34,19 +39,19 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
             print(f"Handling new ({new_metadata['title']})")
             
             dataset = {
-                "new_id": str(x["publicId"]), # use this to get more detailed info about new
-                "new_link": f"https://www.jn.pt/{x['publicId']}/{new_metadata['slug']}/",
-                "new_title":new_metadata["title"],
-                "new_desc":new_metadata["description"],
-                "new_img":f"https://asset.skoiy.com/jnrcnjwljorqgsbu/{new_metadata['image']}?w=410&q=90&crop=5877,3918,62,0",
-                "created_at": x["createdAt"],
-                "updated_at": x["updatedAt"],
-                "new_date": new_metadata['publishedAt'],
+                "new_id": str(x.get("publicId", strDefaultValue)), # use this to get more detailed info about new
+                "new_link": f"https://www.jn.pt/{x.get('publicId', strDefaultValue)}/{new_metadata.get('slug', strDefaultValue)}/",
+                "new_title":new_metadata.get("title", strDefaultValue),
+                "new_desc":new_metadata.get("description", strDefaultValue),
+                "new_img":f"https://asset.skoiy.com/jnrcnjwljorqgsbu/{new_metadata.get('image', strDefaultValue)}?w=410&q=90&crop=5877,3918,62,0",
+                "created_at": x.get("createdAt", strDefaultValue),
+                "updated_at": x.get("updatedAt", strDefaultValue),
+                "new_date": new_metadata.get('publishedAt', strDefaultValue),
                 "new_source": "jornal noticias",
-                "new_isTrue": 0,
-                "new_isFalse": 0,
-                "new_isUnclear": 0,
-                "new_noOpinion": 0,
+                "new_isTrue": randomVeracityValue(),
+                "new_isFalse": randomVeracityValue(),
+                "new_isUnclear": randomVeracityValue(),
+                "new_noOpinion": randomVeracityValue(),
                 "new_votedIps": []
             }
             
