@@ -7,17 +7,18 @@ import express, { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
 import * as dateAndTime from "date-and-time";
 import cors from "cors";
+import * as schedule from "node-schedule";
 
 import { NewsManipulator } from './controllers/NewsManipulator';
 
 import { new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat, opinion } from "../../CommonStuff/src/types/types"
-import { dateFormat } from "../../CommonStuff/src/consts/consts"
+import { dateFormat, Week } from "../../CommonStuff/src/consts/consts"
 import { getYesterdayDate } from "../../CommonStuff/src/functions/functions"
 
 const app = express();
 const PORT = 3000;
 
-app.use(cors())
+app.use(cors());
 
 var jsonData: NewsManipulator
 
@@ -82,6 +83,35 @@ app.get("/old/:date", (req: Request, res: Response) => {
 /**
  * CRON JOB
  */
+const ruleForSaveData = new schedule.RecurrenceRule();
+const ruleForLoadData = new schedule.RecurrenceRule();
+
+ruleForSaveData.dayOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
+ruleForLoadData.dayOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
+
+ruleForSaveData.hour = 14;
+ruleForSaveData.minute = 20;
+
+ruleForLoadData.hour = 14;
+ruleForLoadData.minute = 20;
+
+schedule.scheduleJob(ruleForSaveData, async function () {
+  try {
+    // save manipulated data to file
+
+  } catch (error) {
+    console.log(`An error ocurred: ${error}`)
+  }
+});
+
+schedule.scheduleJob(ruleForLoadData, async function () {
+    try {
+      // load newly generated data 
+  
+    } catch (error) {
+      console.log(`An error ocurred: ${error}`)
+    }
+  });
 
 
 // Start the server
