@@ -28,9 +28,6 @@ function loadData(path: string, date: Date): fromRequestJsonFileFormat {
     return JSON.parse(fs.readFileSync(filePath, "utf-8"))
 }
 
-// Read JSON data from file | TODO: put this to a cron job or check if 
-jsonData = new NewsManipulator(loadData("../Data/", getYesterdayDate()))
-
 // Define API endpoints
 
 // Middleware to log IP address
@@ -113,8 +110,12 @@ schedule.scheduleJob(ruleForLoadData, async function () {
     }
   });
 
+// Read JSON data from file | TODO: put this to a cron job or check if 
+jsonData = new NewsManipulator(loadData("../Data/", getYesterdayDate()))
+const memoryUsageByData = Buffer.byteLength(JSON.stringify(jsonData.data), 'utf8') / (1024 * 1024);
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`Memory need from loading JSON data is ${memoryUsageByData.toFixed(2)}Mb`);
 });

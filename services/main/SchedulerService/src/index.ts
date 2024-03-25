@@ -1,19 +1,11 @@
 import * as schedule from "node-schedule";
 import * as job from "./controllers/functions";
-
-const week = {
-  "monday": 1,
-  "tuesday": 2,
-  "wednesday": 3,
-  "thursday": 4,
-  "friday": 5,
-  "saturday": 6,
-  "sunday": 7
-};
+import { Week } from "../../CommonStuff/src/consts/consts"
 
 const rule = new schedule.RecurrenceRule();
 
-rule.dayOfWeek = [week.monday, week.tuesday, week.wednesday, week.thursday, week.friday, week.saturday, week.sunday];
+rule.dayOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
+
 rule.hour = 14;
 rule.minute = 20;
 
