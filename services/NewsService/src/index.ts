@@ -75,9 +75,7 @@ app.get("/old/:date", (req: Request, res: Response) => {
 
         try {
             const oldJsonData = new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))
-
-            if(oldJsonData.dataSize() > 0) res.status(200).json(oldJsonData.data);
-            else throw new Error("Empty data!")
+            res.status(200).json(oldJsonData.data);
 
         } catch (e) {
             console.log(e)
@@ -97,8 +95,8 @@ const ruleForSaveLoadData = new schedule.RecurrenceRule();
 const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
 
 ruleForSaveLoadData.dayOfWeek = daysOfWeek;
-ruleForSaveLoadData.hour = 16;
-ruleForSaveLoadData.minute = 48;
+ruleForSaveLoadData.hour = 17;
+ruleForSaveLoadData.minute = 12;
 
 schedule.scheduleJob(ruleForSaveLoadData, async function () {
     try {
