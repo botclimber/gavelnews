@@ -2,7 +2,7 @@ twodaysbefore=$(python -c "from dateutil.relativedelta import relativedelta; fro
 
 # move old data files to backup folder
 echo "Backing up current data ..."
-cd /Users/danielsilva/Documents/gavelNews/services/main/Data
+cd ../Data/
 mkdir backup/$twodaysbefore
 mv allData_$twodaysbefore.json backup/$twodaysbefore/
 mv cnnPortugal_$twodaysbefore.json backup/$twodaysbefore/

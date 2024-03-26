@@ -3,8 +3,8 @@
 2024 (updated)
 
 # Setup
+0. if not existing create Data/ folder inside ./services/ folder
 1. npm install
-2. npm install --global gulp-cli
 3. gulp build
 4. gulp compile
 5. go to /services/WebScraperService:
@@ -14,7 +14,6 @@
         - source .packages/bin/activate
     - install dependencies:
         - pip install -r requirements.txt
-6. npm install pm2 -g
 7. pm2 start system.config.js
 
 > [!WARNING]  

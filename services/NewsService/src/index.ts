@@ -75,9 +75,12 @@ app.get("/old/:date", (req: Request, res: Response) => {
 
         try {
             const oldJsonData = new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))
-            res.status(200).json(oldJsonData.data)
+
+            if(oldJsonData.dataSize() > 0) res.status(200).json(oldJsonData.data);
+            else throw new Error("Empty data!")
 
         } catch (e) {
+            console.log(e)
             res.status(500).json({ "msg": `Error: (Most likely) No data found for the specified date` })
         }
     } else {
@@ -95,7 +98,7 @@ const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, We
 
 ruleForSaveLoadData.dayOfWeek = daysOfWeek;
 ruleForSaveLoadData.hour = 16;
-ruleForSaveLoadData.minute = 10;
+ruleForSaveLoadData.minute = 48;
 
 schedule.scheduleJob(ruleForSaveLoadData, async function () {
     try {
@@ -105,14 +108,18 @@ schedule.scheduleJob(ruleForSaveLoadData, async function () {
         console.log("Saving data to file: Start ...")
         await fs.promises.writeFile(`${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`, JSON.stringify(jsonData.data))
         console.log("Saving data to file: finish.")
+    } catch (error) {
+        console.log(`An error ocurred while SAVING: ${error}`)
+    }
 
+    try{
         // load newly generated data 
         jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
         jsonData.sortByTitle()
         console.log(`Loading recent Data into memory, with the size of ${jsonData.dataSize().toFixed(2)} `)
 
     } catch (error) {
-        console.log(`An error ocurred: ${error}`)
+        console.log(`An error ocurred while LOADING: ${error}`)
     }
 });
 
