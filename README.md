@@ -4,7 +4,6 @@
 
 # Setup
 1. npm install
-2. npm install --global gulp-cli
 3. gulp build
 4. gulp compile
 5. go to /services/WebScraperService:
