@@ -13,7 +13,6 @@
         - source .packages/bin/activate
     - install dependencies:
         - pip install -r requirements.txt
-6. npm install pm2 -g
 7. pm2 start system.config.js
 
 > [!WARNING]  
