@@ -32,4 +32,17 @@ export class NewsManipulator {
 
         }catch(e) { if(e instanceof Error) console.log(e.message); throw e;}
     }
+
+    dataSize(): number {
+        return Buffer.byteLength(JSON.stringify(this.data), 'utf8') / (1024 * 1024);
+    }
+
+    /**
+     * purpose is for the news to be mixed (ASC)
+     */
+    sortByTitle(): void {
+        this.data.data = this.data.data.sort( (a, b) => {
+            return a.new_title.length - b.new_title.length
+        })
+    }
 }

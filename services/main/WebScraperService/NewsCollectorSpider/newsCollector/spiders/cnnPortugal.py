@@ -27,20 +27,15 @@ class CnnPortugalNewsCollector(scrapy.Spider):
 
 	currentPage = 1
 	def parse(self, response):
-		print(response)
-		print( f"current page: {self.currentPage}")
-
 		news = response.xpath("//div[@class='grid_list']//div[@class='item']")
-		print(f"news: {news} | {len(news)}")
 
 		news_link = [link.strip() for link in news.xpath(".//a/@href").getall()[:self.NEWSPERPAGE]]
 		news_title = [title.strip() for title in news.xpath(".//h2[@class='item-title']/text()").getall()[:self.NEWSPERPAGE]]
 		news_date = [date.strip() for date in news.xpath(".//div[@class='item-date']/text()").getall()[:self.NEWSPERPAGE]]
-		news_img = [img.strip() for img in news.xpath(".//div[@class='picture16x9 b-lazy']/@data-src").getall()[:self.NEWSPERPAGE]]
+		news_img = news.xpath(".//div[@class='picture16x9 b-lazy']/@data-src").getall()[:self.NEWSPERPAGE]
 
 		data = []
 		for x in range(len(news_title)):
-			print(f"index is {x}")
 			data.append({"new_id":str(uuid.uuid4()), "new_link": news_link[x], "new_title": news_title[x], "new_desc": "", "new_date": news_date[x], "new_img": news_img[x], "new_source": "cnnPortugal", "new_isTrue": randomVeracityValue(), "new_isFalse": randomVeracityValue(), "new_isUnclear": randomVeracityValue(), "new_noOpinion": randomVeracityValue(), "new_votedIps": []})
 		
 		yield {"data": data}

@@ -13,10 +13,13 @@ import { NewsManipulator } from './controllers/NewsManipulator';
 
 import { new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat, opinion } from "../../CommonStuff/src/types/types"
 import { dateFormat, Week } from "../../CommonStuff/src/consts/consts"
-import { getYesterdayDate } from "../../CommonStuff/src/functions/functions"
+import { getPreviousDate } from "../../CommonStuff/src/functions/functions"
 
 const app = express();
 const PORT = 3000;
+
+const pathMainData = "../Data/"
+const pathBackupData = "../Data/backup/"
 
 app.use(cors());
 
@@ -80,42 +83,39 @@ app.get("/old/:date", (req: Request, res: Response) => {
 /**
  * CRON JOB
  */
-const ruleForSaveData = new schedule.RecurrenceRule();
-const ruleForLoadData = new schedule.RecurrenceRule();
+const ruleForSaveLoadData = new schedule.RecurrenceRule();
 
-ruleForSaveData.dayOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
-ruleForLoadData.dayOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
+const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
 
-ruleForSaveData.hour = 14;
-ruleForSaveData.minute = 20;
+ruleForSaveLoadData.dayOfWeek = daysOfWeek;
+ruleForSaveLoadData.hour = 10;
+ruleForSaveLoadData.minute = 45;
 
-ruleForLoadData.hour = 14;
-ruleForLoadData.minute = 20;
-
-schedule.scheduleJob(ruleForSaveData, async function () {
+schedule.scheduleJob(ruleForSaveLoadData, async function () {
   try {
+    const twoDaysBefore = dateAndTime.format(getPreviousDate(2), dateFormat)
+
     // save manipulated data to file
+    console.log("Saving data to file: Start ...")
+    await fs.promises.writeFile(`${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`, JSON.stringify(jsonData.data))
+    console.log("Saving data to file: finish.")
+
+    // load newly generated data 
+    jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
+    jsonData.sortByTitle()
+    console.log(`Loading recent Data into memory, with the size of ${jsonData.dataSize().toFixed(2)} `)
 
   } catch (error) {
     console.log(`An error ocurred: ${error}`)
   }
 });
 
-schedule.scheduleJob(ruleForLoadData, async function () {
-    try {
-      // load newly generated data 
-  
-    } catch (error) {
-      console.log(`An error ocurred: ${error}`)
-    }
-  });
-
 // Read JSON data from file | TODO: put this to a cron job or check if 
-jsonData = new NewsManipulator(loadData("../Data/", getYesterdayDate()))
-const memoryUsageByData = Buffer.byteLength(JSON.stringify(jsonData.data), 'utf8') / (1024 * 1024);
+jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
+jsonData.sortByTitle()
 
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log(`Memory need from loading JSON data is ${memoryUsageByData.toFixed(2)}Mb`);
+  console.log(`Memory need from loading JSON data is ${jsonData.dataSize().toFixed(2)}Mb`);
 });

@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as dateAndTime from "date-and-time";
 import { new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat } from "../../../CommonStuff/src/types/types"
 import { dateFormat } from "../../../CommonStuff/src/consts/consts"
-import { getYesterdayDate } from "../../../CommonStuff/src/functions/functions"
+import { getPreviousDate } from "../../../CommonStuff/src/functions/functions"
 
 /**
  * This may take some time, however is hard to exactly determine it
@@ -62,7 +62,7 @@ async function flatScrayObject(dataToFlatten: fromScrapyJsonFileFormat): Promise
 
 export async function transformExtractedData(): Promise<void> {
 
-    const yesterdayDate = getYesterdayDate()
+    const yesterdayDate = getPreviousDate(1)
 
     const mergedDataFilePathName = `../Data/allData_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
 

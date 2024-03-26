@@ -26,22 +26,22 @@ class ObservadorNewsCollector(scrapy.Spider):
 
 	# constants
 	PAGESTOREAD = PAGES_TO_READ # this must be in sync with common/utils
+	NEWS_PER_PAGE = 10
 
 	currentPage = 1
 	def parse(self, response):
-		print(response)
-		print( f"current page: {self.currentPage}")
-
 		news = response.xpath("//div[@class='results']")
 
 		news_link = [link.strip() for link in news.xpath(".//a[@class='obs-accent-color']/@href").getall()]
-		news_title = list( filter(lambda x: x != "" , [title.strip() for title in news.xpath(".//a[@class='obs-accent-color']/text()").getall()]))
+		news_title = list( filter(lambda x: x != "" , [title.strip() for title in news.xpath(".//a[@class='obs-accent-color']/text()").getall()])) # remove empty titles
 		news_date = [date.strip() for date in news.xpath(".//time[@class='timeago']/text()").getall()]
-		news_img = [img.strip() for img in news.xpath(".//img[@class='img_16x9']/@src").getall()]
+		news_img = list(set(news.xpath(".//img[@class='img_16x9']/@src").getall())) # remove duplicates
+  
+		print(f"news_img: {len(news_img)}")
+		print(news_img)
   
 		data = []
 		for x in range(len(news_title)):
-			print(f"index is {x}")
 			data.append({"new_id":str(uuid.uuid4()), "new_link": news_link[x], "new_title": news_title[x], "new_desc": "", "new_date": news_date[x], "new_img": news_img[x], "new_source": "observador", "new_isTrue": randomVeracityValue(), "new_isFalse": randomVeracityValue(), "new_isUnclear": randomVeracityValue(), "new_noOpinion": randomVeracityValue(), "new_votedIps": []})
 		
 		yield {"data": data}
