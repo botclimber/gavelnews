@@ -5,12 +5,41 @@ import { new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat } from 
 import { dateFormat } from "../../../CommonStuff/src/consts/consts"
 import { getPreviousDate } from "../../../CommonStuff/src/functions/functions"
 
+export function backupCurrentFiles(): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const scriptPath = "../WebScraperService/runBackup.sh"
+        const childProcess = spawn('sh', [scriptPath]);
+
+        childProcess.stdout.on('data', (data) => {
+            console.log(`Script output: ${data}`);
+        });
+
+        childProcess.stderr.on('data', (data) => {
+            console.error(`Script error: ${data}`);
+        });
+
+        childProcess.on('close', (code) => {
+            console.log(`Script execution finished with code ${code}`);
+            if (code === 0) {
+                resolve(); // Resolve the promise when the script execution is successful
+            } else {
+                reject(`Script execution failed with code ${code}`);
+            }
+        });
+
+        childProcess.on('error', (err) => {
+            console.error(`Error executing script: ${err}`);
+            reject(err);
+        });
+    });
+}
+
 /**
  * This may take some time, however is hard to exactly determine it
  */
 export function triggerFullScrap(): Promise<void> {
     return new Promise((resolve, reject) => {
-        const scriptPath = "../WebScraperService/run.sh"
+        const scriptPath = "../WebScraperService/runCollector.sh"
         const childProcess = spawn('sh', [scriptPath]);
 
         childProcess.stdout.on('data', (data) => {

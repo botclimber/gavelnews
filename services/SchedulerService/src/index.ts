@@ -6,12 +6,20 @@ const rule = new schedule.RecurrenceRule();
 
 rule.dayOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
 
-rule.hour = 14;
-rule.minute = 18;
+rule.hour = 16;
+rule.minute = 5;
 
 schedule.scheduleJob(rule, async function () {
 
   try {
+    //await for backup
+    await job.backupCurrentFiles()
+
+  }catch(error){
+    console.log(`An error ocurred: ${error}`)
+  }
+
+  try{
     // await for scrap of all platforms
     await job.triggerFullScrap()
 

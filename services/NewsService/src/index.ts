@@ -27,8 +27,14 @@ var jsonData: NewsManipulator
 
 function loadData(path: string, date: Date): fromRequestJsonFileFormat {
 
-    const filePath = `${path}allData_${dateAndTime.format(date, dateFormat)}.json`
-    return JSON.parse(fs.readFileSync(filePath, "utf-8"))
+    try {
+        const filePath = `${path}allData_${dateAndTime.format(date, dateFormat)}.json`
+        return JSON.parse(fs.readFileSync(filePath, "utf-8"))
+
+    } catch (e) {
+        console.log(e)
+        return { "data": [] }
+    }
 }
 
 // Define API endpoints
@@ -72,7 +78,7 @@ app.get("/old/:date", (req: Request, res: Response) => {
             res.status(200).json(oldJsonData.data)
 
         } catch (e) {
-            res.status(500).json({ "msg": `Error: (Most likely) No data found for the specified date`})
+            res.status(500).json({ "msg": `Error: (Most likely) No data found for the specified date` })
         }
     } else {
         res.status(400).json({ "msg": "date must be included in the request params!" })
@@ -88,26 +94,26 @@ const ruleForSaveLoadData = new schedule.RecurrenceRule();
 const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
 
 ruleForSaveLoadData.dayOfWeek = daysOfWeek;
-ruleForSaveLoadData.hour = 10;
-ruleForSaveLoadData.minute = 45;
+ruleForSaveLoadData.hour = 16;
+ruleForSaveLoadData.minute = 10;
 
 schedule.scheduleJob(ruleForSaveLoadData, async function () {
-  try {
-    const twoDaysBefore = dateAndTime.format(getPreviousDate(2), dateFormat)
+    try {
+        const twoDaysBefore = dateAndTime.format(getPreviousDate(2), dateFormat)
 
-    // save manipulated data to file
-    console.log("Saving data to file: Start ...")
-    await fs.promises.writeFile(`${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`, JSON.stringify(jsonData.data))
-    console.log("Saving data to file: finish.")
+        // save manipulated data to file
+        console.log("Saving data to file: Start ...")
+        await fs.promises.writeFile(`${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`, JSON.stringify(jsonData.data))
+        console.log("Saving data to file: finish.")
 
-    // load newly generated data 
-    jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
-    jsonData.sortByTitle()
-    console.log(`Loading recent Data into memory, with the size of ${jsonData.dataSize().toFixed(2)} `)
+        // load newly generated data 
+        jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
+        jsonData.sortByTitle()
+        console.log(`Loading recent Data into memory, with the size of ${jsonData.dataSize().toFixed(2)} `)
 
-  } catch (error) {
-    console.log(`An error ocurred: ${error}`)
-  }
+    } catch (error) {
+        console.log(`An error ocurred: ${error}`)
+    }
 });
 
 // Read JSON data from file | TODO: put this to a cron job or check if 
@@ -116,6 +122,6 @@ jsonData.sortByTitle()
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`Memory need from loading JSON data is ${jsonData.dataSize().toFixed(2)}Mb`);
+    console.log(`Server is running on port ${PORT}`);
+    console.log(`Memory need from loading JSON data is ${jsonData.dataSize().toFixed(2)}Mb`);
 });
