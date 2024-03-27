@@ -1,8 +1,10 @@
-twodaysbefore=$(python -c "from dateutil.relativedelta import relativedelta; from datetime import datetime; print((datetime.now() - relativedelta(days=2)).strftime('%Y-%m-%d'))")
+twodaysbefore=$(python3 -c "from dateutil.relativedelta import relativedelta; from datetime import datetime; print((datetime.now() - relativedelta(days=2)).strftime('%Y-%m-%d'))")
 
 # move old data files to backup folder
 echo "Backing up current data ..."
+echo "Target date: $twodaysbefore"
 cd ../Data/
+mkdir backup
 mkdir backup/$twodaysbefore
 mv allData_$twodaysbefore.json backup/$twodaysbefore/
 mv cnnPortugal_$twodaysbefore.json backup/$twodaysbefore/

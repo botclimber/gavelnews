@@ -89,6 +89,7 @@ async function flatScrayObject(dataToFlatten: fromScrapyJsonFileFormat): Promise
     return transformedData
 }
 
+// TODO: dont abort in case of some file doesnt exist, just inform
 export async function transformExtractedData(): Promise<void> {
 
     const yesterdayDate = getPreviousDate(1)

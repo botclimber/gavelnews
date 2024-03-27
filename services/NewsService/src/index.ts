@@ -95,8 +95,8 @@ const ruleForSaveLoadData = new schedule.RecurrenceRule();
 const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
 
 ruleForSaveLoadData.dayOfWeek = daysOfWeek;
-ruleForSaveLoadData.hour = 17;
-ruleForSaveLoadData.minute = 12;
+ruleForSaveLoadData.hour = 14;
+ruleForSaveLoadData.minute = 43;
 
 schedule.scheduleJob(ruleForSaveLoadData, async function () {
     try {
@@ -104,8 +104,12 @@ schedule.scheduleJob(ruleForSaveLoadData, async function () {
 
         // save manipulated data to file
         console.log("Saving data to file: Start ...")
-        await fs.promises.writeFile(`${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`, JSON.stringify(jsonData.data))
+        
+        if(jsonData.data.data.length > 0) await fs.promises.writeFile(`${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`, JSON.stringify(jsonData.data));
+        else console.log("\tNothing to be saved!")
+    
         console.log("Saving data to file: finish.")
+    
     } catch (error) {
         console.log(`An error ocurred while SAVING: ${error}`)
     }
