@@ -12,7 +12,7 @@ node_modules/
 .packages/
 
 # dont load data
-Data/*
+Data/
 
 # dont commit dist/ folders
 dist/
