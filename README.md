@@ -16,5 +16,8 @@
         - pip install -r requirements.txt
 7. pm2 start system.config.js
 
+> [!IMPORTANT]  
+> Data/ folder must exist inside ./services/ path (in some cases it may be necessary the manual creation of it once)
+
 > [!WARNING]  
 > chmod +x run.sh (this may be necessary)
