@@ -7,7 +7,7 @@ const rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
 
 rule.hour = 14;
-rule.minute = 41;
+rule.minute = 39;
 
 schedule.scheduleJob(rule, async function () {
 

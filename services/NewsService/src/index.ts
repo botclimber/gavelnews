@@ -96,7 +96,7 @@ const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, We
 
 ruleForSaveLoadData.dayOfWeek = daysOfWeek;
 ruleForSaveLoadData.hour = 14;
-ruleForSaveLoadData.minute = 43;
+ruleForSaveLoadData.minute = 41;
 
 schedule.scheduleJob(ruleForSaveLoadData, async function () {
     try {
