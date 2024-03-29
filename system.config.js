@@ -13,6 +13,13 @@ module.exports = {
             script : "npm",
             args   : "start",
             watch  : true
+        },
+        {
+            name   : "ChatService",
+            cwd    : "./services/ChatService/",
+            script : "npm",
+            args   : "start",
+            watch  : true
         }
     ]
 }

@@ -27,6 +27,7 @@ const services = {
     "NewsService": {"path": "./services/NewsService/"},
     "SchedulerService": {"path": "./services/SchedulerService/"},
     "CommonStuff": {"path": "./services/CommonStuff/"},
+    "ChatService": {"path": "./services/ChatService/"}
 }
 
 gulp.task('build', async function (done) {
