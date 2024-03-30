@@ -8,7 +8,7 @@ const newCodeRegex = /\[new:([a-zA-Z0-9-]+)\]/g;
 function replaceNewCode(match, code) {
 
     const findNew = Object.values(allData).find(row => row.new_id == code)
-    return `<a href="${findNew.new_link}" target="_blank" style="color:blue;">${findNew.new_title}</a>`;
+    return ` <a href="${findNew.new_link}" target="_blank" style="color:blue;">[${findNew.new_title}]</a> `;
 }
 
 // Establishing a WebSocket connection
@@ -104,7 +104,18 @@ function onInputFocus(event) {
 }
 
 function setNewForChat(newId) { activeNew = newId }
+function validateNew(newCode = null) {
+    const newCodeNotInInput = msgInput.value.includes(newCode)
+
+    return newCode !== null && !newCodeNotInInput
+}
+function insertNewInInput(newCode = null){
+    if(validateNew(newCode)){ 
+        chatContainer.classList.remove('hidden');
+        msgInput.value += `[new:${newCode}]`; 
+    }
+}
 
 addEventListener("keydown", (event) => {
-    if (event.key === "Alt" && activeNew !== null) msgInput.value += `[new:${activeNew}]`;
+    if (event.key === "Alt" && activeNew !== null) insertNewInInput(activeNew); 
 })
