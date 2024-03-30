@@ -1,6 +1,7 @@
 const chat = document.getElementById("chat-output")
 const msgInput = document.getElementById("chat-input-message")
 var activeNew = null
+var socket = chatConnection()
 
 const newCodeRegex = /\[new:([a-zA-Z0-9-]+)\]/g;
 
@@ -11,24 +12,38 @@ function replaceNewCode(match, code) {
     return ` <a href="${findNew.new_link}" target="_blank" style="color:blue;">[${findNew.new_title}]</a> `;
 }
 
-// Establishing a WebSocket connection
-const socket = new WebSocket('ws://localhost:8001/');
+function chatConnection(chatCode = "/", general = true, newTitle = "") {
 
-// Event handler for when the connection is established
-socket.onopen = function (event) {
-    console.log('WebSocket connection established');
-};
+    const chatTitle = document.getElementById('chatTitle')
 
-// Event handler for receiving messages from the server
-socket.onmessage = function (event) {
-    console.log('Received message from server:', event.data);
+    if(general) 
+        chatTitle.innerHTML = '<h2 class="font-semibold text-lg tracking-tight">Gavel News Court</h2>';
+    else
+        chatTitle.innerHTML = `
+        <button onclick="changeConnection()" class="bg-blue-500 hover:bg-blue-700 text-[8pt] text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                  go back
+                  </button>
+        <h2 class="font-semibold text-lg tracking-tight">${newTitle}</h2>
+        `
 
-    const data = JSON.parse(event.data)
+    // Establishing a WebSocket connection
+    const connection = new WebSocket(`${websocket}:8001${chatCode}`);
 
-    const message = data.message.replace(newCodeRegex, replaceNewCode)
+    // Event handler for when the connection is established
+    connection.onopen = function (event) {
+        console.log('WebSocket connection established');
+    };
 
-    if (data.user === userId) {
-        chat.innerHTML += `
+    // Event handler for receiving messages from the server
+    connection.onmessage = function (event) {
+        console.log('Received message from server:', event.data);
+
+        const data = JSON.parse(event.data)
+
+        const message = data.message.replace(newCodeRegex, replaceNewCode)
+
+        if (data.user === userId) {
+            chat.innerHTML += `
         <div class="flex gap-3 my-4 text-gray-600 text-sm flex-1 justify-end">
                     <p class="leading-relaxed text-right"><span class="block font-bold text-gray-700">(${data.user}) You </span>${message}
                         <span class="block text-[8pt] text-gray-400 mt-2">${data.date}</span></p>
@@ -44,8 +59,8 @@ socket.onmessage = function (event) {
                 </div>
         `
 
-    } else {
-        chat.innerHTML += `
+        } else {
+            chat.innerHTML += `
     <div class="flex gap-3 my-4 text-gray-600 text-sm flex-1"><span
                         class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
                         <div class="rounded-full bg-gray-100 border p-1"><svg stroke="none" fill="black"
@@ -60,20 +75,23 @@ socket.onmessage = function (event) {
                         <span class="block text-[8pt] text-gray-400 mt-2">${data.date}</span></p>
                 </div>
     `
-    }
-    chat.scrollTop = chat.scrollHeight
-    msgInput.value = ""
-};
+        }
+        chat.scrollTop = chat.scrollHeight
+        msgInput.value = ""
+    };
 
-// Event handler for errors
-socket.onerror = function (error) {
-    console.error('WebSocket error:', error);
-};
+    // Event handler for errors
+    connection.onerror = function (error) {
+        console.error('WebSocket error:', error);
+    };
 
-// Event handler for when the connection is closed
-socket.onclose = function (event) {
-    console.log('WebSocket connection closed');
-};
+    // Event handler for when the connection is closed
+    connection.onclose = function (event) {
+        console.log('WebSocket connection closed');
+    };
+
+    return connection
+}
 
 // Sending a message to the server
 function sendMessage() {
@@ -109,13 +127,18 @@ function validateNew(newCode = null) {
 
     return newCode !== null && !newCodeNotInInput
 }
-function insertNewInInput(newCode = null){
-    if(validateNew(newCode)){ 
+function insertNewInInput(newCode = null) {
+    if (validateNew(newCode)) {
         chatContainer.classList.remove('hidden');
-        msgInput.value += `[new:${newCode}]`; 
+        msgInput.value += `[new:${newCode}]`;
     }
 }
 
 addEventListener("keydown", (event) => {
-    if (event.key === "Alt" && activeNew !== null) insertNewInInput(activeNew); 
+    if (event.key === "Alt" && activeNew !== null) insertNewInInput(activeNew);
 })
+
+function changeConnection(chatCode = "/", general = true, newTitle = ""){
+    socket = chatConnection(chatCode, general, newTitle)
+    
+}

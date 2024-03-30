@@ -2,6 +2,7 @@ var allData;
 var manipulatedData;
 
 const api = "http://localhost:3000"
+const websocket = "ws://localhost"
 
 const news_div = document.getElementById("news")
 var container = document.getElementById('dateContainer');
