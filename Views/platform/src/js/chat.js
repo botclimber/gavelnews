@@ -1,5 +1,16 @@
 const chat = document.getElementById("chat-output")
 const msgInput = document.getElementById("chat-input-message")
+var activeNew = null
+
+const newCodeRegex = /\[new:([a-zA-Z0-9-]+)\]/g;
+
+// Function to replace [new:code]
+function replaceNewCode(match, code) {
+
+    const findNew = Object.values(allData).find(row => row.new_id == code)
+    return `<a href="${findNew.new_link}" target="_blank" style="color:blue;">${findNew.new_title}</a>`;
+}
+
 // Establishing a WebSocket connection
 const socket = new WebSocket('ws://localhost:8001/');
 
@@ -14,10 +25,12 @@ socket.onmessage = function (event) {
 
     const data = JSON.parse(event.data)
 
+    const message = data.message.replace(newCodeRegex, replaceNewCode)
+
     if (data.user === userId) {
         chat.innerHTML += `
         <div class="flex gap-3 my-4 text-gray-600 text-sm flex-1 justify-end">
-                    <p class="leading-relaxed text-right"><span class="block font-bold text-gray-700">(${data.user}) You </span>${data.message}
+                    <p class="leading-relaxed text-right"><span class="block font-bold text-gray-700">(${data.user}) You </span>${message}
                         <span class="block text-[8pt] text-gray-400 mt-2">${data.date}</span></p>
                     <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
                         <div class="rounded-full bg-gray-100 border p-1"><svg stroke="none" fill="black"
@@ -43,7 +56,7 @@ socket.onmessage = function (event) {
                                 </path>
                             </svg></div>
                     </span>
-                    <p class="leading-relaxed"><span class="block font-bold text-gray-700">${data.user} </span>${data.message}
+                    <p class="leading-relaxed"><span class="block font-bold text-gray-700">${data.user} </span>${message}
                         <span class="block text-[8pt] text-gray-400 mt-2">${data.date}</span></p>
                 </div>
     `
@@ -70,22 +83,28 @@ function sendMessage() {
     socket.send(JSON.stringify(toJson));
 }
 
-function onInputFocus(event){
+function onInputFocus(event) {
 
     const emojis = {
-        '#:smile' : '😀',
-        '#:laugh' : '😂',
-        '#:heartEyes' : '😍'
+        '#:smile': '😀',
+        '#:laugh': '😂',
+        '#:heartEyes': '😍'
     }
 
     const lookForEmoji = () => {
         // TODO: check if this is uneficcient
         Object.keys(emojis).map(key => {
             msgInput.value = msgInput.value.replaceAll(key, emojis[key])
-        })   
+        })
     }
 
     lookForEmoji()
 
-    if(event.key == 'Enter') sendMessage();
+    if (event.key == 'Enter') sendMessage();
 }
+
+function setNewForChat(newId) { activeNew = newId }
+
+addEventListener("keydown", (event) => {
+    if (event.key === "Alt" && activeNew !== null) msgInput.value += `[new:${activeNew}]`;
+})

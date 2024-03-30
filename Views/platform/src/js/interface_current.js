@@ -56,8 +56,8 @@ async function setContent(dataList) {
                 <div>
                   <div class="relative mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20"
                     data-te-ripple-init data-te-ripple-color="light">
-                    <img src="${r.new_img}" class="w-full" alt="Louvre" />
-                    <a href="${r.new_link}" target="_blank">
+                    <img src="${r.new_img}" class="w-full" alt="" />
+                    <a href="${r.new_link}" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)" target="_blank">
                       <div
                         class="absolute top-0 right-0 bottom-0 left-0 h-full w-full overflow-hidden bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100 bg-[hsla(0,0%,98.4%,.15)]">
                       </div>
