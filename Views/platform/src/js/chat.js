@@ -69,3 +69,23 @@ function sendMessage() {
 
     socket.send(JSON.stringify(toJson));
 }
+
+function onInputFocus(event){
+
+    const emojis = {
+        '#:smile' : '😀',
+        '#:laugh' : '😂',
+        '#:heartEyes' : '😍'
+    }
+
+    const lookForEmoji = () => {
+        // TODO: check if this is uneficcient
+        Object.keys(emojis).map(key => {
+            msgInput.value = msgInput.value.replaceAll(key, emojis[key])
+        })   
+    }
+
+    lookForEmoji()
+
+    if(event.key == 'Enter') sendMessage();
+}
