@@ -77,7 +77,7 @@ async function setContent(dataList) {
                     </div>
                 </div>
         
-                  <h5 class="mb-3 text-lg font-bold">${r.new_title}</h5>
+                  <h5 class="mb-3 text-lg font-bold"><a href="${r.new_link}" target="_blank">${r.new_title}</a></h5>
                   <div class="mb-3 flex items-center justify-center text-sm font-medium text-yellow-600">
                     ${newType}
                   </div>
