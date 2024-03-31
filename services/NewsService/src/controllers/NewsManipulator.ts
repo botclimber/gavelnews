@@ -51,6 +51,7 @@ export class NewsManipulator {
 
             element.new_title = element.new_title.replaceAll("<em>", "")
             element.new_title = element.new_title.replaceAll("</em>", "")
+            element.new_title = element.new_title.replaceAll("\"", "")
             
             return element
         })
