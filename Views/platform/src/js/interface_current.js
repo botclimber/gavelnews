@@ -52,7 +52,7 @@ async function setContent(dataList) {
     const isVoted = (checkVote(r.new_id)) ? "hidden" : ""
 
     news_div.innerHTML += /* html */
-      `<div class="mb-6 lg:mb-0">
+      `<div id="${r.new_id}" class="mb-6 lg:mb-0">
                 <div>
                   <div class="relative mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20"
                     data-te-ripple-init data-te-ripple-color="light">

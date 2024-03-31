@@ -4,7 +4,7 @@ var manipulatedData;
 const api = "http://localhost:3000"
 const websocket = "ws://localhost"
 
-const chatTitleLimit = 12
+const chatTitleLimit = 15
 
 const news_div = document.getElementById("news")
 var container = document.getElementById('dateContainer');

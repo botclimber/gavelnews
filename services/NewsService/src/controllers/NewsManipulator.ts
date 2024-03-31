@@ -45,4 +45,14 @@ export class NewsManipulator {
             return a.new_title.length - b.new_title.length
         })
     }
+
+    cleanData(): void {
+        this.data.data = this.data.data.map(element => {
+
+            element.new_title = element.new_title.replaceAll("<em>", "")
+            element.new_title = element.new_title.replaceAll("</em>", "")
+            
+            return element
+        })
+    }
 }

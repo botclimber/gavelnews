@@ -83,7 +83,7 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
             <button onclick="changeConnection()" class="bg-blue-500 hover:bg-blue-700 text-[8pt] text-white font-bold p-1 mr-1 rounded inline-flex items-center">
                 Go back
             </button>
-            <h2 class="font-semibold text-lg tracking-tight">${newTitle.substring(0, chatTitleLimit + 10)}...</h2>
+            <h2 class="font-semibold text-lg tracking-tight"><a href="#${chatCode.replace("/", "")}">${newTitle.substring(0, chatTitleLimit)}...</a></h2>
         </div>
         `
 
