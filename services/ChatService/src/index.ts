@@ -6,7 +6,7 @@ import {ChatClass} from './controllers/ChatClass';
 // - prevent spam
 // - [IDEA] create a chat for each New
 
-const PORT = 8001;
+const PORT = 8002;
 const chatService = new ChatClass(PORT);
 
 console.log(`WebSocket server running on port ${PORT}`);

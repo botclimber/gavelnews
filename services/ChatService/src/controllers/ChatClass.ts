@@ -22,7 +22,10 @@ export class ChatClass {
 
       if (checkIfChatAlreadySet == undefined) this.chatClientsMap.set(chatCode, [ws])
       else {
-        if (!this.chatClientsMap.get(chatCode)?.includes(ws)) this.chatClientsMap.get(chatCode)?.push(ws);
+        if (!this.chatClientsMap.get(chatCode)?.includes(ws)){
+          console.log("client is not included on this chat yet!")
+          this.chatClientsMap.get(chatCode)?.push(ws);
+        }
       }
 
     } catch (e) {
@@ -60,12 +63,10 @@ export class ChatClass {
 
         console.log(`chatCode: ${chatCode}`)
         this.connectClientToChat(ws, chatCode)
-        //this.onConnection(ws, chatCode)
+        this.onConnection(ws, chatCode)
 
         // Event handler for receiving messages
         ws.on('message', (message: string) => {
-
-          this.addMessageToChat(message, chatCode)
 
           console.log('Received:', message);
           this.checkHowManyMessagesSent(chatCode)
@@ -102,13 +103,11 @@ export class ChatClass {
     try {
       this.chatClientsMap.get(chatCode)?.map(client => {
         console.log("logged clients x.")
-        if (client.readyState === WebSocket.OPEN) {
-          if (message instanceof Buffer) {
-
-            const msg = Buffer.from(message).toString('utf-8')
-            client.send(msg)
-
-          } else client.send(message);
+        const msg: string = (message instanceof Buffer)? this.parseToString(message) : message
+        
+        if (client.readyState === WebSocket.OPEN){
+          this.addMessageToChat(msg, chatCode)
+          client.send(msg);
         }
       })
 
@@ -124,5 +123,19 @@ export class ChatClass {
     console.log(`This Chat (${chatCode}) already has: ${messages} messages`)
   }
 
-  //private onConnection(){}
+  private onConnection(ws: WebSocket, chatCode: chatCode){
+    try{
+
+      const messages: string[] = this.messagesMemory.get(chatCode) ?? []
+      console.log(`sending messages to client:`)
+      console.log(messages)
+      ws.send(JSON.stringify(messages))
+
+    }catch(e){
+      console.log(this.onConnection.toString)
+      console.log(e)
+    }
+  }
+
+  private parseToString(message: Buffer): string{ return Buffer.from(message).toString('utf-8') }
 }

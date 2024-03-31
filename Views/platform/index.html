@@ -256,20 +256,6 @@
     <script src="./src/js/common.js"></script>
     <script src="./src/js/index.js"></script>
     <script src="./src/js/chat.js"></script>
-    <!-- JavaScript for toggling the chat -->
-    <script>
-        const chatBtn = document.getElementById('chatBtn');
-        const chatContainer = document.getElementById('chatContainer');
-        const closeChatBtn = document.getElementById('closeChatBtn');
-
-        chatBtn.addEventListener('click', function () {
-            chatContainer.classList.remove('hidden');
-        });
-
-        closeChatBtn.addEventListener('click', function () {
-            chatContainer.classList.add('hidden');
-        });
-    </script>
 
     <script>
         // Function to toggle visibility of emoji container
@@ -283,6 +269,22 @@
             const input = document.getElementById('chat-input-message');
             input.value += emoji;
         }
+    </script>
+
+    <!-- JavaScript for toggling the chat -->
+    <script>
+        const chatBtn = document.getElementById('chatBtn');
+        const chatContainer = document.getElementById('chatContainer');
+        const closeChatBtn = document.getElementById('closeChatBtn');
+
+        chatBtn.addEventListener('click', function () {
+            changeConnection();
+            chatContainer.classList.remove('hidden');
+        });
+
+        closeChatBtn.addEventListener('click', function () {
+            chatContainer.classList.add('hidden');
+        });
     </script>
 
 </body>

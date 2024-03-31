@@ -97,9 +97,13 @@ async function setContent(dataList) {
                   </p>
                   <button onclick="insertNewInInput('${r.new_id}')" class="bg-blue-500 hover:bg-blue-700 text-[8pt] text-white font-bold py-1 px-2 rounded inline-flex items-center">
                     <svg class="fill-current w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 5a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 4a1 1 0 1 1 0-2h10a1 1 0 1 1 0 2H5zm0 4a1 1 0 1 1 0-2h6a1 1 0 1 1 0 2H5z"/></svg>
-                  Copy to Chat
+                  Link to Chat
                   </button>
-                  <button onclick="changeConnection('/${r.new_id}', false, '${r.new_title.substring(0, 10)}')" class="bg-blue-500 hover:bg-blue-700 text-[8pt] text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                  <button onclick="insertRoomInInput('${r.new_id}')" class="bg-blue-500 hover:bg-blue-700 text-[8pt] text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                    <svg class="fill-current w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 5a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 4a1 1 0 1 1 0-2h10a1 1 0 1 1 0 2H5zm0 4a1 1 0 1 1 0-2h6a1 1 0 1 1 0 2H5z"/></svg>
+                  Room to Chat
+                  </button>
+                  <button onclick="changeConnection('/${r.new_id}', false, '${r.new_title}')" class="bg-blue-500 hover:bg-blue-700 text-[8pt] text-white font-bold py-1 px-2 rounded inline-flex items-center">
                     <svg class="fill-current w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 5a1 1 0 0 1 1-1h10a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1zm0 4a1 1 0 1 1 0-2h10a1 1 0 1 1 0 2H5zm0 4a1 1 0 1 1 0-2h6a1 1 0 1 1 0 2H5z"/></svg>
                   Open Chat
                   </button>
