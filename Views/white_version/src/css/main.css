@@ -21,8 +21,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    background-color: #B9785F;
     border-radius: 10px;
     z-index: 1;
 }
@@ -43,9 +41,9 @@
 
 .filter-btn {
     padding: 8px 16px;
-    border: none;
+    border: 1px solid #d0d0d0;
     border-radius: 5px;
-    background-color: #007bff;
+    background-color: #b97a5f;
     color: #fff;
     cursor: pointer;
 }
@@ -166,11 +164,10 @@
     text-overflow: ellipsis;
     padding: 2px 10px;
     /* Adjust padding as needed */
-    border: 2px solid #B9785F;
     /* Border color */
-    border-radius: 10px;
+    border-radius: 0px;
     /* Round border to create circular shape */
-    background-color: #FFC36E;
+    background-color:#983e16;
     /* Background color */
     color: #FFFFFF;
     /* Text color */
@@ -181,18 +178,15 @@
 }
 
 .date-option:hover {
-    background-color: #B9785F;
+    background-color: #b97a5f;
     /* Hover background color */
-    border-color: #FFC36E;
-    /* Hover border color */
     color: #FFFFFF;
     /* Hover text color */
 }
 
 .active-date {
-    background-color: #B9785F;
+    background-color: #7d4c37;
     /* Background color for the active date */
-    border-color: #FFC36E;
     /* Border color for the active date */
     color: #FFFFFF;
     /* Text color for the active date */

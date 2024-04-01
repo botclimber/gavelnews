@@ -1,11 +1,11 @@
 function waitForAllData() {
   return new Promise(resolve => {
-      let interval = setInterval(() => {
-          if (typeof allData !== 'undefined') {
-              clearInterval(interval);
-              resolve();
-          }
-      }, 100);
+    let interval = setInterval(() => {
+      if (typeof allData !== 'undefined') {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 100);
   });
 }
 
@@ -14,14 +14,17 @@ function generateDateOptions() {
   const endDate = new Date("2024-03-20")
 
   const yesterday = getSubtractedDate(1)
-  var options = `<button class="date-option active-date" onclick="location.href='index.html'"><span style="color:rgb(110, 255, 110);">(Open)</span> ${yesterday}</button>`;
+  var options = `<button class="date-option active-date flex items-center" onclick="location.href='index.html'">
+  <img class="w-[15px] h-[12px] mr-2" src="./src/images/live.gif" alt="Live icon" />
+  <span>${yesterday}</span>
+</button>`;
 
   var currentDate = new Date(getSubtractedDate(2));
   while (currentDate >= endDate) {
-      var formattedDate = currentDate.toISOString().slice(0,10);
+    var formattedDate = currentDate.toISOString().slice(0, 10);
 
-      options += `<button class="date-option" onclick="location.href='index_old.html?date=${formattedDate}'">${formattedDate}</button>`;
-      currentDate.setDate(currentDate.getDate() - 1); 
+    options += `<button class="date-option" onclick="location.href='index_old.html?date=${formattedDate}'">${formattedDate}</button>`;
+    currentDate.setDate(currentDate.getDate() - 1);
   }
   return options;
 }
@@ -32,7 +35,7 @@ function computeAvg(rawValue, totalValue) {
   return (comp != "NaN") ? comp : 0;
 }
 
-function transformToPercentages(isTrue, isFalse, noOpinion, isUnclear){
+function transformToPercentages(isTrue, isFalse, noOpinion, isUnclear) {
 
   const totalVotes = (isTrue) + (isFalse) + (isUnclear) + (noOpinion)
 
@@ -41,10 +44,10 @@ function transformToPercentages(isTrue, isFalse, noOpinion, isUnclear){
   const noOpinionPerc = parseFloat(computeAvg(noOpinion, totalVotes))
   const isUnclearPerc = parseFloat(computeAvg(isUnclear, totalVotes))
 
-  return {"isTruePerc": isTruePerc, "isFalsePerc": isFalsePerc, "noOpinionPerc": noOpinionPerc, "isUnclearPerc": isUnclearPerc, "totalVotes": totalVotes}
+  return { "isTruePerc": isTruePerc, "isFalsePerc": isFalsePerc, "noOpinionPerc": noOpinionPerc, "isUnclearPerc": isUnclearPerc, "totalVotes": totalVotes }
 }
 
-async function hideButtons(newId){
+async function hideButtons(newId) {
   const btns = document.getElementById(`toVoteButtons-${newId}`)
   btns.style.display = "none"
 }
@@ -129,10 +132,10 @@ document.getElementById("searchComponent").addEventListener("input", function (e
   withLoadScreen(() => serachByTextInTitle(event.target.value))
 });
 
-function checkVote(newId){
+function checkVote(newId) {
   const getVotedList = localStorage.getItem("votedNews")
 
-  if(getVotedList !== null){
+  if (getVotedList !== null) {
     const votedList = JSON.parse(getVotedList)
 
     return votedList.newIds.includes(newId)
@@ -143,10 +146,10 @@ function checkVote(newId){
 
 async function markNewAsVoted(newId) {
   const getVotedList = localStorage.getItem("votedNews")
-  
+
   if (getVotedList !== null) {
 
-    if( !checkVote(newId) ){
+    if (!checkVote(newId)) {
       var votedList = JSON.parse(getVotedList)
       votedList.newIds.push(newId)
       localStorage.setItem("votedNews", JSON.stringify(votedList))
@@ -157,7 +160,7 @@ async function markNewAsVoted(newId) {
   }
 }
 
-function getSubtractedDate(dayToSubtract){
+function getSubtractedDate(dayToSubtract) {
   const date = new Date();
   date.setDate(date.getDate() - dayToSubtract)
 
