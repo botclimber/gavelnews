@@ -92,7 +92,7 @@ async function setContent(dataList) {
                   <div class="mb-3 flex items-center justify-center text-sm font-medium text-yellow-600">
                     ${newType}
                   </div>
-                  <p class="mb-2 text-neutral-500 dark:text-neutral-700">
+                  <p class="mb-4 text-neutral-500 dark:text-neutral-700">
                     ${r.new_desc}
                   </p>
                   <button title="Copy link to current chat" onclick="insertNewInInput('${r.new_id}')" class="bg-blue-500 hover:bg-blue-700 text-[8pt] text-white font-bold py-1 px-2 rounded inline-flex items-center">
