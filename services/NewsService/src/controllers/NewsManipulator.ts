@@ -42,7 +42,7 @@ export class NewsManipulator {
      */
     sortByTitle(): void {
         this.data.data = this.data.data.sort( (a, b) => {
-            return a.new_title.length - b.new_title.length
+            return b.new_title.length - a.new_title.length
         })
     }
 
