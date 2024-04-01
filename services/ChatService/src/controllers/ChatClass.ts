@@ -25,7 +25,7 @@ export class ChatClass {
   /**
    * Setup WebSocket
    */
-  private  setupWebSocket() {
+  private setupWebSocket() {
 
     try {
       this.wss.on('connection', (ws: WebSocket, req) => {
@@ -40,7 +40,7 @@ export class ChatClass {
         // Event handler for receiving messages
         ws.on('message', async (message: Buffer | string) => {
 
-          const ensureStringType: string = ( message instanceof Buffer)? await this.helper.parseToString(message) : message
+          const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
           const messageAsObject: message = JSON.parse(ensureStringType)
 
           const cleanMessageContent: message = await this.helper.checkMessageContent(messageAsObject);
@@ -53,6 +53,7 @@ export class ChatClass {
             this.addMessageToChat(messageAsString, chatCode)
             this.checkHowManyMessagesSent(chatCode)
             this.broadcast(messageAsString, chatCode); // Broadcast the message to all clients
+            this.broadcastChatsStatus()
 
           }
         });
@@ -172,17 +173,32 @@ export class ChatClass {
    * @param ws 
    * @param chatCode 
    */
-  private onConnection(ws: WebSocket, chatCode: chatCode) {
+  private async onConnection(ws: WebSocket, chatCode: chatCode) {
     try {
 
       const messages: string[] = this.messagesMemory.get(chatCode) ?? []
       console.log(`sending messages to client:`)
       console.log(messages)
+      
       ws.send(JSON.stringify(messages))
+      this.broadcastChatsStatus()
 
     } catch (e) {
       console.log(this.onConnection.toString)
       console.log(e)
     }
+  }
+
+  private async broadcastChatsStatus() {
+    const chatsStatus: { [key: string]: boolean } = Array.from(this.messagesMemory.entries())
+      .reduce((acc, [chatCode, messages]) => {
+        acc[chatCode] = (messages.length > 0)? true : false;
+        return acc;
+      }, {} as { [key: string]: boolean });
+
+    this.wss.clients.forEach(client => {
+      client.send(JSON.stringify({"chatsStatus": chatsStatus}))
+    })
+
   }
 }
