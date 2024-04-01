@@ -1,76 +1,60 @@
 import * as WebSocket from 'ws';
+import { ChatClassHelper } from './ChatClassHelper';
+import { message } from "../types/types";
 
 type chatCode = string
 
 // Define a class for the chat service
 export class ChatClass {
-  private MESSAGES_LIMIT_PER_CHAT: number = 5
-  private wss: WebSocket.Server;
+
+  // TODO: print messagesMemory and chatClientsMap memory occupation
+  private MESSAGES_LIMIT_PER_CHAT: number = 25
+  private wss: WebSocket.Server
   private messagesMemory: Map<chatCode, string[]>
   private chatClientsMap: Map<chatCode, WebSocket[]>
+  private helper: ChatClassHelper
 
   constructor(port: number) {
     this.wss = new WebSocket.Server({ port });
     this.messagesMemory = new Map();
     this.chatClientsMap = new Map();
+    this.helper = new ChatClassHelper()
     this.setupWebSocket();
   }
 
-  private connectClientToChat(ws: WebSocket, chatCode: chatCode): void {
-    try {
-      const checkIfChatAlreadySet = this.chatClientsMap.get(chatCode)
-
-      if (checkIfChatAlreadySet == undefined) this.chatClientsMap.set(chatCode, [ws])
-      else {
-        if (!this.chatClientsMap.get(chatCode)?.includes(ws)){
-          console.log("client is not included on this chat yet!")
-          this.chatClientsMap.get(chatCode)?.push(ws);
-        }
-      }
-
-    } catch (e) {
-      console.log(this.connectClientToChat.toString)
-      console.log(e)
-    }
-  }
-
-  private addMessageToChat(message: string, chatCode: chatCode): void {
-    // TODO: verify if 
-
-    try {
-      const checkIfMessageMemoryExists = this.messagesMemory.get(chatCode)
-
-      if (checkIfMessageMemoryExists == undefined) this.messagesMemory.set(chatCode, [message])
-      else this.messagesMemory.get(chatCode)?.push(message)
-
-    } catch (e) {
-      console.log(this.addMessageToChat.toString)
-      console.log(e)
-    }
-  }
-
-  // Setup WebSocket connection and event handlers
-  private setupWebSocket() {
+  /**
+   * Setup WebSocket
+   */
+  private  setupWebSocket() {
 
     try {
       this.wss.on('connection', (ws: WebSocket, req) => {
-        console.log(`Client connected: ${this.wss.clients.size}`);
-        console.log(this.chatClientsMap)
 
         // Extract chat code from URL
         const urlParts = req.url?.split('/');
         const chatCode = (urlParts && urlParts.length > 1 && urlParts[1] !== "") ? urlParts[1] : "/"; // Assuming "/" as default chat code if none specified
 
-        console.log(`chatCode: ${chatCode}`)
         this.connectClientToChat(ws, chatCode)
         this.onConnection(ws, chatCode)
 
         // Event handler for receiving messages
-        ws.on('message', (message: string) => {
+        ws.on('message', async (message: Buffer | string) => {
 
-          console.log('Received:', message);
-          this.checkHowManyMessagesSent(chatCode)
-          this.broadcast(message, chatCode); // Broadcast the message to all clients
+          const ensureStringType: string = ( message instanceof Buffer)? await this.helper.parseToString(message) : message
+          const messageAsObject: message = JSON.parse(ensureStringType)
+
+          const cleanMessageContent: message = await this.helper.checkMessageContent(messageAsObject);
+
+          console.log(`Message is: ${cleanMessageContent}`)
+          if (cleanMessageContent.message !== "") {
+
+            const messageAsString = JSON.stringify(cleanMessageContent)
+
+            this.addMessageToChat(messageAsString, chatCode)
+            this.checkHowManyMessagesSent(chatCode)
+            this.broadcast(messageAsString, chatCode); // Broadcast the message to all clients
+
+          }
         });
 
         // Event handler for closing connection
@@ -83,7 +67,7 @@ export class ChatClass {
           if (index !== undefined && index !== -1) this.chatClientsMap.get(chatCode)?.splice(index, 1)
 
           // if empty remove chat/room
-          if(this.chatClientsMap.get(chatCode)?.length == 0) this.chatClientsMap.delete(chatCode);
+          if (this.chatClientsMap.get(chatCode)?.length == 0) this.chatClientsMap.delete(chatCode);
           /* --- */
 
           console.log('Client disconnected');
@@ -95,19 +79,74 @@ export class ChatClass {
       console.log(this.setupWebSocket.toString)
       console.log(e)
     }
-
   }
 
-  // Broadcast message to all connected clients
-  private broadcast(message: Buffer | string, chatCode: string) {
+  /**
+   * connect client to specific chat
+   * 
+   * @param ws 
+   * @param chatCode 
+   */
+  private connectClientToChat(ws: WebSocket, chatCode: chatCode): void {
+    try {
+      const checkIfChatAlreadySet = this.chatClientsMap.get(chatCode)
+
+      if (checkIfChatAlreadySet == undefined) this.chatClientsMap.set(chatCode, [ws])
+      else {
+        if (!this.chatClientsMap.get(chatCode)?.includes(ws)) {
+          console.log("client is not included on this chat yet!")
+          this.chatClientsMap.get(chatCode)?.push(ws);
+        }
+      }
+
+    } catch (e) {
+      console.log(this.connectClientToChat.toString)
+      console.log(e)
+    }
+  }
+
+  /**
+   * add message to specific chat, so we can perfome checks on chat individually
+   * 
+   * @param message 
+   * @param chatCode 
+   */
+  private async addMessageToChat(message: string, chatCode: chatCode): Promise<void> {
+    // TODO: verify if message already reached limit
+
+    try {
+      const checkIfMessageMemoryExists = this.messagesMemory.get(chatCode)
+
+      if (checkIfMessageMemoryExists == undefined) this.messagesMemory.set(chatCode, [message])
+      else {
+
+        this.messagesMemory.get(chatCode)?.push(message)
+
+        const messages = this.messagesMemory.get(chatCode)
+        const rearrangedMessages = await this.helper.checkMessagesSizeLimit(messages, this.MESSAGES_LIMIT_PER_CHAT)
+
+        this.messagesMemory.set(chatCode, rearrangedMessages)
+      }
+
+    } catch (e) {
+      console.log(this.addMessageToChat.toString)
+      console.log(e)
+    }
+  }
+
+  /**
+   * Broadcast messages to clients, for specific chat
+   * 
+   * @param message 
+   * @param chatCode 
+   */
+  private broadcast(message: string, chatCode: string) {
     try {
       this.chatClientsMap.get(chatCode)?.map(client => {
-        console.log("logged clients x.")
-        const msg: string = (message instanceof Buffer)? this.parseToString(message) : message
-        
-        if (client.readyState === WebSocket.OPEN){
-          this.addMessageToChat(msg, chatCode)
-          client.send(msg);
+
+        if (client.readyState === WebSocket.OPEN) {
+
+          client.send(message);
         }
       })
 
@@ -117,25 +156,33 @@ export class ChatClass {
     }
   }
 
-  // Check how many times the same user sent a message
+  /**
+   * Check how many messages a specific chat has
+   * 
+   * @param chatCode 
+   */
   private checkHowManyMessagesSent(chatCode: string) {
     const messages = this.messagesMemory.get(chatCode)?.length
     console.log(`This Chat (${chatCode}) already has: ${messages} messages`)
   }
 
-  private onConnection(ws: WebSocket, chatCode: chatCode){
-    try{
+  /**
+   * does something on client connection, in this case is sent all existing messages for specific chat
+   * 
+   * @param ws 
+   * @param chatCode 
+   */
+  private onConnection(ws: WebSocket, chatCode: chatCode) {
+    try {
 
       const messages: string[] = this.messagesMemory.get(chatCode) ?? []
       console.log(`sending messages to client:`)
       console.log(messages)
       ws.send(JSON.stringify(messages))
 
-    }catch(e){
+    } catch (e) {
       console.log(this.onConnection.toString)
       console.log(e)
     }
   }
-
-  private parseToString(message: Buffer): string{ return Buffer.from(message).toString('utf-8') }
 }
