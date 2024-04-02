@@ -114,19 +114,4 @@ async function setContent(dataList) {
 
 }
 
-window.addEventListener('scroll', function() {
-  var menu = document.getElementById('menu');
-  var scrollPosition = window.scrollY;
-
-  // Adjust class based on scroll position
-  if (scrollPosition > 50) {
-      menu.classList.add('menu-scrolled');
-      menu.style.position = "fixed";
-
-  } else {
-      menu.classList.remove('menu-scrolled');
-      menu.style.position = "relative";
-  }
-});
-
 withLoadScreen(() => loadDataFromServer())
