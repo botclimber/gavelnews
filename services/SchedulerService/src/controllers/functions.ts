@@ -102,6 +102,7 @@ export async function transformExtractedData(): Promise<void> {
     const jornalNoticiasFilePath = `../Data/jornalNoticias_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
     const observadorFilePath = `../Data/observador_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
     const cnnFilePath = `../Data/cnnPortugal_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
+    const visaoFilePath = `../Data/visao_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
 
     const expressoData = await readJSONFile<fromRequestJsonFileFormat>(expressoFilePath)
     const sicNoticiasData = await readJSONFile<fromRequestJsonFileFormat>(sicNoticiasFilePath)
@@ -110,11 +111,13 @@ export async function transformExtractedData(): Promise<void> {
 
     const observadorData = await readJSONFile<fromScrapyJsonFileFormat>(observadorFilePath)
     const cnnData = await readJSONFile<fromScrapyJsonFileFormat>(cnnFilePath)
+    const visaoData = await readJSONFile<fromScrapyJsonFileFormat>(visaoFilePath)
 
     const flattenObservadorData: new_object[] = await flatScrayObject(observadorData)
     const flattenCnnData: new_object[] = await flatScrayObject(cnnData)
+    const flattenVisaoData: new_object[] = await flatScrayObject(visaoData)
 
-    const mergedData: new_object[] = [...expressoData.data, ...sicNoticiasData.data, ...publicoData.data, ...jornalNoticiasData.data, ...flattenObservadorData, ...flattenCnnData]
+    const mergedData: new_object[] = [...expressoData.data, ...sicNoticiasData.data, ...publicoData.data, ...jornalNoticiasData.data, ...flattenObservadorData, ...flattenCnnData, ...flattenVisaoData]
 
     fs.writeFile(mergedDataFilePathName, JSON.stringify({ "data": mergedData }), 'utf-8', (err) => {
         if (err) {

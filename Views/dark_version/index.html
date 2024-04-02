@@ -31,7 +31,7 @@
     <div class="px-10 py-5">
         <!-- Section: Design Block -->
         <section class="mb-32 text-center">
-            <div class="mb-[1.5rem] text-center flex items-center justify-center">
+            <div class="text-center flex items-center justify-center">
                 <svg class="h-10 w-10 mr-2" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
                     fill="#000000">
@@ -100,7 +100,7 @@
                 <h2 class="text-3xl font-bold">Gavel News</h2>
             </div>
 
-            <div class="menu mb-5 flex flex-col sm:flex-row items-center justify-between">
+            <div id="menu" class="menu">
                 <div class="mb-3 sm:mb-0">
                     <button onclick="withLoadScreen(() => sortBy('isTruePerc'))"
                         class="filter-btn bg-green-500">True</button>
@@ -123,6 +123,7 @@
                         <a href="#" onclick="withLoadScreen(() => filterBy('jornal noticias'))">Jornal Noticias</a>
                         <a href="#" onclick="withLoadScreen(() => filterBy('observador'))">Observador</a>
                         <a href="#" onclick="withLoadScreen(() => filterBy('cnnPortugal'))">Cnn Portugal</a>
+                        <a href="#" onclick="withLoadScreen(() => filterBy('visao'))">Visao</a>
                     </div>
                 </div>
             </div>
@@ -195,7 +196,7 @@
                 </div>
             </div>
 
-            <div class="grid gap-4 lg:grid-cols-4" id="news">
+            <div class="mt-[55px] grid gap-4 lg:grid-cols-4" id="news">
             </div>
         </section>
         <!-- Section: Design Block -->

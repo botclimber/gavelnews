@@ -23,11 +23,23 @@ body{
 }
 
 .menu {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 10px;
     z-index: 1;
+    top: 30px; /* Initial position above the viewport */
+    transition: top 0.3s; /* Smooth transition effect */
+}
+
+.menu.menu-scrolled {
+    top: 4px; /* Move the menu to the top of the viewport when scrolled */
+    right: 2.5rem;
+    left: 2.5rem;
+    background-color: #9ca3b0;
+    height: 55px;
+    padding: 10px;
 }
 
 .filters {

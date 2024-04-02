@@ -13,4 +13,5 @@ mv publico_$twodaysbefore.json backup/$twodaysbefore/
 mv expresso_$twodaysbefore.json backup/$twodaysbefore/
 mv observador_$twodaysbefore.json backup/$twodaysbefore/
 mv sicNoticias_$twodaysbefore.json backup/$twodaysbefore/
+mv visao_$twodaysbefore.json backup/$twodaysbefore/
 echo "Backup finish."

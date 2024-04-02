@@ -28,3 +28,4 @@ Data proposed structure, example:
 - cnn portugal | method: spider (scrapy crawl collectFrom_cnnPortugal -o ../../Data/cnnPortugal_(date).json )
 - expresso and sic noticias method: request (python3 expresso_e_sicNoticias.py)
 - publico method: request (python3 publico.py)
+- visao
