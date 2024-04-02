@@ -1,15 +1,17 @@
-window.addEventListener('scroll', function() {
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+window.addEventListener('scroll', function () {
   var menu = document.getElementById('menu');
   var scrollPosition = window.scrollY;
 
   // Adjust class based on scroll position
-  if (scrollPosition > 50) {
-      menu.classList.add('menu-scrolled');
-      menu.style.position = "fixed";
+  if (scrollPosition > 50 && !isMobileDevice()) {
+    menu.classList.add('menu-scrolled');
 
   } else {
-      menu.classList.remove('menu-scrolled');
-      menu.style.position = "relative";
+    menu.classList.remove('menu-scrolled');
   }
 });
 
