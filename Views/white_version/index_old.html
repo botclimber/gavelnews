@@ -10,218 +10,29 @@
 
     <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
 
-    <style>
-        .tooltip-text {
-            position: absolute;
-            top: -1.5rem;
-            /* Adjust this value as needed */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+    <!-- Include Font Awesome for icons (optional) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./src/css/main.css">
 
-        .w-full:hover .tooltip-text {
-            opacity: 1;
-        }
-
-        .menu {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #B9785F;
-            border-radius: 10px;
-            z-index: 1;
-        }
-
-        .filters {
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-box {
-            flex-grow: 1;
-            margin: 0 20px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .filter-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-            padding: 12px 16px;
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 8px 0;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* loading view */
-        .loading-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 1000;
-        }
-
-        .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 8px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 8px solid #3498db;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-
-        .loading-text {
-            position: absolute;
-            top: calc(50% + 30px);
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 18px;
-            color: #333;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* gavel loading animation*/
-        .loading-gavel {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .loading-text {
-            position: absolute;
-            top: calc(50% + 30px);
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 18px;
-            color: #333;
-        }
-
-        @keyframes knock {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            50% {
-                transform: rotate(15deg);
-            }
-
-            100% {
-                transform: rotate(0deg);
-            }
-        }
-
-        .loading-gavel svg {
-            animation: knock 1s ease infinite;
-        }
-
-        /*dates*/
-        .date-option {
-            width: 150px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            padding: 2px 10px;
-            /* Adjust padding as needed */
-            border: 2px solid #B9785F;
-            /* Border color */
-            border-radius: 10px;
-            /* Round border to create circular shape */
-            background-color: #FFC36E;
-            /* Background color */
-            color: #FFFFFF;
-            /* Text color */
-            font-size: 12px;
-            /* Adjust font size as needed */
-            cursor: pointer;
-            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-        }
-
-        .date-option:hover {
-            background-color: #B9785F;
-            /* Hover background color */
-            border-color: #FFC36E;
-            /* Hover border color */
-            color: #FFFFFF;
-            /* Hover text color */
-        }
-
-        .active-date {
-            background-color: #B9785F;
-            /* Background color for the active date */
-            border-color: #FFC36E;
-            /* Border color for the active date */
-            color: #FFFFFF;
-            /* Text color for the active date */
-        }
-    </style>
 </head>
 
 <body>
+
+    <!-- Chat Button -->
+    <button id="chatBtn" style="z-index: 1;"
+        class="fixed bottom-16 right-10 inline-flex items-center justify-center text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border-[5px] rounded-full w-[70px] h-[70px] bg-white hover:bg-gray-200 m-0 cursor-pointer border-gray-400 bg-none p-0 normal-case leading-5 hover:text-gray-900"
+        type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">
+        <svg fill="#983e16" height="50px" width="50px" version="1.1" id="Jury" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 128 128" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle id="_x34__6_" cx="30" cy="39.6" r="6.6"></circle> <path id="_x32__11_" d="M44,61v-4.9c0-4.5-3.7-8.2-8.2-8.2H24.2c-4.5,0-8.2,3.7-8.2,8.2V61H44z"></path> <circle id="_x34__7_" cx="64" cy="39.6" r="6.6"></circle> <path id="_x32__12_" d="M78,61v-4.9c0-4.5-3.7-8.2-8.2-8.2H58.2c-4.5,0-8.2,3.7-8.2,8.2V61H78z"></path> <circle id="_x34__8_" cx="98" cy="39.6" r="6.6"></circle> <path id="_x32__13_" d="M112,61v-4.9c0-4.5-3.7-8.2-8.2-8.2H92.2c-4.5,0-8.2,3.7-8.2,8.2V61H112z"></path> <path id="_x33__11_" d="M8,65v7.9h8V120h96V72.9h8V65H8z M84.5,98.3c-1.6,2.7-4.5,4.6-7.9,4.6s-6.3-1.8-7.9-4.6l0,0l0,0l0,0l0,0 l6.6-11.4H65.1v20.6h8l4.6,4.6H50.3l4.6-4.6h8V86.9H52.8l6.6,11.4l0,0l0,0c-1.6,2.7-4.5,4.6-7.9,4.6s-6.3-1.8-7.9-4.6l0,0l0,0l0,0 l0,0l7.9-13.7l0,0h11.4V76h2.3v8.6h11.4l0,0L84.5,98.3L84.5,98.3L84.5,98.3z"></path> <polygon id="_x32__19_" points="71.3,98.3 81.8,98.3 76.5,89.2 "></polygon> <polygon id="_x31__8_" points="46.2,98.3 56.6,98.3 51.4,89.2 "></polygon> </g></svg>
+    </button>
+
+    <div class="flex space-x-[1px] overflow-x-auto" id="dateContainer">
+    </div>
+
     <!-- Contaainer for demo purpose -->
-    <div class="p-10">
+    <div class="px-10 py-5">
         <!-- Section: Design Block -->
-        <section class="mb-32 text-center">
-            <div class="flex space-x-1 mb-4 overflow-x-auto" id="dateContainer">
-            </div>
-            
-            <div class="mb-12 text-center flex items-center justify-center">
+        <section class="mb-12 text-center">
+            <div class="mb-[25px] text-center flex items-center justify-center">
                 <svg class="h-10 w-10 mr-2" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
                     fill="#000000">
@@ -290,8 +101,8 @@
                 <h2 class="text-3xl font-bold">Gavel News</h2>
             </div>
 
-            <div class="menu mb-5">
-                <div class="filters">
+            <div id="menu" class="menu flex flex-col sm:flex-row items-center justify-between">
+                <div class="mb-3 sm:mb-0">
                     <button onclick="withLoadScreen(() => sortBy('isTruePerc'))"
                         class="filter-btn bg-green-500">True</button>
                     <button onclick="withLoadScreen(() => sortBy('noOpinionPerc'))" class="filter-btn bg-gray-500">No
@@ -301,7 +112,8 @@
                     <button onclick="withLoadScreen(() => sortBy('isFalsePerc'))"
                         class="filter-btn bg-red-500">False</button>
                 </div>
-                <input id="searchComponent" type="text" value="" class="search-box" placeholder="Search...">
+                <input id="searchComponent" type="text" value="" class="search-box mb-3 sm:mb-0"
+                    placeholder="Search...">
                 <div class="dropdown">
                     <button class="filter-btn" style="color:black; background-color: white;">News Source</button>
                     <div class="dropdown-content">
@@ -312,6 +124,7 @@
                         <a href="#" onclick="withLoadScreen(() => filterBy('jornal noticias'))">Jornal Noticias</a>
                         <a href="#" onclick="withLoadScreen(() => filterBy('observador'))">Observador</a>
                         <a href="#" onclick="withLoadScreen(() => filterBy('cnnPortugal'))">Cnn Portugal</a>
+                        <a href="#" onclick="withLoadScreen(() => filterBy('visao'))">Visao</a>
                     </div>
                 </div>
             </div>
@@ -383,11 +196,56 @@
                     <!-- End of SVG code -->
                 </div>
             </div>
-            <div class="grid gap-6 lg:grid-cols-4 xl:gap-x-12" id="news">
+
+            <div class="mt-[55px] grid gap-4 lg:grid-cols-4" id="news">
             </div>
         </section>
         <!-- Section: Design Block -->
+        <footer style="border-radius: 10px;" class="bg-gray-300 py-2">
+            <div class="container mx-auto flex justify-between items-center grid gap-3 grid-cols-3">
+                <div class="text-left ml-4">
+                    <p class="text-sm">contact us at <a href="mailto:gnewsgeral@gmail.com" class="text-blue-600">gnewsgeral@gmail.com</a></p>
+                    
+                </div>
+                <div class="text-center">
+                    <p class="text-sm"></p>
+                </div>
+                <div class="text-right mr-4">
+                    <p class="text-sm">&copy; 2024 Gavel News.</p>
+                </div>
+            </div>
+        </footer>
     </div>
+
+    <!-- Chat Container -->
+    <div id="chatContainer" style="z-index: 1;" class="fixed hidden">
+        <!-- component -->
+        <div style="box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);"
+            class="chat-container fixed bottom-[calc(4rem+1.5rem)] right-0 mr-4 bg-white p-4 rounded-lg border border-[#e5e7eb]">
+            <!-- Heading -->
+            <div style="display:flex; justify-content: space-between;">
+                <div id="chatTitle">
+                </div>
+                <div>
+                    <button type="button" id="closeChatBtn">x</button>
+                </div>
+            </div>
+            <hr />
+            <!-- Chat Container -->
+            <div class="h-[80%] overflow-y-auto" id="chat-output">
+            </div>
+            <!-- Input box  -->
+            <div class="flex items-center pt-0">
+                <div class="flex items-center justify-center w-full space-x-2">
+
+                    <input onkeypress="onInputFocus(event)" id="chat-input-message"
+                        class="flex h-10 w-full rounded-md border border-[#e5e7eb] px-3 py-2 text-sm placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#9ca3af] disabled:cursor-not-allowed disabled:opacity-50 text-[#030712] focus-visible:ring-offset-2"
+                        placeholder="Type your message" value="Chat is for read only" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <!-- Container for demo purpose -->
@@ -395,6 +253,38 @@
     <script src="./src/js/interface_old.js"></script>
     <script src="./src/js/common.js"></script>
     <script src="./src/js/index.js"></script>
+    <script src="./src/js/chat_readOnly.js"></script>
+
+    <script>
+        // Function to toggle visibility of emoji container
+        function toggleEmojiContainer() {
+            const container = document.getElementById('emojiContainer');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Function to select an emoji and insert it into the input field
+        function selectEmoji(emoji) {
+            const input = document.getElementById('chat-input-message');
+            input.value += emoji;
+        }
+    </script>
+
+    <!-- JavaScript for toggling the chat -->
+    <script>
+        const chatBtn = document.getElementById('chatBtn');
+        const chatContainer = document.getElementById('chatContainer');
+        const closeChatBtn = document.getElementById('closeChatBtn');
+
+        chatBtn.addEventListener('click', function () {
+            changeConnection();
+            chatContainer.classList.remove('hidden');
+        });
+
+        closeChatBtn.addEventListener('click', function () {
+            chatContainer.classList.add('hidden');
+        });
+    </script>
+
 </body>
 
 </html>
