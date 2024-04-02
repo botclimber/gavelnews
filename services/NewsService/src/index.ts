@@ -11,12 +11,15 @@ import * as schedule from "node-schedule";
 
 import { NewsManipulator } from './controllers/NewsManipulator';
 
-import { new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat, opinion } from "../../CommonStuff/src/types/types"
+import { fromRequestJsonFileFormat, opinion } from "../../CommonStuff/src/types/types"
 import { dateFormat, Week } from "../../CommonStuff/src/consts/consts"
 import { getPreviousDate } from "../../CommonStuff/src/functions/functions"
+import path from "path";
+
+const viewPath = "../../../../../views/white_version/"
 
 const app = express();
-const PORT = 3000;
+const PORT = 80;
 
 const pathMainData = "../Data/"
 const pathBackupData = "../Data/backup/"
@@ -47,10 +50,18 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     next(); // Pass the request to the next middleware or route handler
 });
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", function (req: Request, res: Response) {
+
+    app.use(express.static(path.join(__dirname, viewPath)));
+
+    res.sendFile(path.join(__dirname, viewPath))
+})
+
+app.get("/news", function (req: Request, res: Response) {
 
     res.status(200).json(jsonData.data)
 })
+
 
 app.patch("/new/:newId/:opinion", (req: Request, res: Response) => {
 
@@ -104,17 +115,17 @@ schedule.scheduleJob(ruleForSaveLoadData, async function () {
 
         // save manipulated data to file
         console.log("Saving data to file: Start ...")
-        
-        if(jsonData.data.data.length > 0) await fs.promises.writeFile(`${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`, JSON.stringify(jsonData.data));
+
+        if (jsonData.data.data.length > 0) await fs.promises.writeFile(`${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`, JSON.stringify(jsonData.data));
         else console.log("\tNothing to be saved!")
-    
+
         console.log("Saving data to file: finish.")
-    
+
     } catch (error) {
         console.log(`An error ocurred while SAVING: ${error}`)
     }
 
-    try{
+    try {
         // load newly generated data 
         jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
         jsonData.sortByTitle()

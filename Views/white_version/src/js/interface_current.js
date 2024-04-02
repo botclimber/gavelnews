@@ -1,5 +1,5 @@
 loadDataFromServer = async () => {
-  const response = await fetch(`${api}/`);
+  const response = await fetch(`${api}/news`);
   const news = await response.json();
 
   allData = news.data;

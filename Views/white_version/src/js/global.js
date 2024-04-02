@@ -1,8 +1,8 @@
 var allData;
 var manipulatedData;
 
-const api = "http://localhost:3000"
-const websocket = "ws://localhost"
+const api = "http://localhost"
+const chatWebsocket = "ws://localhost:8002"
 
 const chatTitleLimit = 15
 

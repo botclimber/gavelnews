@@ -69,7 +69,6 @@ function printToChat(data) {
     msgInput.value = ""
 }
 
-
 async function chatConnection(chatCode = "/", general = true, newTitle = "") {
     await waitForAllData()
 
@@ -88,7 +87,7 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
         `
 
     // Establishing a WebSocket connection
-    const connection = new WebSocket(`${websocket}:8002${chatCode}`);
+    const connection = new WebSocket(`${chatWebsocket}${chatCode}`);
 
     // Event handler for when the connection is established
     connection.onopen = function (event) {
