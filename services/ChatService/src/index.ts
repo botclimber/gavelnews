@@ -6,7 +6,8 @@ import * as schedule from "node-schedule";
 // - save in memory last 50 or 100 messages
 // - prevent/filter suspicious messages with links or script/html injection
 // - prevent spam
-// - [IDEA] create a chat for each New
+// - prevent really long usernames
+// - [Implemented] create a chat for each New
 
 const PORT = 8002;
 const chatService = new ChatClass(PORT);

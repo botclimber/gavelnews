@@ -3,6 +3,8 @@ loadDataFromServer = async () => {
   const news = await response.json();
   
   dateAsGlobal = getSubtractedDate(1);
+  readOnlyPage = false;
+
   console.log(dateAsGlobal)
 
   allData = news.data;

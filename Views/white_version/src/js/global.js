@@ -1,6 +1,7 @@
 var allData;
 var manipulatedData;
 var dateAsGlobal;
+var readOnlyPage;
 
 const api = "http://localhost"
 const chatWebsocket = "ws://localhost:8002"
