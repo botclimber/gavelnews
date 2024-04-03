@@ -100,13 +100,24 @@ app.get("/old/chats/:date/:chatId", async (req: Request, res: Response) => {
     const date = req.params.date
 
     try {
-        const messages = await (new ChatClass(chatCode, date).getMessages());
-        return res.status(200).send(messages)
+        const handler = new ChatClass(chatCode, date)
+
+        if (chatCode === "*") {
+
+            const chatsStatus = await handler.getChatsStatus()
+            return res.status(200).json({"chatsStatus": chatsStatus})
+
+        } else {
+
+            const messages = await handler.getMessages();
+            return res.status(200).json(messages)
+
+        }
 
     } catch (e: any) {
-        switch(e.code){
-        case "ENOENT": return res.status(500).send({ "msg": "Chat is empty!" }); break;
-        default: return res.status(500).send({ "msg": e.message }); 
+        switch (e.code) {
+            case "ENOENT": return res.status(500).json({ "msg": "Chat is empty!" }); break;
+            default: return res.status(500).json({ "msg": e.message });
         }
     }
 

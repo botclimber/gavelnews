@@ -1,4 +1,5 @@
-import { message } from "../types/types";
+import { message } from "../../../CommonStuff/src/types/types";
+import { saveToFile } from "../../../CommonStuff/src/functions/functions";
 // TODO: 
 //  - class for cleaner code
 //  - we may think of handling unique usernames
@@ -15,13 +16,14 @@ export class ChatClassHelper {
      * @param limit 
      * @returns 
      */
-    async checkMessagesSizeLimit(messages: string[] | undefined, limit: number): Promise<string[]> {
+    async checkMessagesSizeLimit(messages: string[] | undefined, limit: number): Promise<{ rearrangedData: string[], slicedData: string[] }> {
         const data = messages ?? []
         const sizeDiff = data.length - limit
-
+    
         const rearrangedData = (sizeDiff > 0) ? data.slice(sizeDiff) : data
-
-        return rearrangedData
+        const slicedData = (sizeDiff > 0) ? data.slice(0, sizeDiff) : []
+    
+        return { rearrangedData, slicedData }
     }
 
     async checkMessageContent(message: message): Promise<message> {
@@ -45,24 +47,17 @@ export class ChatClassHelper {
      * @returns 
      */
     async parseToString(message: Buffer): Promise<string> { return Buffer.from(message).toString('utf-8') }
-}
 
-/*
-function filterHtmlAndUrls(input: string): string {
-    // Remove HTML tags
-    const withoutHtmlTags = input.replace(/<[^>]*>/g, '');
+    async saveMessagesToFile( messages: string[], path: string): Promise<void>{
 
-    // Remove various forms of URLs
-    const withoutUrls = withoutHtmlTags.replace(
-        /\b(?:https?|ftp):\/\/(?:www\.)?[^\s<>()]+|\bwww\.[^\s<>()]+|\b(?<!:\/\/)\b[^\s<>()]+\.[^\s<>()]+/gi,
-        ''
-    );
-
-        // Check for invalid URLs with spaces between characters
-        if (withoutUrls.match(/\b\s+\b/)) {
-            return "Invalid input: URLs should not have spaces between characters.";
+        try{
+            for (let x of messages){
+               await saveToFile(x, path, true)
+            }
+            
+        }catch(e){
+            console.log(e)
+            throw e
         }
-
-    return withoutUrls;
+    }
 }
-*/

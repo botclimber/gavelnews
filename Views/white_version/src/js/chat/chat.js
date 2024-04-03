@@ -25,7 +25,7 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
             for (let x in data.chatsStatus){
                 const chatIcon = document.getElementById(`chatIcon-${x}`)
 
-                if(data.chatsStatus[x])
+                if(data.chatsStatus[x] && x !== "/")
                     chatIcon.innerHTML = `
                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>

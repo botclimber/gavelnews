@@ -9,4 +9,8 @@ export enum Week {
     SATURDAY,
     SUNDAY
   };
+
+export const pathMainData = "../Data/"
+export const pathBackupData = "../Data/backup/"
+export const pathChatsData = "../Data/chats/"
   

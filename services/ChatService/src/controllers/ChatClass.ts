@@ -1,6 +1,8 @@
 import * as WebSocket from 'ws';
 import { ChatClassHelper } from './ChatClassHelper';
-import { message } from "../types/types";
+import { message } from "../../../CommonStuff/src/types/types";
+import { pathMainData, pathBackupData, dateFormat, pathChatsData } from "../../../CommonStuff/src/consts/consts";
+import { formatDate, getPreviousDate } from "../../../CommonStuff/src/functions/functions";
 
 type chatCode = string
 
@@ -8,7 +10,7 @@ type chatCode = string
 export class ChatClass {
 
   // TODO: print messagesMemory and chatClientsMap memory occupation
-  private MESSAGES_LIMIT_PER_CHAT: number = 25
+  private MESSAGES_LIMIT_PER_CHAT: number = 5
   private wss: WebSocket.Server
   private messagesMemory: Map<chatCode, string[]>
   private chatClientsMap: Map<chatCode, WebSocket[]>
@@ -126,7 +128,8 @@ export class ChatClass {
         const messages = this.messagesMemory.get(chatCode)
         const rearrangedMessages = await this.helper.checkMessagesSizeLimit(messages, this.MESSAGES_LIMIT_PER_CHAT)
 
-        this.messagesMemory.set(chatCode, rearrangedMessages)
+        this.helper.saveMessagesToFile(rearrangedMessages.slicedData, `${pathChatsData}${chatCode}_${formatDate(getPreviousDate(1), dateFormat)}.txt`)
+        this.messagesMemory.set(chatCode, rearrangedMessages.rearrangedData)
       }
 
     } catch (e) {
@@ -179,7 +182,7 @@ export class ChatClass {
       const messages: string[] = this.messagesMemory.get(chatCode) ?? []
       console.log(`sending messages to client:`)
       console.log(messages)
-      
+
       ws.send(JSON.stringify(messages))
       this.broadcastChatsStatus()
 
@@ -192,13 +195,35 @@ export class ChatClass {
   private async broadcastChatsStatus() {
     const chatsStatus: { [key: string]: boolean } = Array.from(this.messagesMemory.entries())
       .reduce((acc, [chatCode, messages]) => {
-        acc[chatCode] = (messages.length > 0)? true : false;
+        acc[chatCode] = (messages.length > 0) ? true : false;
         return acc;
       }, {} as { [key: string]: boolean });
 
     this.wss.clients.forEach(client => {
-      client.send(JSON.stringify({"chatsStatus": chatsStatus}))
+      client.send(JSON.stringify({ "chatsStatus": chatsStatus }))
     })
 
+  }
+
+  async closeDay(): Promise<void> {
+
+    try {
+
+      this.messagesMemory.forEach((messages, key) => {
+        if (key !== "/" && messages.length > 0) {
+          //const date = getPreviousDate(2)
+          const date = getPreviousDate(1) // for test purposes
+
+          this.helper.saveMessagesToFile(messages, `${pathChatsData}${key}_${formatDate(date, dateFormat)}.txt`)
+        }
+      })
+
+      this.chatClientsMap = new Map();
+      this.messagesMemory = new Map();
+
+    } catch (e) {
+      console.log(e)
+      throw e
+    }
   }
 }
