@@ -1,3 +1,13 @@
+const NewsAndChatScheduler = {
+    "HOUR": 2,
+    "MIN": 30
+}
+
+const ScrapperScheduler = {
+    "HOUR": 2,
+    "MIN":20
+}
+
 module.exports = {
     apps : [
         {
@@ -5,21 +15,24 @@ module.exports = {
             cwd    : "./services/NewsService/",
             script : "npm",
             args   : "start",
-            watch  : true
+            watch  : true,
+            env    : NewsAndChatScheduler
         },
         {
             name   : "SchedulerService",
             cwd    : "./services/SchedulerService/",
             script : "npm",
             args   : "start",
-            watch  : true
+            watch  : true,
+            env    : ScrapperScheduler
         },
         {
             name   : "ChatService",
             cwd    : "./services/ChatService/",
             script : "npm",
             args   : "start",
-            watch  : true
+            watch  : true,
+            env    : NewsAndChatScheduler
         }
     ]
 }

@@ -132,8 +132,10 @@ const ruleForSaveLoadData = new schedule.RecurrenceRule();
 const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
 
 ruleForSaveLoadData.dayOfWeek = daysOfWeek;
-ruleForSaveLoadData.hour = 10;
-ruleForSaveLoadData.minute = 38;
+ruleForSaveLoadData.hour = process.env.HOUR || 2;
+ruleForSaveLoadData.minute = process.env.MIN || 30;
+
+console.log(ruleForSaveLoadData.hour)
 
 schedule.scheduleJob(ruleForSaveLoadData, async function () {
     try {
