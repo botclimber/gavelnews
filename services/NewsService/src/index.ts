@@ -4,7 +4,6 @@
 // previous days are load on request and sent
 
 import express, { NextFunction, Request, Response } from 'express';
-import fs from 'fs';
 import * as dateAndTime from "date-and-time";
 import cors from "cors";
 import * as schedule from "node-schedule";
@@ -12,17 +11,15 @@ import * as schedule from "node-schedule";
 import { NewsManipulator } from './controllers/NewsManipulator';
 
 import { fromRequestJsonFileFormat, opinion } from "../../CommonStuff/src/types/types"
-import { dateFormat, Week } from "../../CommonStuff/src/consts/consts"
-import { getPreviousDate } from "../../CommonStuff/src/functions/functions"
+import { dateFormat, Week, pathBackupData, pathMainData } from "../../CommonStuff/src/consts/consts"
+import { getPreviousDate, saveToFile, loadFromFile, formatDate } from "../../CommonStuff/src/functions/functions"
 import path from "path";
+import { ChatClass } from './controllers/ChatHandler';
 
 const viewPath = "../../../../../views/white_version/"
 
 const app = express();
 const PORT = 80;
-
-const pathMainData = "../Data/"
-const pathBackupData = "../Data/backup/"
 
 app.use(cors());
 
@@ -31,8 +28,9 @@ var jsonData: NewsManipulator
 function loadData(path: string, date: Date): fromRequestJsonFileFormat {
 
     try {
-        const filePath = `${path}allData_${dateAndTime.format(date, dateFormat)}.json`
-        return JSON.parse(fs.readFileSync(filePath, "utf-8"))
+        const filePath = `${path}allData_${formatDate(date, dateFormat)}.json`
+
+        return JSON.parse(loadFromFile(filePath))
 
     } catch (e) {
         console.log(e)
@@ -61,7 +59,6 @@ app.get("/news", function (req: Request, res: Response) {
 
     res.status(200).json(jsonData.data)
 })
-
 
 app.patch("/new/:newId/:opinion", (req: Request, res: Response) => {
 
@@ -97,6 +94,24 @@ app.get("/old/:date", (req: Request, res: Response) => {
     }
 })
 
+app.get("/old/chats/:date/:chatId", async (req: Request, res: Response) => {
+
+    const chatCode = req.params.chatId
+    const date = req.params.date
+
+    try {
+        const messages = await (new ChatClass(chatCode, date).getMessages());
+        return res.status(200).send(messages)
+
+    } catch (e: any) {
+        switch(e.code){
+        case "ENOENT": return res.status(500).send({ "msg": "Chat is empty!" }); break;
+        default: return res.status(500).send({ "msg": e.message }); 
+        }
+    }
+
+
+})
 
 /**
  * CRON JOB
@@ -106,17 +121,18 @@ const ruleForSaveLoadData = new schedule.RecurrenceRule();
 const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
 
 ruleForSaveLoadData.dayOfWeek = daysOfWeek;
-ruleForSaveLoadData.hour = 12;
-ruleForSaveLoadData.minute = 41;
+ruleForSaveLoadData.hour = 10;
+ruleForSaveLoadData.minute = 38;
 
 schedule.scheduleJob(ruleForSaveLoadData, async function () {
     try {
-        const twoDaysBefore = dateAndTime.format(getPreviousDate(2), dateFormat)
+        const twoDaysBefore = formatDate(getPreviousDate(2), dateFormat)
 
         // save manipulated data to file
         console.log("Saving data to file: Start ...")
 
-        if (jsonData.data.data.length > 0) await fs.promises.writeFile(`${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`, JSON.stringify(jsonData.data));
+        if (jsonData.data.data.length > 0) await saveToFile(JSON.stringify(jsonData.data), `${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`);
+
         else console.log("\tNothing to be saved!")
 
         console.log("Saving data to file: finish.")
