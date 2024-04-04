@@ -25,7 +25,7 @@
 TODO:
 - [ ] ``` waitForAllData() ``` change interval time from 100 to 1 or a bit higher, this is supposed to not run longer;
 - [ ] implement lazyload on scroll event;
-- [ ] [investigate] how filtering and sorting can exist with lazyload; 
+- [ ] create endpoints for filtering and sorting;
 - [ ] search function should request from server instead of looking on the client existing data;
 - [ ] backoffice page and service to check platform utilization;
 - [ ] implement chat backend validations (username limit chars, block script/html injection and reserved username keywors).
