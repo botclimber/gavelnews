@@ -202,7 +202,7 @@ schedule.scheduleJob(ruleForSaveLoadData, async function () {
     try {
         // load newly generated data 
         jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
-        jsonData.sortByTitle()
+        jsonData.sortByTitle() //TODO: sortBy existing description instead
         jsonData.cleanData()
         contentSize = jsonData.length
         console.log(`Loading recent Data into memory, with the size of ${jsonData.dataSize().toFixed(2)} `)
@@ -214,7 +214,7 @@ schedule.scheduleJob(ruleForSaveLoadData, async function () {
 
 // Read JSON data from file | TODO: put this to a cron job or check if 
 jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
-jsonData.sortByTitle()
+jsonData.sortByTitle() //TODO: sortBy existing description instead
 jsonData.cleanData()
 contentSize = jsonData.length
 
