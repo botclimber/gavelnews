@@ -19,8 +19,23 @@ export function sliceData (data: fromRequestJsonFileFormat, page: number, conten
 
   const startIndex = (page - 1) * contentPerPage;
   const endIndex = startIndex + contentPerPage;
-  const slicedData = data.slice(startIndex, endIndex);
+  const slicedData = data.data.slice(startIndex, endIndex);
 
   return { data: slicedData};
   
+}
+
+export function search(data: fromRequestJsonFileFormat, title: string): fromRequestJsonFileFormat {
+  // Use filter to find objects with matching titles
+  const filteredNews = data.data.filter(item => item.new_title.toLowerCase().includes(title.toLowerCase())
+  return {"data": filteredNews}
+}
+
+/**
+* this is used for replacement functions on client side
+*/
+export function getSingleNewData(data: fromRequestJsonFileFormat, newId: string): new_object {
+  const newContent = data.data.find(row => row.new_id === newId)
+
+  return newContent
 }
