@@ -34,7 +34,7 @@ export function search(data: fromRequestJsonFileFormat, title: string): fromRequ
 /**
 * this is used for replacement functions on client side
 */
-export function getSingleNewData(data: fromRequestJsonFileFormat, newId: string): new_object {
+export function getSingleNewData(data: fromRequestJsonFileFormat, newId: string): new_object | undefined {
   const newContent = data.data.find(row => row.new_id === newId)
 
   return newContent
