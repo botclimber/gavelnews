@@ -9,6 +9,7 @@ import cors from "cors";
 import * as schedule from "node-schedule";
 
 import { NewsManipulator } from './controllers/NewsManipulator';
+import { sortBy, filterBy, slicedData } from './controllers/NewsHelper';
 
 import { fromRequestJsonFileFormat, opinion } from "../../CommonStuff/src/types/types"
 import { dateFormat, Week, pathBackupData, pathMainData } from "../../CommonStuff/src/consts/consts"
@@ -24,6 +25,9 @@ const PORT = 80;
 app.use(cors());
 
 var jsonData: NewsManipulator
+var contentSize: number
+
+const CONTENT_PER_PAGE: number = 10
 
 function loadData(path: string, date: Date): fromRequestJsonFileFormat {
 
@@ -57,7 +61,48 @@ app.get("/", function (req: Request, res: Response) {
 
 app.get("/news", function (req: Request, res: Response) {
 
-    res.status(200).json(jsonData.data)
+    res.status(200).json({"allContentSize": contentSize, "contentSize": jsonData.data.length, "content": jsonData.data})
+})
+
+app.get("/news/:page", function (req: Request, res: Response) {
+
+    try{
+        const page = req.params.page
+
+        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
+        
+        const dataToBeSent: fromRequestJsonFileFormat = slicedData(jsonData.data, page, CONTENT_PER_PAGE)
+    
+        res.status(200).json({"allContentSize": contentSize, "contentSize": dataToBeSent.length, "content": dataToBeSent})
+        
+    }catch(e){ console.log(e) return res.status(500).json({"msg":e})}
+})
+
+app.get("/news/:action/:param/:page", function (req: Request, res: Response) {
+
+    try{
+        const action = req.params.action
+        const param = req.params.param
+        const page = parseInt(req.params.page)
+
+        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
+        if( !(param in jsonData.data[0])) throw new Error(`${param} key not valid!`);
+
+        switch(action){
+            case "filterBy":
+                const sortData = sortBy(jsonData.data, param);
+                const dataToBeSent = slicedData(sortData, page, CONTENT_PER_PAGE);
+                return res.status(200).json({"allContentSize": contentSize, "contentSize": dataToBeSent.length, "content": dataToBeSent})
+                    ; break;
+            case "sortBy":
+                const filteredData = filterBy(jsonData.data, param);
+                const dataToBeSent = slicedData(filteredData, page, CONTENT_PER_PAGE);
+                return res.status(200).json({"allContentSize": contentSize, "contentSize": dataToBeSent.length, "content": dataToBeSent})
+                    ; break;
+            default: throw new Error(`Invalid action ${action}`) ;
+        }
+        
+    }catch(e){ console.log(e) return res.status(500).json({"msg":e})}
 })
 
 app.patch("/new/:newId/:opinion", (req: Request, res: Response) => {
@@ -159,6 +204,7 @@ schedule.scheduleJob(ruleForSaveLoadData, async function () {
         jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
         jsonData.sortByTitle()
         jsonData.cleanData()
+        contentSize = jsonData.length
         console.log(`Loading recent Data into memory, with the size of ${jsonData.dataSize().toFixed(2)} `)
 
     } catch (error) {
@@ -170,6 +216,7 @@ schedule.scheduleJob(ruleForSaveLoadData, async function () {
 jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
 jsonData.sortByTitle()
 jsonData.cleanData()
+contentSize = jsonData.length
 
 // Start the server
 app.listen(PORT, () => {
