@@ -9,7 +9,7 @@ import cors from "cors";
 import * as schedule from "node-schedule";
 
 import { NewsManipulator } from './controllers/NewsManipulator';
-import { sortBy, filterBy, slicedData } from './controllers/NewsHelper';
+import { sortBy, filterBy, slicedData, getSingleNewData, search } from './controllers/NewsHelper';
 
 import { fromRequestJsonFileFormat, opinion } from "../../CommonStuff/src/types/types"
 import { dateFormat, Week, pathBackupData, pathMainData } from "../../CommonStuff/src/consts/consts"
@@ -103,6 +103,55 @@ app.get("/news/:action/:param/:page", function (req: Request, res: Response) {
         }
         
     }catch(e){ console.log(e) return res.status(500).json({"msg":e})}
+})
+
+app.get("/news/search/:title", (req: Request, res: Response) => {
+
+    const title = req.params.title
+    console.log(`trying to search for ${title}`)
+
+        try {
+            const matchedNews = search(jsonData.data, title)
+            return res.status(200).json(matchedNews)
+
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({ "msg": e })
+        }
+})
+
+app.get("/news/getNew/:id", (req: Request, res: Response) => {
+
+    const id = req.params.id
+    console.log(`trying to retrieve new with id ${id}`)
+
+        try {
+            const newData = getSingleNewData(jsonData.data, title)
+            return res.status(200).json(newData)
+
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({ "msg": e })
+        }
+})
+
+app.get("/old/:date", (req: Request, res: Response) => {
+
+    const date = req.params.date
+
+    if (date) {
+
+        try {
+            const oldJsonData = new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))
+            res.status(200).json(oldJsonData.data);
+
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({ "msg": `Error: (Most likely) No data found for the specified date` })
+        }
+    } else {
+        res.status(400).json({ "msg": "date must be included in the request params!" })
+    }
 })
 
 app.patch("/new/:newId/:opinion", (req: Request, res: Response) => {
