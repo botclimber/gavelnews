@@ -1,10 +1,12 @@
 loadDataFromServer = async () => {
-  const response = await fetch(`${api}/`);
+  const response = await fetch(`${api}/news/current`);
   const news = await response.json();
 
-  allData = news.data;
-  manipulatedData = news.data;
-  await setContent(news.data)
+  console.log(news)
+
+  allData = news.content.data;
+  manipulatedData = news.content.data;
+  await setContent(news.content.data)
 
 }
 
