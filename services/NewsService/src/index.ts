@@ -4,6 +4,7 @@
 // previous days are load on request and sent
 
 import express, { NextFunction, Request, Response } from 'express';
+import bodyParser from 'body-parser';
 import cors from "cors";
 import * as schedule from "node-schedule";
 
@@ -22,6 +23,9 @@ const app = express();
 const PORT = 80;
 
 app.use(cors());
+
+// Middleware to parse JSON bodies
+app.use(bodyParser.json());
 
 var jsonData: NewsManipulator
 var contentSize: number
@@ -121,7 +125,7 @@ app.get("/news/sortFilterBy/:sortParam/:filterParam/:filterValue/:page", functio
         const page = parseInt(req.params.page)
 
         if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
-        if (!(filterParam in jsonData.data.data[0]) || !(sortParam in jsonData.data.data[0]) ) throw new Error(`SORT_PARAm:${sortParam} or FILTER_PARAM:${filterParam} key not valid!`);
+        if (!(filterParam in jsonData.data.data[0]) || !(sortParam in jsonData.data.data[0])) throw new Error(`SORT_PARAm:${sortParam} or FILTER_PARAM:${filterParam} key not valid!`);
 
         const filteredData = filterBy(jsonData.data, filterParam, filterValue);
         const sortData = sortBy(filteredData, sortParam)
@@ -132,14 +136,20 @@ app.get("/news/sortFilterBy/:sortParam/:filterParam/:filterValue/:page", functio
     } catch (e) { console.log(e); return res.status(500).json({ "msg": e }); }
 })
 
-app.get("/news/search/:title", (req: Request, res: Response) => {
-
-    const title = req.params.title
-    console.log(`trying to search for ${title}`)
+app.post("/news/search/:page", (req: Request, res: Response) => {
 
     try {
+        console.log(req.body)
+        const title = req.body.title ?? ""
+        const page = parseInt(req.params.page)
+        console.log(`trying to search for ${title}`)
+
+        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
+        if(title === "") throw new Error ("Invalid request, either no title param or empty!")
+
         const matchedNews = search(jsonData.data, title)
-        return res.status(200).json(matchedNews)
+        const dataToBeSent = sliceData(matchedNews, page, CONTENT_PER_PAGE)
+        return res.status(200).json({ "allContentSize": matchedNews.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
 
     } catch (e) {
         console.log(e)

@@ -71,7 +71,6 @@ function printToChat(data) {
 
 
 async function chatConnection(chatCode = "/", general = true, newTitle = "") {
-    await waitForAllData()
 
     const chatTitle = document.getElementById('chatTitle')
 

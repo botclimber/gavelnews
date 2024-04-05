@@ -1,14 +1,3 @@
-function waitForAllData() {
-  return new Promise(resolve => {
-    let interval = setInterval(() => {
-      if (typeof allData !== 'undefined') {
-        clearInterval(interval);
-        resolve();
-      }
-    }, 100);
-  });
-}
-
 // Function to generate date options until a specific date
 function generateDateOptions() {
   const endDate = new Date("2024-03-20")

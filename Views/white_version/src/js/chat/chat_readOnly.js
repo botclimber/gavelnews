@@ -10,7 +10,6 @@
  */
 
 async function setChatsStatus() {
-    await waitForAllData()
 
     if (dateAsGlobal != null) {
         const response = await fetch(`${api}/old/chats/${dateAsGlobal}/*`);

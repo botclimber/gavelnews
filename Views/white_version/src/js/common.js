@@ -16,17 +16,6 @@ window.addEventListener('scroll', function () {
   }
 });
 
-function waitForAllData() {
-  return new Promise(resolve => {
-    let interval = setInterval(() => {
-      if (typeof allData !== 'undefined') {
-        clearInterval(interval);
-        resolve();
-      }
-    }, 100);
-  });
-}
-
 // Function to generate date options until a specific date
 function generateDateOptions() {
   const endDate = new Date("2024-03-20")
@@ -102,15 +91,15 @@ async function sortBy(param) {
   sortObject.isActive = true
   sortObject.param = param
 
-  const url = (filterObject.isActive)? 
-  `${api}/news/sortFilterBy/${param}/${filterObject.param}/${filterObject.value}`
-  : `${api}/news/sortBy/${param}` 
+  const url = (filterObject.isActive) ?
+    `${api}/news/sortFilterBy/${param}/${filterObject.param}/${filterObject.value}`
+    : `${api}/news/sortBy/${param}`
 
   currentReqUrl = url
   next_page = 1
   contentSize = 0
 
-  loadDataFromServer(currentReqUrl)
+  withLoadScreen(() => { loadDataFromServerGET(currentReqUrl); })
 }
 
 async function filterBy(filterValue) {
@@ -131,22 +120,28 @@ async function filterBy(filterValue) {
     next_page = 1
     contentSize = 0
 
-    loadDataFromServer(currentReqUrl)
+    withLoadScreen(() => { loadDataFromServerGET(currentReqUrl); })
   }
 }
 
 async function serachByTextInTitle(textValue) {
 
-  if (textValue === "") { await setContent(manipulatedData); }
-  else {
-    const dataContains = manipulatedData.filter(item => item.new_title.toLowerCase().includes(textValue.toLowerCase()));
-    await setContent(dataContains);
-  }
+  if (textValue !== "") {
 
+    const url = `${api}/news/search`
+
+    currentReqUrl = url
+    next_page = 1
+    contentSize = 0
+
+    withLoadScreen(() => { loadDataFromServerPOST(currentReqUrl, {title: textValue}); })
+
+  } else window.location.reload()
 }
 
-document.getElementById("searchComponent").addEventListener("input", function (event) {
-  withLoadScreen(() => serachByTextInTitle(event.target.value))
+document.getElementById("searchComponent").addEventListener("keypress", function (event) {
+
+  if (event.key === "Enter") withLoadScreen(() => serachByTextInTitle(event.target.value))
 });
 
 function checkVote(newId) {
@@ -177,18 +172,11 @@ async function markNewAsVoted(newId) {
   }
 }
 
-function getSubtractedDate(dayToSubtract) {
-  const date = new Date();
-  date.setDate(date.getDate() - dayToSubtract)
-
-  return date.toISOString().slice(0, 10)
-}
-
 // Event listener for the "Load More" button click
 document.getElementById('loadMoreButton').addEventListener('click', () => {
   // Load more data when the button is clicked
 
-  loadDataFromServer(currentReqUrl, true);
+  withLoadScreen(() => { loadDataFromServerGET(currentReqUrl, true); })
 });
 
 // Generate date options and insert them into the container

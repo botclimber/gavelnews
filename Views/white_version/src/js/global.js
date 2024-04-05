@@ -1,21 +1,22 @@
+const api = "http://localhost"
+const chatWebsocket = "ws://localhost:8002"
+
+const chatTitleLimit = 15
+
+const newsContentSize = document.getElementById("contentSize")
+const news_div = document.getElementById("news")
+const container = document.getElementById('dateContainer');
+const loadBtn = document.getElementById("loadMoreButton");
+
 var allData;
 var dateAsGlobal;
 var readOnlyPage;
 var next_page = 1;
 var filterObject = {isActive: false, param: undefined, value: undefined};
 var sortObject = {isActive: false, param: undefined};
-var currentReqUrl;
-
-const api = "http://localhost"
-const chatWebsocket = "ws://localhost:8002"
-
-const chatTitleLimit = 15
+var currentReqUrl = `${api}/news`;
 
 var contentSize = 0;
-const newsContentSize = document.getElementById("contentSize")
-const news_div = document.getElementById("news")
-const container = document.getElementById('dateContainer');
-const loadBtn = document.getElementById("loadMoreButton");
 
 function showLoading() {
     document.getElementById("loading-container").style.display = "block";
