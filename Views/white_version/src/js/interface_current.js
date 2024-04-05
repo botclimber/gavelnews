@@ -1,15 +1,17 @@
-loadDataFromServer = async () => {
-  const response = await fetch(`${api}/news`);
+loadDataFromServer = async (append = false) => {
+  const response = await fetch(`${api}/news/${next_page}`);
   const news = await response.json();
-  
+
   dateAsGlobal = getSubtractedDate(1);
   readOnlyPage = false;
 
   console.log(dateAsGlobal)
+  console.log(news.content.data)
 
-  allData = news.data;
-  manipulatedData = news.data;
-  await setContent(news.data)
+  newsContentSize.innerHTML = `${news.contentSize * next_page} of ${news.allContentSize} news`
+
+  next_page++
+  await setContent(news.content.data, append)
 
 }
 
@@ -39,9 +41,10 @@ async function vote(voteValue, newId) {
     });
 }
 
-async function setContent(dataList) {
+async function setContent(dataList, append = false) {
   // clear div content
-  news_div.innerHTML = ""
+
+  if (!append) news_div.innerHTML = "";
 
   dataList.forEach(r => {
 
@@ -116,7 +119,6 @@ async function setContent(dataList) {
                 </div>
               </div>`
   })
-
 }
 
 withLoadScreen(() => loadDataFromServer())

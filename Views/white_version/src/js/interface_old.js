@@ -1,4 +1,4 @@
-loadDataFromServer = async () => {
+loadDataFromServer = async (append = false) => {
 
   const queryString = window.location.search
   const urlParams = new URLSearchParams(queryString);

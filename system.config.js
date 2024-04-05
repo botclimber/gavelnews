@@ -1,11 +1,11 @@
-const NewsAndChatScheduler = {
-    "HOUR": 23,
-    "MIN": 4
-}
-
 const ScrapperScheduler = {
     "HOUR": 23,
-    "MIN":3
+    "MIN":8
+}
+
+const NewsAndChatScheduler = {
+    "HOUR": 23,
+    "MIN": 9
 }
 
 module.exports = {

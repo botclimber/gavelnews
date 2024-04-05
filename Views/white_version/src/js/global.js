@@ -1,13 +1,16 @@
 var allData;
-var manipulatedData;
 var dateAsGlobal;
 var readOnlyPage;
+var next_page = 1;
+var filterObject = {isActive: false, param: undefined, value: undefined};
+var sortObject = {isActive: false, param: undefined};
 
 const api = "http://localhost"
 const chatWebsocket = "ws://localhost:8002"
 
 const chatTitleLimit = 15
 
+const newsContentSize = document.getElementById("contentSize")
 const news_div = document.getElementById("news")
 var container = document.getElementById('dateContainer');
 

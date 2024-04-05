@@ -4,14 +4,13 @@
 // previous days are load on request and sent
 
 import express, { NextFunction, Request, Response } from 'express';
-import * as dateAndTime from "date-and-time";
 import cors from "cors";
 import * as schedule from "node-schedule";
 
 import { NewsManipulator } from './controllers/NewsManipulator';
-import { sortBy, filterBy, slicedData, getSingleNewData, search } from './controllers/NewsHelper';
+import { sortBy, filterBy, sliceData, getSingleNewData, search } from './controllers/NewsHelper';
 
-import { fromRequestJsonFileFormat, opinion } from "../../CommonStuff/src/types/types"
+import { fromRequestJsonFileFormat, new_object, opinion } from "../../CommonStuff/src/types/types"
 import { dateFormat, Week, pathBackupData, pathMainData } from "../../CommonStuff/src/consts/consts"
 import { getPreviousDate, saveToFile, loadFromFile, formatDate } from "../../CommonStuff/src/functions/functions"
 import path from "path";
@@ -61,48 +60,55 @@ app.get("/", function (req: Request, res: Response) {
 
 app.get("/news", function (req: Request, res: Response) {
 
-    res.status(200).json({"allContentSize": contentSize, "contentSize": jsonData.data.length, "content": jsonData.data})
+    res.status(200).json({ "allContentSize": contentSize, "contentSize": jsonData.data.data.length, "content": jsonData.data })
 })
 
 app.get("/news/:page", function (req: Request, res: Response) {
 
-    try{
-        const page = req.params.page
-
-        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
-        
-        const dataToBeSent: fromRequestJsonFileFormat = slicedData(jsonData.data, page, CONTENT_PER_PAGE)
-    
-        res.status(200).json({"allContentSize": contentSize, "contentSize": dataToBeSent.length, "content": dataToBeSent})
-        
-    }catch(e){ console.log(e) return res.status(500).json({"msg":e})}
-})
-
-app.get("/news/:action/:param/:page", function (req: Request, res: Response) {
-
-    try{
-        const action = req.params.action
-        const param = req.params.param
+    try {
         const page = parseInt(req.params.page)
 
         if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
-        if( !(param in jsonData.data[0])) throw new Error(`${param} key not valid!`);
 
-        switch(action){
-            case "filterBy":
-                const sortData = sortBy(jsonData.data, param);
-                const dataToBeSent = slicedData(sortData, page, CONTENT_PER_PAGE);
-                return res.status(200).json({"allContentSize": contentSize, "contentSize": dataToBeSent.length, "content": dataToBeSent})
-                    ; break;
-            case "sortBy":
-                const filteredData = filterBy(jsonData.data, param);
-                const dataToBeSent = slicedData(filteredData, page, CONTENT_PER_PAGE);
-                return res.status(200).json({"allContentSize": contentSize, "contentSize": dataToBeSent.length, "content": dataToBeSent})
-                    ; break;
-            default: throw new Error(`Invalid action ${action}`) ;
-        }
-        
-    }catch(e){ console.log(e) return res.status(500).json({"msg":e})}
+        const dataToBeSent: fromRequestJsonFileFormat = sliceData(jsonData.data, page, CONTENT_PER_PAGE)
+
+        res.status(200).json({ "allContentSize": contentSize, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
+
+    } catch (e) { console.log(e); return res.status(500).json({ "msg": e }); }
+})
+
+app.get("/news/sortBy/:param/:page", function (req: Request, res: Response) {
+
+    try {
+        const param = req.params.param as keyof new_object
+        const page = parseInt(req.params.page)
+
+        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
+        if (!(param in jsonData.data.data[0])) throw new Error(`${param} key not valid!`);
+
+        const sortData = sortBy(jsonData.data, param);
+        const dataToBeSent = sliceData(sortData, page, CONTENT_PER_PAGE);
+        return res.status(200).json({ "allContentSize": contentSize, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
+
+    } catch (e) { console.log(e); return res.status(500).json({ "msg": e }); }
+})
+
+app.get("/news/filterBy/:param/:value/:page", function (req: Request, res: Response) {
+
+    try {
+
+        const param = req.params.param as keyof new_object
+        const value = req.params.value
+        const page = parseInt(req.params.page)
+
+        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
+        if (!(param in jsonData.data.data[0])) throw new Error(`${param} key not valid!`);
+
+        const filteredData = filterBy(jsonData.data, param, value);
+        const dataToBeSent = sliceData(filteredData, page, CONTENT_PER_PAGE);
+        return res.status(200).json({ "allContentSize": contentSize, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
+
+    } catch (e) { console.log(e); return res.status(500).json({ "msg": e }); }
 })
 
 app.get("/news/search/:title", (req: Request, res: Response) => {
@@ -110,14 +116,14 @@ app.get("/news/search/:title", (req: Request, res: Response) => {
     const title = req.params.title
     console.log(`trying to search for ${title}`)
 
-        try {
-            const matchedNews = search(jsonData.data, title)
-            return res.status(200).json(matchedNews)
+    try {
+        const matchedNews = search(jsonData.data, title)
+        return res.status(200).json(matchedNews)
 
-        } catch (e) {
-            console.log(e)
-            res.status(500).json({ "msg": e })
-        }
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({ "msg": e })
+    }
 })
 
 app.get("/news/getNew/:id", (req: Request, res: Response) => {
@@ -125,14 +131,14 @@ app.get("/news/getNew/:id", (req: Request, res: Response) => {
     const id = req.params.id
     console.log(`trying to retrieve new with id ${id}`)
 
-        try {
-            const newData = getSingleNewData(jsonData.data, title)
-            return res.status(200).json(newData)
+    try {
+        const newData = getSingleNewData(jsonData.data, id)
+        return res.status(200).json(newData)
 
-        } catch (e) {
-            console.log(e)
-            res.status(500).json({ "msg": e })
-        }
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({ "msg": e })
+    }
 })
 
 app.get("/old/:date", (req: Request, res: Response) => {
@@ -199,7 +205,7 @@ app.get("/old/chats/:date/:chatId", async (req: Request, res: Response) => {
         if (chatCode === "*") {
 
             const chatsStatus = await handler.getChatsStatus()
-            return res.status(200).json({"chatsStatus": chatsStatus})
+            return res.status(200).json({ "chatsStatus": chatsStatus })
 
         } else {
 
@@ -229,8 +235,6 @@ ruleForSaveLoadData.dayOfWeek = daysOfWeek;
 ruleForSaveLoadData.hour = process.env.HOUR || 2;
 ruleForSaveLoadData.minute = process.env.MIN || 30;
 
-console.log(ruleForSaveLoadData.hour)
-
 schedule.scheduleJob(ruleForSaveLoadData, async function () {
     try {
         const twoDaysBefore = formatDate(getPreviousDate(2), dateFormat)
@@ -253,7 +257,7 @@ schedule.scheduleJob(ruleForSaveLoadData, async function () {
         jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
         jsonData.sortByTitle() //TODO: sortBy existing description instead
         jsonData.cleanData()
-        contentSize = jsonData.length
+        contentSize = jsonData.data.data.length
         console.log(`Loading recent Data into memory, with the size of ${jsonData.dataSize().toFixed(2)} `)
 
     } catch (error) {
@@ -265,7 +269,7 @@ schedule.scheduleJob(ruleForSaveLoadData, async function () {
 jsonData = new NewsManipulator(loadData(pathMainData, getPreviousDate(1)))
 jsonData.sortByTitle() //TODO: sortBy existing description instead
 jsonData.cleanData()
-contentSize = jsonData.length
+contentSize = jsonData.data.data.length
 
 // Start the server
 app.listen(PORT, () => {

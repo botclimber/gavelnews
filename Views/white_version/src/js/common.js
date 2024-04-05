@@ -185,5 +185,11 @@ function getSubtractedDate(dayToSubtract) {
   return date.toISOString().slice(0, 10)
 }
 
+// Event listener for the "Load More" button click
+document.getElementById('loadMoreButton').addEventListener('click', () => {
+  // Load more data when the button is clicked
+  loadDataFromServer(true);
+});
+
 // Generate date options and insert them into the container
 container.innerHTML = generateDateOptions();

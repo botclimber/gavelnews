@@ -2,9 +2,19 @@ import {fromRequestJsonFileFormat, new_object} from "../../../CommonStuff/src/ty
 
 export function sortBy(data: fromRequestJsonFileFormat, param: keyof new_object): fromRequestJsonFileFormat {
   const sortedData = data.data.slice().sort((a, b) => {
-    if (a[param] < b[param]) return -1;
-    if (a[param] > b[param]) return 1;
-    return 0;
+    // Use optional chaining to access properties safely
+    const aValue = a[param];
+    const bValue = b[param];
+
+    // Check if aValue or bValue is undefined
+    if (aValue === undefined && bValue === undefined) return 0; // Both are undefined, consider them equal
+    if (aValue === undefined) return -1; // aValue is undefined, consider it smaller
+    if (bValue === undefined) return 1; // bValue is undefined, consider it smaller
+    
+    // Now, both aValue and bValue are defined, proceed with regular comparison
+    if (aValue < bValue) return -1;
+    if (aValue > bValue) return 1;
+    return 0; // Values are equal
   });
 
   return { data: sortedData };
@@ -21,14 +31,13 @@ export function sliceData (data: fromRequestJsonFileFormat, page: number, conten
   const endIndex = startIndex + contentPerPage;
   const slicedData = data.data.slice(startIndex, endIndex);
 
-  return { data: slicedData};
-  
+  return { data: slicedData}; 
 }
 
 export function search(data: fromRequestJsonFileFormat, title: string): fromRequestJsonFileFormat {
   // Use filter to find objects with matching titles
-  const filteredNews = data.data.filter(item => item.new_title.toLowerCase().includes(title.toLowerCase())
-  return {"data": filteredNews}
+  const filteredNews = data.data.filter(item => item.new_title.toLowerCase().includes(title.toLowerCase()))
+  return {data: filteredNews}
 }
 
 /**
