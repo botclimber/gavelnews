@@ -1,5 +1,6 @@
 import {fromRequestJsonFileFormat, new_object} from "../../../CommonStuff/src/types/types"
 
+// TODO: add param for ASC | DESC
 export function sortBy(data: fromRequestJsonFileFormat, param: keyof new_object): fromRequestJsonFileFormat {
   const sortedData = data.data.slice().sort((a, b) => {
     // Use optional chaining to access properties safely

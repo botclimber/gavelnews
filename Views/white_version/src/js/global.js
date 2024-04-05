@@ -10,9 +10,11 @@ const chatWebsocket = "ws://localhost:8002"
 
 const chatTitleLimit = 15
 
+var contentSize = 0;
 const newsContentSize = document.getElementById("contentSize")
 const news_div = document.getElementById("news")
-var container = document.getElementById('dateContainer');
+const container = document.getElementById('dateContainer');
+const loadBtn = document.getElementById("loadMoreButton");
 
 function showLoading() {
     document.getElementById("loading-container").style.display = "block";

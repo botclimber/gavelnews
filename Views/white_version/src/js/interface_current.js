@@ -6,9 +6,14 @@ loadDataFromServer = async (append = false) => {
   readOnlyPage = false;
 
   console.log(dateAsGlobal)
+  console.log(news)
   console.log(news.content.data)
 
-  newsContentSize.innerHTML = `${news.contentSize * next_page} of ${news.allContentSize} news`
+  contentSize += news.contentSize
+
+  if(contentSize >= news.allContentSize) loadBtn.classList.add('hidden');
+
+  newsContentSize.innerHTML = `${contentSize} of ${news.allContentSize} news`
 
   next_page++
   await setContent(news.content.data, append)
@@ -121,7 +126,6 @@ async function setContent(dataList, append = false) {
                   </p>
                 </div>
               </div>`
-              console.log("request")
   })
 }
 

@@ -106,7 +106,28 @@ app.get("/news/filterBy/:param/:value/:page", function (req: Request, res: Respo
 
         const filteredData = filterBy(jsonData.data, param, value);
         const dataToBeSent = sliceData(filteredData, page, CONTENT_PER_PAGE);
-        return res.status(200).json({ "allContentSize": contentSize, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
+        return res.status(200).json({ "allContentSize": filteredData.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
+
+    } catch (e) { console.log(e); return res.status(500).json({ "msg": e }); }
+})
+
+app.get("/news/sortFilterBy/:sortParam/:filterParam/:filterValue/:page", function (req: Request, res: Response) {
+
+    try {
+
+        const sortParam = req.params.sortParam as keyof new_object
+        const filterParam = req.params.filterParam as keyof new_object
+        const filterValue = req.params.filterValue
+        const page = parseInt(req.params.page)
+
+        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
+        if (!(filterParam in jsonData.data.data[0]) || !(sortParam in jsonData.data.data[0]) ) throw new Error(`SORT_PARAm:${sortParam} or FILTER_PARAM:${filterParam} key not valid!`);
+
+        const filteredData = filterBy(jsonData.data, filterParam, filterValue);
+        const sortData = sortBy(filteredData, sortParam)
+        const dataToBeSent = sliceData(sortData, page, CONTENT_PER_PAGE);
+
+        return res.status(200).json({ "allContentSize": filteredData.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
 
     } catch (e) { console.log(e); return res.status(500).json({ "msg": e }); }
 })
