@@ -8,7 +8,8 @@ const news_div = document.getElementById("news")
 const container = document.getElementById('dateContainer');
 const loadBtn = document.getElementById("loadMoreButton");
 
-var allData;
+var currentChat = {chatCode: "/", general: true, newTitle: ""};
+var allDataIsSet = false;
 var dateAsGlobal;
 var readOnlyPage;
 var next_page = 1;

@@ -145,6 +145,8 @@ async function setContent(dataList, append = false) {
                 </div>
               </div>`
   })
+
+  allDataIsSet = true;
 }
 
 withLoadScreen(() => { loadDataFromServerGET(currentReqUrl); })

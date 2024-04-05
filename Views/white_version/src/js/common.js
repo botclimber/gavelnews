@@ -3,6 +3,18 @@ function isMobileDevice() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
+function waitForAllData() {
+  return new Promise(resolve => {
+    let interval = setInterval(() => {
+      if (allDataIsSet) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 100);
+  });
+}
+
+// fix menu when user scrolls down
 window.addEventListener('scroll', function () {
   var menu = document.getElementById('menu');
   var scrollPosition = window.scrollY;
@@ -176,6 +188,7 @@ async function markNewAsVoted(newId) {
 document.getElementById('loadMoreButton').addEventListener('click', () => {
   // Load more data when the button is clicked
 
+  changeConnection(currentChat.chatCode, currentChat.general, currentChat.newTitle, false);
   withLoadScreen(() => { loadDataFromServerGET(currentReqUrl, true); })
 });
 

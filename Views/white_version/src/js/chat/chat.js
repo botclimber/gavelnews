@@ -1,9 +1,10 @@
 var activeNew = null
-var socket = chatConnection()
+var socket = chatConnection();
 
 async function chatConnection(chatCode = "/", general = true, newTitle = "") {
+    await waitForAllData();
 
-    setChatTitle(`#${chatCode.replace("/", "")}`, general, `${newTitle.substring(0, chatTitleLimit)}...`)
+    setChatTitle(`#${chatCode.replace("/", "")}`, general, `${newTitle}`)
 
     // Establishing a WebSocket connection
     const connection = new WebSocket(`${chatWebsocket}${chatCode}`);
@@ -22,8 +23,10 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
 
         if (data.chatsStatus) {
             for (let x in data.chatsStatus){
+                console.log(x)
                 const chatIcon = document.getElementById(`chatIcon-${x}`)
 
+                console.log(chatIcon)
                 if(chatIcon && data.chatsStatus[x] && x !== "/")
                     chatIcon.innerHTML = `
                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -96,8 +99,12 @@ addEventListener("keydown", (event) => {
     if (event.key === "Alt" && activeNew !== null) insertNewInInput(activeNew);
 })
 
-async function changeConnection(chatCode = "/", general = true, newTitle = "") {
+async function changeConnection(chatCode = "/", general = true, newTitle = "", openChat = true) {
     chat.innerHTML = ""
+
+    currentChat.chatCode = chatCode
+    currentChat.general = general
+    currentChat.newTitle = newTitle
 
     if (socket !== null) {
         const s = await socket
@@ -106,7 +113,7 @@ async function changeConnection(chatCode = "/", general = true, newTitle = "") {
 
     socket = chatConnection(chatCode, general, newTitle)
 
-    chatContainer.classList.remove('hidden');
+    if(openChat) chatContainer.classList.remove('hidden');
 
 }
 
