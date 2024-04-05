@@ -47,13 +47,13 @@ export class NewsManipulator {
     }
 
     cleanData(): void {
-        this.data.data = this.data.data.map(element => {
+            this.data.data = this.data.data.map(element => {
 
-            element.new_title = element.new_title.replaceAll("<em>", "")
-            element.new_title = element.new_title.replaceAll("</em>", "")
-            element.new_title = element.new_title.replaceAll("\"", "")
-            
-            return element
-        })
+                element.new_title = element.new_title.replaceAll("<em>", "")
+                element.new_title = element.new_title.replaceAll("</em>", "")
+                element.new_title = element.new_title.replaceAll("\"", "")
+                
+                return element
+            })
     }
 }
