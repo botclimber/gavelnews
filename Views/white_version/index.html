@@ -120,13 +120,13 @@
 
             <div id="menu" class="menu flex flex-col sm:flex-row items-center justify-between">
                 <div class="mb-3 sm:mb-0">
-                    <button onclick="withLoadScreen(() => sortBy('isTruePerc'))"
+                    <button onclick="withLoadScreen(() => sortBy('new_isTrue'))"
                         class="filter-btn bg-green-500">True</button>
-                    <button onclick="withLoadScreen(() => sortBy('noOpinionPerc'))" class="filter-btn bg-gray-500">No
+                    <button onclick="withLoadScreen(() => sortBy('new_noOpinion'))" class="filter-btn bg-gray-500">No
                         Opinion</button>
-                    <button onclick="withLoadScreen(() => sortBy('isUnclearPerc'))"
+                    <button onclick="withLoadScreen(() => sortBy('new_isUnclear'))"
                         class="filter-btn bg-orange-500">Unclear</button>
-                    <button onclick="withLoadScreen(() => sortBy('isFalsePerc'))"
+                    <button onclick="withLoadScreen(() => sortBy('new_isFalse'))"
                         class="filter-btn bg-red-500">False</button>
                 </div>
                 <input id="searchComponent" type="text" value="" class="search-box mb-3 sm:mb-0"

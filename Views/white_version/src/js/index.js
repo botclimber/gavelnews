@@ -13,7 +13,6 @@ const generateRandomString = (len) => {
 const getUserId = () => {
 
     const userId = localStorage.getItem("userId")
-    console.log(userId)
 
     if(userId === null){
         const newUserId = generateRandomString(8)

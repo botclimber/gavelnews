@@ -1,21 +1,21 @@
-loadDataFromServer = async (append = false) => {
-  const response = await fetch(`${api}/news/${next_page}`);
+loadDataFromServer = async (reqUrl, append = false) => {
+
+  const response = await fetch(`${reqUrl}/${next_page}`);
   const news = await response.json();
 
   dateAsGlobal = getSubtractedDate(1);
   readOnlyPage = false;
 
-  console.log(dateAsGlobal)
-  console.log(news)
-  console.log(news.content.data)
-
   contentSize += news.contentSize
 
   if(contentSize >= news.allContentSize) loadBtn.classList.add('hidden');
+  else loadBtn.classList.remove('hidden');
 
   newsContentSize.innerHTML = `${contentSize} of ${news.allContentSize} news`
 
   next_page++
+
+  console.log(news)
   await setContent(news.content.data, append)
 
 }
@@ -129,4 +129,4 @@ async function setContent(dataList, append = false) {
   })
 }
 
-withLoadScreen(() => loadDataFromServer())
+withLoadScreen(() =>{ currentReqUrl =`${api}/news`; loadDataFromServer(currentReqUrl);})

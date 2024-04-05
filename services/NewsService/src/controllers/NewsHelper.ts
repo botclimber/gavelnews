@@ -1,21 +1,49 @@
 import {fromRequestJsonFileFormat, new_object} from "../../../CommonStuff/src/types/types"
 
+function calcPercentage (nr: number, total: number): number {
+
+  return +((nr / total) * 100).toFixed(2);
+}
+
 // TODO: add param for ASC | DESC
 export function sortBy(data: fromRequestJsonFileFormat, param: keyof new_object): fromRequestJsonFileFormat {
-  const sortedData = data.data.slice().sort((a, b) => {
-    // Use optional chaining to access properties safely
-    const aValue = a[param];
-    const bValue = b[param];
 
+  const veracityValues = ["new_isTrue", "new_isFalse", "new_isUnclear", "new_noOpinion"]
+
+  const getSortResult = (aValue: any, bValue: any) => {
     // Check if aValue or bValue is undefined
     if (aValue === undefined && bValue === undefined) return 0; // Both are undefined, consider them equal
     if (aValue === undefined) return -1; // aValue is undefined, consider it smaller
     if (bValue === undefined) return 1; // bValue is undefined, consider it smaller
     
     // Now, both aValue and bValue are defined, proceed with regular comparison
-    if (aValue < bValue) return -1;
-    if (aValue > bValue) return 1;
+    if (aValue < bValue) return 1;
+    if (aValue > bValue) return -1;
     return 0; // Values are equal
+  }
+
+  const sortedData = data.data.slice().sort((a, b) => {
+    // Use optional chaining to access properties safely
+
+    if (veracityValues.includes(param)){
+      const aTotal = (a.new_isFalse + a.new_isTrue + a.new_isUnclear + a.new_noOpinion )
+      const bTotal = (b.new_isFalse + b.new_isTrue + b.new_isUnclear + b.new_noOpinion )
+
+      const aNr = a[param] ?? 0
+      const bNr = b[param] ?? 0
+      
+      const aValue = calcPercentage(+aNr, aTotal);
+      const bValue = calcPercentage(+bNr, bTotal);
+
+      return getSortResult(aValue, bValue)
+    
+    }else{
+      const aValue = a[param];
+      const bValue = b[param];
+
+      return getSortResult(aValue, bValue)
+    }
+
   });
 
   return { data: sortedData };

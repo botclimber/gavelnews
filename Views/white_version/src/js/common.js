@@ -97,42 +97,41 @@ async function setBarsContent(new_data) {
   `
 }
 
-async function sortBy(veracityValue) {
+async function sortBy(param) {
 
-  /* consider using bubble or any other sorting algorithm if its too slow
-  var sortedData = allData;
+  sortObject.isActive = true
+  sortObject.param = param
 
-  for(var i = sortedData.length; i > 0; i--){
-    for(var j = 0; j < i - 1; j++){
-      if(sortedData[j][veracityValue] < sortedData[j+1][veracityValue]){
-        var temp = sortedData[j];
-        sortedData[j] = sortedData[j + 1];
-        sortedData[j + 1] = temp;
-      }
-    }
-  }*/
+  const url = (filterObject.isActive)? 
+  `${api}/news/sortFilterBy/${param}/${filterObject.param}/${filterObject.value}`
+  : `${api}/news/sortBy/${param}` 
 
-  manipulatedData = manipulatedData.sort((a, b) => {
-    const percentagesOfA = transformToPercentages(a.new_isTrue, a.new_isFalse, a.new_noOpinion, a.new_isUnclear)
-    const percentagesOfB = transformToPercentages(b.new_isTrue, b.new_isFalse, b.new_noOpinion, b.new_isUnclear)
+  currentReqUrl = url
+  next_page = 1
+  contentSize = 0
 
-    return percentagesOfB[veracityValue] - percentagesOfA[veracityValue]
-  });
-
-  await setContent(manipulatedData)
-
+  loadDataFromServer(currentReqUrl)
 }
 
-async function filterBy(sourceValue) {
+async function filterBy(filterValue) {
 
-  if (sourceValue === "*") {
-    manipulatedData = allData;
-    await setContent(manipulatedData);
+  if (filterValue === "*") {
+    window.location.reload();
 
   }
   else {
-    manipulatedData = allData.filter(item => item.new_source === sourceValue);
-    await setContent(manipulatedData)
+
+    filterObject.isActive = true
+    filterObject.param = "new_source"
+    filterObject.value = filterValue
+
+    const url = `${api}/news/filterBy/new_source/${filterValue}`
+
+    currentReqUrl = url
+    next_page = 1
+    contentSize = 0
+
+    loadDataFromServer(currentReqUrl)
   }
 }
 
@@ -188,7 +187,8 @@ function getSubtractedDate(dayToSubtract) {
 // Event listener for the "Load More" button click
 document.getElementById('loadMoreButton').addEventListener('click', () => {
   // Load more data when the button is clicked
-  loadDataFromServer(true);
+
+  loadDataFromServer(currentReqUrl, true);
 });
 
 // Generate date options and insert them into the container
