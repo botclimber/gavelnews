@@ -104,8 +104,8 @@ async function sortBy(param) {
   sortObject.param = param
 
   const url = (filterObject.isActive) ?
-    `${api}/news/sortFilterBy/${param}/${filterObject.param}/${filterObject.value}`
-    : `${api}/news/sortBy/${param}`
+    `${pageBaseEndpoint}/sortFilterBy/${param}/${filterObject.param}/${filterObject.value}`
+    : `${pageBaseEndpoint}/sortBy/${param}`
 
   currentReqUrl = url
   next_page = 1
@@ -126,7 +126,7 @@ async function filterBy(filterValue) {
     filterObject.param = "new_source"
     filterObject.value = filterValue
 
-    const url = `${api}/news/filterBy/new_source/${filterValue}`
+    const url = `${pageBaseEndpoint}/filterBy/new_source/${filterValue}`
 
     currentReqUrl = url
     next_page = 1
@@ -140,7 +140,7 @@ async function serachByTextInTitle(textValue) {
 
   if (textValue !== "") {
 
-    const url = `${api}/news/search`
+    const url = `${pageBaseEndpoint}/search`
 
     currentReqUrl = url
     next_page = 1
@@ -188,7 +188,7 @@ async function markNewAsVoted(newId) {
 document.getElementById('loadMoreButton').addEventListener('click', () => {
   // Load more data when the button is clicked
 
-  changeConnection(currentChat.chatCode, currentChat.general, currentChat.newTitle, false);
+  if(!readOnlyPage) changeConnection(currentChat.chatCode, currentChat.general, currentChat.newTitle, false);
   withLoadScreen(() => { loadDataFromServerGET(currentReqUrl, true); })
 });
 

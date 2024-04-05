@@ -15,7 +15,7 @@ var readOnlyPage;
 var next_page = 1;
 var filterObject = {isActive: false, param: undefined, value: undefined};
 var sortObject = {isActive: false, param: undefined};
-var currentReqUrl = `${api}/news`;
+var currentReqUrl;
 
 var contentSize = 0;
 

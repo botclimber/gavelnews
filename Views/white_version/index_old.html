@@ -103,13 +103,13 @@
 
             <div id="menu" class="menu flex flex-col sm:flex-row items-center justify-between">
                 <div class="mb-3 sm:mb-0">
-                    <button onclick="withLoadScreen(() => sortBy('isTruePerc'))"
+                    <button onclick="withLoadScreen(() => sortBy('new_isTrue'))"
                         class="filter-btn bg-green-500">True</button>
-                    <button onclick="withLoadScreen(() => sortBy('noOpinionPerc'))" class="filter-btn bg-gray-500">No
+                    <button onclick="withLoadScreen(() => sortBy('new_noOpinion'))" class="filter-btn bg-gray-500">No
                         Opinion</button>
-                    <button onclick="withLoadScreen(() => sortBy('isUnclearPerc'))"
+                    <button onclick="withLoadScreen(() => sortBy('new_isUnclear'))"
                         class="filter-btn bg-orange-500">Unclear</button>
-                    <button onclick="withLoadScreen(() => sortBy('isFalsePerc'))"
+                    <button onclick="withLoadScreen(() => sortBy('new_isFalse'))"
                         class="filter-btn bg-red-500">False</button>
                 </div>
                 <input id="searchComponent" type="text" value="" class="search-box mb-3 sm:mb-0"
@@ -197,8 +197,17 @@
                 </div>
             </div>
 
-            <div class="mt-[55px] grid gap-4 lg:grid-cols-4" id="news">
+            <div class="flex mt-[30px]">
+                <p id="contentSize"></p>
             </div>
+            <hr>
+            <div class="mt-[10px] grid gap-4 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2" id="news">
+            </div>
+            <button id="loadMoreButton"
+                class="mt-[50px] bg-[#983e16] hover:bg-[#b97a5f] text-[10pt] text-white font-bold py-1 px-2 rounded inline-flex items-center">
+                Load More
+                <svg class="ml-[5px] w-5 h-5" fill="#fff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 333.639 333.639" xml:space="preserve" stroke="#fff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M304.122,131.742c-10.172,0-18.447,8.275-18.447,18.447v68.817c0,9.056-11.499,18.855-20.554,18.855H72.43l31.114-32.33 c3.479-3.482,5.404-8.683,5.404-13.612c0-4.924-1.925-9.891-5.404-13.367c-3.48-3.488-8.116-5.566-13.042-5.566 c-4.924,0-9.56,1.838-13.04,5.32l-62.528,62.492c-1.735,1.711-3.107,3.717-4.059,6.022c-1.895,4.563-1.895,9.56,0,14.136 c0.945,2.281,2.306,4.299,3.99,5.969l61.312,61.309c3.48,3.488,8.116,5.404,13.04,5.404c4.927,0,9.562-1.97,13.042-5.452 c7.194-7.188,7.194-17.63,0-24.824L72.43,274.756h192.691c29.394,0,57.447-26.361,57.447-55.749v-68.817 C322.568,140.011,314.294,131.742,304.122,131.742z M310.271,219.007c0,22.614-22.535,43.451-45.149,43.451H42.739l50.825,49.6 c2.405,2.401,2.405,5.681,0,8.082c-1.198,1.201-2.771,1.501-4.348,1.501c-1.573,0-3.146-0.756-4.347-1.951L23.56,258.303 c-0.58-0.576-1.021-1.285-1.336-2.042c-0.624-1.501-0.624-3.219,0-4.72c0.315-0.75,0.757-1.441,1.336-2.012l62.594-62.6 c2.405-2.402,6.293-2.402,8.695,0c2.405,2.401,2.405,7.506,0,9.908L42.739,250.16h222.382c15.834,0,32.852-15.324,32.852-31.153 v-68.817c0-3.396,2.751-6.149,6.149-6.149s6.148,2.753,6.148,6.149V219.007z"></path> <path d="M27.421,202.458c10.169,0,18.447-8.28,18.447-18.446v-68.909c0-9.052,7.833-12.52,16.892-12.52H261.05l-30.475,28.532 c-7.188,7.193-7.182,17.597,0.018,24.796c3.489,3.483,8.113,5.074,13.031,5.074s9.541-2.072,13.042-5.573l62.594-62.681 c3.478-3.48,5.404-8.14,5.404-13.066c0-4.924-1.927-9.562-5.404-13.049L257.951,5.333C254.468,1.847,249.833,0,244.909,0 c-4.931,0-9.566,2.072-13.043,5.561c-7.193,7.188-7.193,20.519,0,27.706l30.469,32.423H62.759 c-29.394,0-53.785,20.014-53.785,49.414v68.909C8.974,194.178,17.252,202.458,27.421,202.458z M21.272,115.103 c0-22.617,18.87-37.116,41.487-37.116h229.263l-51.461-53.416c-2.408-2.405-2.408-7.269,0-9.665 c2.407-2.399,6.287-2.892,8.694-0.486l61.31,61.074c2.407,2.405,2.407,6.17,0,8.575l-62.595,62.546 c-1.2,1.198-2.773,1.771-4.347,1.771c-1.58,0-3.153-0.622-4.348-1.822c-2.408-2.402-2.408-4.354,0-6.756l51.455-49.524H62.759 c-15.829,0-29.189,8.983-29.189,24.818v68.909c0,3.398-2.747,6.148-6.149,6.148c-3.401,0-6.149-2.75-6.149-6.148V115.103z"></path> </g> </g> </g></svg>
+            </button>
         </section>
         <!-- Section: Design Block -->
         <footer style="border-radius: 10px;" class="bg-gray-300 py-2">
@@ -250,9 +259,9 @@
 
     <!-- Container for demo purpose -->
     <script src="./src/js/global.js"></script>
+    <script src="./src/js/index.js"></script>
     <script src="./src/js/interface_old.js"></script>
     <script src="./src/js/common.js"></script>
-    <script src="./src/js/index.js"></script>
     <script src="./src/js/chat/chat_commons.js"></script>
     <script src="./src/js/chat/chat_readOnly.js"></script>
 

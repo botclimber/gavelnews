@@ -1,3 +1,5 @@
+pageBaseEndpoint = `${api}/news/current`
+
 dateAsGlobal = getSubtractedDate(1);
 readOnlyPage = false;
 
@@ -149,4 +151,4 @@ async function setContent(dataList, append = false) {
   allDataIsSet = true;
 }
 
-withLoadScreen(() => { loadDataFromServerGET(currentReqUrl); })
+withLoadScreen(() => { currentReqUrl = pageBaseEndpoint; loadDataFromServerGET(currentReqUrl); })

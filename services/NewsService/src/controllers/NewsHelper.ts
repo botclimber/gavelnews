@@ -1,8 +1,13 @@
 import {fromRequestJsonFileFormat, new_object} from "../../../CommonStuff/src/types/types"
+import {dateRegex} from "../../../CommonStuff/src/consts/consts"
 
 function calcPercentage (nr: number, total: number): number {
 
   return +((nr / total) * 100).toFixed(2);
+}
+
+export function isValidDateFormat(dateString: string): boolean {
+  return dateRegex.test(dateString);
 }
 
 // TODO: add param for ASC | DESC

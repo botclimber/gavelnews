@@ -9,7 +9,7 @@ import cors from "cors";
 import * as schedule from "node-schedule";
 
 import { NewsManipulator } from './controllers/NewsManipulator';
-import { sortBy, filterBy, sliceData, getSingleNewData, search } from './controllers/NewsHelper';
+import { sortBy, filterBy, sliceData, getSingleNewData, search, isValidDateFormat } from './controllers/NewsHelper';
 
 import { fromRequestJsonFileFormat, new_object, opinion } from "../../CommonStuff/src/types/types"
 import { dateFormat, Week, pathBackupData, pathMainData } from "../../CommonStuff/src/consts/consts"
@@ -62,60 +62,90 @@ app.get("/", function (req: Request, res: Response) {
     res.sendFile(path.join(__dirname, viewPath))
 })
 
-app.get("/news", function (req: Request, res: Response) {
+app.get("/news/:date", function (req: Request, res: Response) {
 
-    res.status(200).json({ "allContentSize": contentSize, "contentSize": jsonData.data.data.length, "content": jsonData.data })
+    try{
+        const date = req.params.date
+
+        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
+
+        const dataToBeSent = (date == "current")? 
+        jsonData.data :
+        new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data
+
+
+        res.status(200).json({ "allContentSize": dataToBeSent.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
+
+    }catch(e){ console.log(e); return res.status(500).json({ "msg": e }); }
+    
 })
 
-app.get("/news/:page", function (req: Request, res: Response) {
+app.get("/news/:date/:page", function (req: Request, res: Response) {
 
     try {
+        const date = req.params.date
         const page = parseInt(req.params.page)
 
+        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
         if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
 
-        const dataToBeSent: fromRequestJsonFileFormat = sliceData(jsonData.data, page, CONTENT_PER_PAGE)
+        const data = (date == "current")? 
+        jsonData.data :
+        new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data
+        const dataToBeSent: fromRequestJsonFileFormat = sliceData(data, page, CONTENT_PER_PAGE)
 
-        res.status(200).json({ "allContentSize": contentSize, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
+        res.status(200).json({ "allContentSize": data.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
 
     } catch (e) { console.log(e); return res.status(500).json({ "msg": e }); }
 })
 
-app.get("/news/sortBy/:param/:page", function (req: Request, res: Response) {
+app.get("/news/:date/sortBy/:param/:page", function (req: Request, res: Response) {
 
     try {
         const param = req.params.param as keyof new_object
         const page = parseInt(req.params.page)
+        const date = req.params.date
 
+        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
         if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
         if (!(param in jsonData.data.data[0])) throw new Error(`${param} key not valid!`);
 
-        const sortData = sortBy(jsonData.data, param);
+        const data = (date == "current")? 
+        jsonData.data :
+        new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data;
+        const sortData = sortBy(data, param);
         const dataToBeSent = sliceData(sortData, page, CONTENT_PER_PAGE);
-        return res.status(200).json({ "allContentSize": contentSize, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
+
+        return res.status(200).json({ "allContentSize": data.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
 
     } catch (e) { console.log(e); return res.status(500).json({ "msg": e }); }
 })
 
-app.get("/news/filterBy/:param/:value/:page", function (req: Request, res: Response) {
+app.get("/news/:date/filterBy/:param/:value/:page", function (req: Request, res: Response) {
 
     try {
 
         const param = req.params.param as keyof new_object
         const value = req.params.value
         const page = parseInt(req.params.page)
+        const date = req.params.date
 
+        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
         if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
         if (!(param in jsonData.data.data[0])) throw new Error(`${param} key not valid!`);
 
-        const filteredData = filterBy(jsonData.data, param, value);
+        const data = (date == "current")? 
+        jsonData.data :
+        new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data;
+
+        const filteredData = filterBy(data, param, value);
         const dataToBeSent = sliceData(filteredData, page, CONTENT_PER_PAGE);
         return res.status(200).json({ "allContentSize": filteredData.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
 
     } catch (e) { console.log(e); return res.status(500).json({ "msg": e }); }
 })
 
-app.get("/news/sortFilterBy/:sortParam/:filterParam/:filterValue/:page", function (req: Request, res: Response) {
+app.get("/news/:date/sortFilterBy/:sortParam/:filterParam/:filterValue/:page", function (req: Request, res: Response) {
 
     try {
 
@@ -123,12 +153,18 @@ app.get("/news/sortFilterBy/:sortParam/:filterParam/:filterValue/:page", functio
         const filterParam = req.params.filterParam as keyof new_object
         const filterValue = req.params.filterValue
         const page = parseInt(req.params.page)
+        const date = req.params.date
 
+        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
         if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
         if (!(filterParam in jsonData.data.data[0]) || !(sortParam in jsonData.data.data[0])) throw new Error(`SORT_PARAm:${sortParam} or FILTER_PARAM:${filterParam} key not valid!`);
 
-        const filteredData = filterBy(jsonData.data, filterParam, filterValue);
-        const sortData = sortBy(filteredData, sortParam)
+        const data = (date == "current")? 
+        jsonData.data :
+        new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data;
+
+        const filteredData = filterBy(data, filterParam, filterValue);
+        const sortData = sortBy(filteredData, sortParam);
         const dataToBeSent = sliceData(sortData, page, CONTENT_PER_PAGE);
 
         return res.status(200).json({ "allContentSize": filteredData.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
@@ -136,18 +172,23 @@ app.get("/news/sortFilterBy/:sortParam/:filterParam/:filterValue/:page", functio
     } catch (e) { console.log(e); return res.status(500).json({ "msg": e }); }
 })
 
-app.post("/news/search/:page", (req: Request, res: Response) => {
+app.post("/news/:date/search/:page", (req: Request, res: Response) => {
 
     try {
-        console.log(req.body)
+
         const title = req.body.title ?? ""
         const page = parseInt(req.params.page)
-        console.log(`trying to search for ${title}`)
+        const date = req.params.date
 
+        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
         if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
         if(title === "") throw new Error ("Invalid request, either no title param or empty!")
 
-        const matchedNews = search(jsonData.data, title)
+        const data = (date == "current")? 
+        jsonData.data :
+        new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data;
+
+        const matchedNews = search(data, title)
         const dataToBeSent = sliceData(matchedNews, page, CONTENT_PER_PAGE)
         return res.status(200).json({ "allContentSize": matchedNews.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
 
@@ -157,37 +198,26 @@ app.post("/news/search/:page", (req: Request, res: Response) => {
     }
 })
 
-app.get("/news/getNew/:id", (req: Request, res: Response) => {
+app.get("/news/:date/getNew/:id", (req: Request, res: Response) => {
 
     const id = req.params.id
+    const date = req.params.date
     console.log(`trying to retrieve new with id ${id}`)
 
     try {
-        const newData = getSingleNewData(jsonData.data, id)
+
+        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
+
+        const data = (date == "current")? 
+        jsonData.data :
+        new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data;
+
+        const newData = getSingleNewData(data, id)
         return res.status(200).json(newData)
 
     } catch (e) {
         console.log(e)
         res.status(500).json({ "msg": e })
-    }
-})
-
-app.get("/old/:date", (req: Request, res: Response) => {
-
-    const date = req.params.date
-
-    if (date) {
-
-        try {
-            const oldJsonData = new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))
-            res.status(200).json(oldJsonData.data);
-
-        } catch (e) {
-            console.log(e)
-            res.status(500).json({ "msg": `Error: (Most likely) No data found for the specified date` })
-        }
-    } else {
-        res.status(400).json({ "msg": "date must be included in the request params!" })
     }
 })
 
@@ -204,25 +234,6 @@ app.patch("/new/:newId/:opinion", (req: Request, res: Response) => {
             else res.status(401).json({ "msg": "new not found in our db." })
         })
         .catch(e => { console.log(e.message); res.status(400).json({ "msg": e.message }) })
-})
-
-app.get("/old/:date", (req: Request, res: Response) => {
-
-    const date = req.params.date
-
-    if (date) {
-
-        try {
-            const oldJsonData = new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))
-            res.status(200).json(oldJsonData.data);
-
-        } catch (e) {
-            console.log(e)
-            res.status(500).json({ "msg": `Error: (Most likely) No data found for the specified date` })
-        }
-    } else {
-        res.status(400).json({ "msg": "date must be included in the request params!" })
-    }
 })
 
 app.get("/old/chats/:date/:chatId", async (req: Request, res: Response) => {
