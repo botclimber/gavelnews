@@ -189,6 +189,8 @@ document.getElementById('loadMoreButton').addEventListener('click', () => {
   // Load more data when the button is clicked
 
   if(!readOnlyPage) changeConnection(currentChat.chatCode, currentChat.general, currentChat.newTitle, false);
+  else setChatsStatus();
+  
   withLoadScreen(() => { loadDataFromServerGET(currentReqUrl, true); })
 });
 

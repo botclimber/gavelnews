@@ -67,7 +67,7 @@ app.get("/news/:date", function (req: Request, res: Response) {
     try{
         const date = req.params.date
 
-        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
+        if( date !==  "current" && !isValidDateFormat(date)) return res.status(400).json({"msg": "Not a valid date"});
 
         const dataToBeSent = (date == "current")? 
         jsonData.data :
@@ -86,8 +86,8 @@ app.get("/news/:date/:page", function (req: Request, res: Response) {
         const date = req.params.date
         const page = parseInt(req.params.page)
 
-        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
-        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
+        if( date !==  "current" && !isValidDateFormat(date)) return res.status(400).json({"msg": "Not a valid date"});
+        if (isNaN(page) || page <= 0) return res.status(400).json({"msg": `Invalid page number ${page}`});
 
         const data = (date == "current")? 
         jsonData.data :
@@ -106,9 +106,9 @@ app.get("/news/:date/sortBy/:param/:page", function (req: Request, res: Response
         const page = parseInt(req.params.page)
         const date = req.params.date
 
-        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
-        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
-        if (!(param in jsonData.data.data[0])) throw new Error(`${param} key not valid!`);
+        if( date !==  "current" && !isValidDateFormat(date)) return res.status(400).json({"msg": "Not a valid date"});
+        if (isNaN(page) || page <= 0) return res.status(400).json({"msg": `Invalid page number ${page}`});
+        if (!(param in jsonData.data.data[0])) return res.status(400).json({"msg": `${param} key not valid!`});
 
         const data = (date == "current")? 
         jsonData.data :
@@ -130,9 +130,9 @@ app.get("/news/:date/filterBy/:param/:value/:page", function (req: Request, res:
         const page = parseInt(req.params.page)
         const date = req.params.date
 
-        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
-        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
-        if (!(param in jsonData.data.data[0])) throw new Error(`${param} key not valid!`);
+        if( date !==  "current" && !isValidDateFormat(date)) return res.status(400).json({"msg": "Not a valid date"});
+        if (isNaN(page) || page <= 0) return res.status(400).json({"msg": `Invalid page number ${page}`});
+        if (!(param in jsonData.data.data[0])) return res.status(400).json({"msg": `${param} key not valid!`});
 
         const data = (date == "current")? 
         jsonData.data :
@@ -155,9 +155,9 @@ app.get("/news/:date/sortFilterBy/:sortParam/:filterParam/:filterValue/:page", f
         const page = parseInt(req.params.page)
         const date = req.params.date
 
-        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
-        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
-        if (!(filterParam in jsonData.data.data[0]) || !(sortParam in jsonData.data.data[0])) throw new Error(`SORT_PARAm:${sortParam} or FILTER_PARAM:${filterParam} key not valid!`);
+        if( date !==  "current" && !isValidDateFormat(date)) return res.status(400).json({"msg": "Not a valid date"});
+        if (isNaN(page) || page <= 0) return res.status(400).json({"msg": `Invalid page number ${page}`});
+        if (!(filterParam in jsonData.data.data[0]) || !(sortParam in jsonData.data.data[0])) return res.status(400).json({"msg": `SORT_PARAm:${sortParam} or FILTER_PARAM:${filterParam} key not valid!`});
 
         const data = (date == "current")? 
         jsonData.data :
@@ -180,9 +180,9 @@ app.post("/news/:date/search/:page", (req: Request, res: Response) => {
         const page = parseInt(req.params.page)
         const date = req.params.date
 
-        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
-        if (isNaN(page) || page <= 0) throw new Error(`Invalid page number ${page}`)
-        if(title === "") throw new Error ("Invalid request, either no title param or empty!")
+        if( date !==  "current" && !isValidDateFormat(date)) return res.status(400).json({"msg": "Not a valid date"});
+        if (isNaN(page) || page <= 0) return res.status(400).json({"msg": `Invalid page number ${page}`});
+        if(title === "") return res.status(400).json({"msg": "Invalid request, either no title param or empty!"});
 
         const data = (date == "current")? 
         jsonData.data :
@@ -206,7 +206,9 @@ app.get("/news/:date/getNew/:id", (req: Request, res: Response) => {
 
     try {
 
-        if( date !==  "current" && !isValidDateFormat(date)) throw new Error ("Not a valid date");
+        if( date !==  "current" && !isValidDateFormat(date)){
+            return res.status(400).json({"msg": "Not a valid date"})
+        } 
 
         const data = (date == "current")? 
         jsonData.data :

@@ -2,18 +2,8 @@ const chatTitle = document.getElementById('chatTitle')
 const chat = document.getElementById("chat-output")
 const msgInput = document.getElementById("chat-input-message")
 
-const newRegex = /\[new:(.*?)\]/g;
 const newCodeRegex = /\[new:([a-zA-Z0-9-]+)\]/;
-
-const roomRegex = /\[room:(.*?)\]/g;
 const roomCodeRegex = /\[room:([a-zA-Z0-9-]+)\]/;
-
-async function getNewFromServer(id) {
-    const request = await fetch(`${api}/news/getNew/${id}`)
-    const response = await request.json()
-
-    return response
-}
 
 // Function to replace [new:code]
 function replaceNewCode(match, code) {
@@ -32,20 +22,20 @@ function replaceRoomCode(match, code) {
 </a> `;
 }
 
-function setChatTitle(chatCode = "/", general = true, title = "", goBackBtn = true) {
+function setChatTitle(chatCode = "/", general = true, title = "", goBackBtn = true){
 
-    const backBtn = (goBackBtn) ? `<button onclick="changeConnection()" class="bg-[#983e16] hover:bg-[#b97a5f] text-[8pt] text-white font-bold p-1 mr-1 rounded inline-flex items-center">
+    const backBtn = (goBackBtn)? `<button onclick="changeConnection()" class="bg-[#983e16] hover:bg-[#b97a5f] text-[8pt] text-white font-bold p-1 mr-1 rounded inline-flex items-center">
     Go back
 </button>` : ""
 
     if (general)
         chatTitle.innerHTML = '<h2 class="font-semibold text-lg tracking-tight">Gavel News Court</h2>';
-
+    
     else
         chatTitle.innerHTML = `
         <div class="flex items-center">
             ${backBtn}
-            <h2 class="font-semibold text-lg tracking-tight"><a href="#" onclick="serachByTextInTitle('${title}')">${title.substring(0, chatTitleLimit)}...</a></h2>
+            <h2 class="font-semibold text-lg tracking-tight"><a href="${chatCode}">${title}</a></h2>
         </div>
         `
 }

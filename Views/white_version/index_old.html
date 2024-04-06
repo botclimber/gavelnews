@@ -18,13 +18,6 @@
 
 <body>
 
-    <!-- Chat Button -->
-    <button id="chatBtn" style="z-index: 1;"
-        class="fixed bottom-16 right-10 inline-flex items-center justify-center text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border-[5px] rounded-full w-[70px] h-[70px] bg-white hover:bg-gray-200 m-0 cursor-pointer border-gray-400 bg-none p-0 normal-case leading-5 hover:text-gray-900"
-        type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">
-        <svg fill="#983e16" height="50px" width="50px" version="1.1" id="Jury" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 128 128" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle id="_x34__6_" cx="30" cy="39.6" r="6.6"></circle> <path id="_x32__11_" d="M44,61v-4.9c0-4.5-3.7-8.2-8.2-8.2H24.2c-4.5,0-8.2,3.7-8.2,8.2V61H44z"></path> <circle id="_x34__7_" cx="64" cy="39.6" r="6.6"></circle> <path id="_x32__12_" d="M78,61v-4.9c0-4.5-3.7-8.2-8.2-8.2H58.2c-4.5,0-8.2,3.7-8.2,8.2V61H78z"></path> <circle id="_x34__8_" cx="98" cy="39.6" r="6.6"></circle> <path id="_x32__13_" d="M112,61v-4.9c0-4.5-3.7-8.2-8.2-8.2H92.2c-4.5,0-8.2,3.7-8.2,8.2V61H112z"></path> <path id="_x33__11_" d="M8,65v7.9h8V120h96V72.9h8V65H8z M84.5,98.3c-1.6,2.7-4.5,4.6-7.9,4.6s-6.3-1.8-7.9-4.6l0,0l0,0l0,0l0,0 l6.6-11.4H65.1v20.6h8l4.6,4.6H50.3l4.6-4.6h8V86.9H52.8l6.6,11.4l0,0l0,0c-1.6,2.7-4.5,4.6-7.9,4.6s-6.3-1.8-7.9-4.6l0,0l0,0l0,0 l0,0l7.9-13.7l0,0h11.4V76h2.3v8.6h11.4l0,0L84.5,98.3L84.5,98.3L84.5,98.3z"></path> <polygon id="_x32__19_" points="71.3,98.3 81.8,98.3 76.5,89.2 "></polygon> <polygon id="_x31__8_" points="46.2,98.3 56.6,98.3 51.4,89.2 "></polygon> </g></svg>
-    </button>
-
     <div class="flex space-x-[1px] overflow-x-auto" id="dateContainer">
     </div>
 
@@ -281,13 +274,8 @@
 
     <!-- JavaScript for toggling the chat -->
     <script>
-        const chatBtn = document.getElementById('chatBtn');
         const chatContainer = document.getElementById('chatContainer');
         const closeChatBtn = document.getElementById('closeChatBtn');
-
-        chatBtn.addEventListener('click', function () {
-            chatContainer.classList.remove('hidden');
-        });
 
         closeChatBtn.addEventListener('click', function () {
             chatContainer.classList.add('hidden');

@@ -9,208 +9,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./src/css/main.css">
 
-    <style>
-        .tooltip-text {
-            position: absolute;
-            top: -1.5rem;
-            /* Adjust this value as needed */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .w-full:hover .tooltip-text {
-            opacity: 1;
-        }
-
-        .menu {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #B9785F;
-            border-radius: 10px;
-            z-index: 1;
-        }
-
-        .filters {
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-box {
-            flex-grow: 1;
-            margin: 0 20px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .filter-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-            padding: 12px 16px;
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 8px 0;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* loading view */
-        .loading-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 1000;
-        }
-
-        .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 8px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 8px solid #3498db;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-
-        .loading-text {
-            position: absolute;
-            top: calc(50% + 30px);
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 18px;
-            color: #333;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* gavel loading animation*/
-        .loading-gavel {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .loading-text {
-            position: absolute;
-            top: calc(50% + 30px);
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 18px;
-            color: #333;
-        }
-
-        @keyframes knock {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            50% {
-                transform: rotate(15deg);
-            }
-
-            100% {
-                transform: rotate(0deg);
-            }
-        }
-
-        .loading-gavel svg {
-            animation: knock 1s ease infinite;
-        }
-
-        /*dates*/
-        .date-option {
-            width: 150px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            padding: 2px 10px;
-            /* Adjust padding as needed */
-            border: 2px solid #B9785F;
-            /* Border color */
-            border-radius: 10px;
-            /* Round border to create circular shape */
-            background-color: #FFC36E;
-            /* Background color */
-            color: #FFFFFF;
-            /* Text color */
-            font-size: 12px;
-            /* Adjust font size as needed */
-            cursor: pointer;
-            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-        }
-
-        .date-option:hover {
-            background-color: #B9785F;
-            /* Hover background color */
-            border-color: #FFC36E;
-            /* Hover border color */
-            color: #FFFFFF;
-            /* Hover text color */
-        }
-
-        .active-date {
-            background-color: #B9785F;
-            /* Background color for the active date */
-            border-color: #FFC36E;
-            /* Border color for the active date */
-            color: #FFFFFF;
-            /* Text color for the active date */
-        }
-    </style>
 </head>
 
 <body>
@@ -290,8 +90,8 @@
                 <h2 class="text-3xl font-bold">Gavel News</h2>
             </div>
 
-            <div class="menu mb-5">
-                <div class="filters">
+            <div id="menu" class="menu flex flex-col sm:flex-row items-center justify-between">
+                <div class="mb-3 sm:mb-0">
                     <button onclick="withLoadScreen(() => sortBy('isTruePerc'))"
                         class="filter-btn bg-green-500">True</button>
                     <button onclick="withLoadScreen(() => sortBy('noOpinionPerc'))" class="filter-btn bg-gray-500">No
@@ -301,7 +101,8 @@
                     <button onclick="withLoadScreen(() => sortBy('isFalsePerc'))"
                         class="filter-btn bg-red-500">False</button>
                 </div>
-                <input id="searchComponent" type="text" value="" class="search-box" placeholder="Search...">
+                <input id="searchComponent" type="text" value="" class="search-box mb-3 sm:mb-0"
+                    placeholder="Search...">
                 <div class="dropdown">
                     <button class="filter-btn" style="color:black; background-color: white;">News Source</button>
                     <div class="dropdown-content">
@@ -312,6 +113,7 @@
                         <a href="#" onclick="withLoadScreen(() => filterBy('jornal noticias'))">Jornal Noticias</a>
                         <a href="#" onclick="withLoadScreen(() => filterBy('observador'))">Observador</a>
                         <a href="#" onclick="withLoadScreen(() => filterBy('cnnPortugal'))">Cnn Portugal</a>
+                        <a href="#" onclick="withLoadScreen(() => filterBy('visao'))">Visao</a>
                     </div>
                 </div>
             </div>
@@ -383,11 +185,45 @@
                     <!-- End of SVG code -->
                 </div>
             </div>
-            <div class="grid gap-6 lg:grid-cols-4 xl:gap-x-12" id="news">
+            <div class="flex mt-[30px]">
+                <p id="contentSize"></p>
+            </div>
+            <hr>
+            <div class="mt-[10px] grid gap-4 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2" id="news">
             </div>
         </section>
         <!-- Section: Design Block -->
     </div>
+
+    <!-- Chat Container -->
+    <div id="chatContainer" style="z-index: 1;" class="fixed hidden">
+        <!-- component -->
+        <div style="box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);"
+            class="chat-container fixed bottom-[calc(4rem+1.5rem)] right-0 mr-4 bg-[#101010] p-4 rounded-lg border border-[#e5e7eb]">
+            <!-- Heading -->
+            <div style="display:flex; justify-content: space-between;">
+                <div id="chatTitle">
+                </div>
+                <div>
+                    <button type="button" id="closeChatBtn">x</button>
+                </div>
+            </div>
+            <hr />
+            <!-- Chat Container -->
+            <div class="h-[80%] overflow-y-auto" id="chat-output">
+            </div>
+            <!-- Input box  -->
+            <div class="flex items-center pt-0">
+                <div class="flex items-center justify-center w-full space-x-2">
+
+                    <input onkeypress="onInputFocus(event)" id="chat-input-message"
+                        class="flex h-10 w-full rounded-md border border-[#e5e7eb] px-3 py-2 text-sm placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#9ca3af] disabled:cursor-not-allowed disabled:opacity-50 text-[#030712] focus-visible:ring-offset-2"
+                        placeholder="Type your message" value="Chat is for read only" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <!-- Container for demo purpose -->
@@ -397,6 +233,16 @@
     <script src="./src/js/common.js"></script>
     <script src="./src/js/chat/chat_commons.js"></script>
     <script src="./src/js/chat/chat_readOnly.js"></script>
+
+    <!-- JavaScript for toggling the chat -->
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+        const closeChatBtn = document.getElementById('closeChatBtn');
+
+        closeChatBtn.addEventListener('click', function () {
+            chatContainer.classList.add('hidden');
+        });
+    </script>
 </body>
 
 </html>
