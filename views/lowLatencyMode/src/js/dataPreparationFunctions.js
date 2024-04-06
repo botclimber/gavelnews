@@ -11,6 +11,7 @@ async function sortBy(param) {
   next_page = 1
   contentSize = 0
 
+  setChatsStatusOnLoad()
   withLoadScreen(() => { loadDataFromServerGET(currentReqUrl); })
 }
 
@@ -32,6 +33,7 @@ async function filterBy(filterValue) {
     next_page = 1
     contentSize = 0
 
+    setChatsStatusOnLoad()
     withLoadScreen(() => { loadDataFromServerGET(currentReqUrl); })
   }
 }
@@ -46,7 +48,8 @@ async function serachByTextInTitle(textValue) {
     next_page = 1
     contentSize = 0
 
-    withLoadScreen(() => { loadDataFromServerPOST(currentReqUrl, {title: textValue}); })
+    setChatsStatusOnLoad()
+    withLoadScreen(() => { loadDataFromServerPOST(currentReqUrl, { title: textValue }); })
 
   } else window.location.reload()
 }
@@ -58,10 +61,12 @@ document.getElementById("searchComponent").addEventListener("keypress", function
 
 // Event listener for the "Load More" button click
 document.getElementById('loadMoreButton').addEventListener('click', () => {
-  // Load more data when the button is clicked
 
-  if(!readOnlyPage) changeConnection(currentChat.chatCode, currentChat.general, currentChat.newTitle, false);
-  else setChatsStatus();
-  
+  setChatsStatusOnLoad()
   withLoadScreen(() => { loadDataFromServerGET(currentReqUrl, true); })
 });
+
+function setChatsStatusOnLoad() {
+  if (!readOnlyPage) changeConnection(currentChat.chatCode, currentChat.general, currentChat.newTitle, false);
+  else setChatsStatus();
+}
