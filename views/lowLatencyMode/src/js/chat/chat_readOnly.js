@@ -13,7 +13,7 @@ async function setChatsStatus() {
     await waitForAllData();
 
     if (dateAsGlobal != null) {
-        const response = await fetch(`${api}/old/chats/${dateAsGlobal}/*`);
+        const response = await fetch(`${api}/chat/old/chats/${dateAsGlobal}/*`);
         const data = await response.json();
 
         console.log(data)
@@ -56,7 +56,7 @@ async function readOnlyChat(chatCode, chatTitle) {
     if (dateAsGlobal != null) {
         chat.innerHTML = ""
 
-        const response = await fetch(`${api}/old/chats/${dateAsGlobal}/${chatCode}`);
+        const response = await fetch(`${api}/chat/old/chats/${dateAsGlobal}/${chatCode}`);
         const data = await response.json();
 
         console.log(data)
