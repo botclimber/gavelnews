@@ -1,3 +1,5 @@
+readOnlyPage = true;
+
 loadDataFromServer = async () => {
 
   const queryString = window.location.search

@@ -31,7 +31,7 @@
     <div class="px-10 py-5">
         <!-- Section: Design Block -->
         <section class="mb-32 text-center">
-            <div class="text-center flex items-center justify-center">
+            <div class="mb-[25px] text-center flex items-center justify-center">
                 <svg class="h-10 w-10 mr-2" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
                     fill="#000000">
@@ -100,7 +100,7 @@
                 <h2 class="text-3xl font-bold">Gavel News</h2>
             </div>
 
-            <div id="menu" class="menu">
+            <div id="menu" class="menu flex flex-col sm:flex-row items-center justify-between">
                 <div class="mb-3 sm:mb-0">
                     <button onclick="withLoadScreen(() => sortBy('isTruePerc'))"
                         class="filter-btn bg-green-500">True</button>
@@ -196,7 +196,11 @@
                 </div>
             </div>
 
-            <div class="mt-[55px] grid gap-4 lg:grid-cols-4" id="news">
+            <div class="flex mt-[30px]">
+                <p id="contentSize"></p>
+            </div>
+            <hr>
+            <div class="mt-[10px] grid gap-4 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2" id="news">
             </div>
         </section>
         <!-- Section: Design Block -->
@@ -248,10 +252,11 @@
 
     <!-- Container for demo purpose -->
     <script src="./src/js/global.js"></script>
+    <script src="./src/js/index.js"></script>
     <script src="./src/js/interface_current.js"></script>
     <script src="./src/js/common.js"></script>
-    <script src="./src/js/index.js"></script>
-    <script src="./src/js/chat.js"></script>
+    <script src="./src/js/chat/chat_commons.js"></script>
+    <script src="./src/js/chat/chat.js"></script>
 
     <script>
         // Function to toggle visibility of emoji container
@@ -274,7 +279,6 @@
         const closeChatBtn = document.getElementById('closeChatBtn');
 
         chatBtn.addEventListener('click', function () {
-            changeConnection();
             chatContainer.classList.remove('hidden');
         });
 

@@ -63,9 +63,8 @@ async function readOnlyChat(chatCode, chatTitle) {
         setChatTitle(`#${chatCode}`, false, chatTitle, false, "readOnlyChat()");
 
         if (data.length > 0) {
-            for (const item of data) {
-                await printToChat(JSON.parse(item));
-            }
+            data.forEach(item => printToChat(item));
+
         }
 
         chatContainer.classList.remove('hidden');

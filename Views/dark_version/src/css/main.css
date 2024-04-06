@@ -23,7 +23,6 @@ body{
 }
 
 .menu {
-    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,7 +33,8 @@ body{
 }
 
 .menu.menu-scrolled {
-    top: 4px; /* Move the menu to the top of the viewport when scrolled */
+    position: fixed;
+    top: 4px;
     right: 2.5rem;
     left: 2.5rem;
     background-color: #9ca3b0;

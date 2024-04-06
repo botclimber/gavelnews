@@ -1,3 +1,33 @@
+function isMobileDevice() {
+  console.log(navigator.userAgent)
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+function waitForAllData() {
+  return new Promise(resolve => {
+    let interval = setInterval(() => {
+      if (typeof allData !== 'undefined') {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 100);
+  });
+}
+
+// fix menu when user scrolls down
+window.addEventListener('scroll', function () {
+  var menu = document.getElementById('menu');
+  var scrollPosition = window.scrollY;
+
+  // Adjust class based on scroll position
+  if (scrollPosition > 50 && !isMobileDevice()) {
+    menu.classList.add('menu-scrolled');
+
+  } else {
+    menu.classList.remove('menu-scrolled');
+  }
+});
+
 // Function to generate date options until a specific date
 function generateDateOptions() {
   const endDate = new Date("2024-03-20")
