@@ -23,9 +23,9 @@
 > chmod +x run.sh (this may be necessary)
 
 TODO:
-- [ ] ``` waitForAllData() ``` change interval time from 100 to 1 or a bit higher, this is supposed to not run longer;
-- [ ] implement lazyload on scroll event;
-- [ ] create endpoints for filtering and sorting;
-- [ ] search function should request from server instead of looking on the client existing data;
+- [x] ``` waitForAllData() ``` change interval time from 100 to 1 or a bit higher, this is supposed to not run longer;
+- [x] implement lazyload on scroll event;
+- [x] create endpoints for filtering and sorting;
+- [x] search function should request from server instead of looking on the client existing data;
 - [ ] backoffice page and service to check platform utilization;
 - [ ] implement chat backend validations (username limit chars, block script/html injection and reserved username keywors).

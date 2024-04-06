@@ -5,7 +5,7 @@ function waitForAllData() {
           clearInterval(interval);
           resolve();
         }
-      }, 100);
+      }, 0);
     });
   }
 
