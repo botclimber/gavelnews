@@ -17,7 +17,8 @@ import { getPreviousDate, saveToFile, loadFromFile, formatDate } from "../../Com
 import path from "path";
 import { ChatClass } from './controllers/ChatHandler';
 
-const viewPath = "../../../../../views/white_version/"
+const viewsSrcPath = "../../../../../views/"
+const viewsPath = "../../../../../views/lowLatencyMode/"
 
 const app = express();
 const PORT = 80;
@@ -57,9 +58,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.get("/", function (req: Request, res: Response) {
 
-    app.use(express.static(path.join(__dirname, viewPath)));
+    app.use(express.static(path.join(__dirname, viewsSrcPath)));
 
-    res.sendFile(path.join(__dirname, viewPath))
+    res.sendFile(path.join(__dirname, viewsPath))
 })
 
 app.get("/news/:date", function (req: Request, res: Response) {

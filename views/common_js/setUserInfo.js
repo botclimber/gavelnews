@@ -23,13 +23,6 @@ const getUserId = () => {
 
     return userId
 }
-
-function getSubtractedDate(dayToSubtract) {
-    const date = new Date();
-    date.setDate(date.getDate() - dayToSubtract)
-  
-    return date.toISOString().slice(0, 10)
-  }
   
 
 const userId = getUserId()

@@ -1,7 +1,7 @@
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString);
 
-const dateAsGlobal = urlParams.get("date")
+dateAsGlobal = urlParams.get("date")
 
 readOnlyPage = true;
 

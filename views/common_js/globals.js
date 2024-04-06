@@ -1,15 +1,15 @@
 const api = "http://localhost"
 const chatWebsocket = "ws://localhost:8002"
 
-var allData;
-var manipulatedData;
-var readOnlyPage;
-
-const chatTitleLimit = 15
 
 const newsContentSize = document.getElementById("contentSize")
 const news_div = document.getElementById("news")
 const container = document.getElementById('dateContainer');
+
+const chatTitleLimit = 15
+
+var dateAsGlobal;
+var readOnlyPage;
 
 function showLoading() {
     document.getElementById("loading-container").style.display = "block";
@@ -21,17 +21,17 @@ function showLoading() {
   
   function showErrorMessage(message) {
     Toastify({
-        text: message,
-        duration: 5000, // Duration in milliseconds (5 seconds in this example)
-        gravity: 'top', // Display position: 'top', 'center', 'bottom'
-        position: 'right', // Toast position: 'left', 'center', 'right'
-        backgroundColor: 'linear-gradient(to right, #FF6C6C, #FF0000)', // Background color
-        stopOnFocus: true // Stop the toast when focused
+      text: message,
+      duration: 5000, // Duration in milliseconds (5 seconds in this example)
+      gravity: 'top', // Display position: 'top', 'center', 'bottom'
+      position: 'right', // Toast position: 'left', 'center', 'right'
+      backgroundColor: 'linear-gradient(to right, #FF6C6C, #FF0000)', // Background color
+      stopOnFocus: true // Stop the toast when focused
     }).showToast();
   }
-
-// try to replace the setTimeout by a promise
-async function withLoadScreen(func) {
+  
+  // try to replace the setTimeout by a promise
+  async function withLoadScreen(func) {
     showLoading();
   
     // for some reason the load screen only shows if code inside setTimeout
