@@ -1,2 +1,0 @@
-var allData;
-var manipulatedData;

@@ -17,7 +17,6 @@ import { getPreviousDate, saveToFile, loadFromFile, formatDate } from "../../Com
 import path from "path";
 import { ChatClass } from './controllers/ChatHandler';
 
-const viewsSrcPath = "../../../../../views/"
 const viewsPath = "../../../../../views/lowLatencyMode/"
 
 const app = express();
@@ -58,7 +57,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.get("/", function (req: Request, res: Response) {
 
-    app.use(express.static(path.join(__dirname, viewsSrcPath)));
+    app.use(express.static(path.join(__dirname, viewsPath)));
 
     res.sendFile(path.join(__dirname, viewsPath))
 })

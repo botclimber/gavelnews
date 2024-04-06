@@ -151,7 +151,4 @@ async function setContent(dataList, append = false) {
   allDataIsSet = true;
 }
 
-// Generate date options and insert them into the container
-container.innerHTML = generateDateOptions("../lowLatencyMode/src/images/live.gif", "./lowLatencyMode/index_old.html", "/");
-
 withLoadScreen(() => { currentReqUrl = pageBaseEndpoint; loadDataFromServerGET(currentReqUrl); })

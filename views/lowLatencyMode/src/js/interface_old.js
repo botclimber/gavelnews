@@ -147,7 +147,4 @@ async function setContent(dataList, append = false) {
 
 }
 
-// Generate date options and insert them into the container
-container.innerHTML = generateDateOptions("./src/images/live.gif", "index_old.html", "/");
-
 withLoadScreen(() => { currentReqUrl = pageBaseEndpoint; loadDataFromServerGET(currentReqUrl); })

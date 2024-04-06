@@ -1,14 +1,3 @@
-function waitForAllData() {
-  return new Promise(resolve => {
-    let interval = setInterval(() => {
-      if (allDataIsSet) {
-        clearInterval(interval);
-        resolve();
-      }
-    }, 100);
-  });
-}
-
 async function sortBy(param) {
 
   sortObject.isActive = true

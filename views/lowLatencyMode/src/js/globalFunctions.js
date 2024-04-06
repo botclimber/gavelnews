@@ -1,16 +1,3 @@
-const api = "http://localhost"
-const chatWebsocket = "ws://localhost:8002"
-
-
-const newsContentSize = document.getElementById("contentSize")
-const news_div = document.getElementById("news")
-const container = document.getElementById('dateContainer');
-
-const chatTitleLimit = 15
-
-var dateAsGlobal;
-var readOnlyPage;
-
 function showLoading() {
     document.getElementById("loading-container").style.display = "block";
   }
