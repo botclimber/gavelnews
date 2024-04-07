@@ -1,5 +1,14 @@
 var activeNew = null
 var socket = chatConnection();
+const emojiContainer = document.getElementById("emojiContainer")
+
+function loadEmojis() {
+
+    for (let x in emojis){
+        emojiContainer.innerHTML += `<button class="emoji-button" onclick="selectEmoji('${emojis[x]}')">${emojis[x]}</button>`
+    }
+    
+}
 
 // Sending a message to the server
 async function sendMessage() {
@@ -13,12 +22,6 @@ async function sendMessage() {
 }
 
 function onInputFocus(event) {
-
-    const emojis = {
-        '#:smile': '😀',
-        '#:laugh': '😂',
-        '#:heartEyes': '😍'
-    }
 
     const lookForEmoji = () => {
         // TODO: check if this is uneficcient
@@ -143,3 +146,5 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
 
     return connection
 }
+
+loadEmojis()
