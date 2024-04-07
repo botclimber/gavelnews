@@ -2,6 +2,8 @@ const chatTitle = document.getElementById('chatTitle')
 const chat = document.getElementById("chat-output")
 const msgInput = document.getElementById("chat-input-message")
 
+const usernameRegex = /#(\w+)/g;
+
 const newRegex = /\[new:(.*?)\]/g;
 const newCodeRegex = /\[new:([a-zA-Z0-9-]+)\]/;
 
@@ -110,7 +112,9 @@ async function printToChat(data) {
         const messageReplaceNewCodes = await replaceNewCode(data.message);
         const messageReplaceRoomCodes = await replaceRoomCode(messageReplaceNewCodes);
 
-        if (data.user === userId) {
+        const userIdToCompare = userId.replace(usernameRegex, "").trim()
+
+        if (data.user === userIdToCompare) {
             chat.innerHTML += `<div class="flex gap-3 my-4 text-gray-600 text-sm flex-1 justify-end">
             <p class="leading-relaxed text-right"><span class="block font-bold text-gray-700">(${data.user}) You </span>${messageReplaceRoomCodes}
                 <span class="block text-[8pt] text-gray-400 mt-2">${data.date}</span></p>

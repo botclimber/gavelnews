@@ -14,6 +14,8 @@ import PostNewsRouter from './routes/post/news/PostNewsRoutes';
 import PatchNewsRouter from './routes/patch/news/PatchNewsRoutes';
 import loggingMiddleware from './middleware/recognizerMiddleware';
 
+import { setupScheduler } from './cron/cronJob';
+
 const viewsPath = "../../../../../views/lowLatencyMode/"
 
 const app = express();
@@ -36,6 +38,9 @@ app.use("/news", GetNewsRouter);
 app.use("/news", PostNewsRouter);
 app.use("/news", PatchNewsRouter);
 app.use("/chat", GetChatRouter);
+
+// start scheduler
+setupScheduler();
 
 // Start the server
 app.listen(PORT, () => {

@@ -8,8 +8,9 @@ rule.dayOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week
 
 rule.hour = process.env.HOUR || 2;
 rule.minute = process.env.MIN || 20;
+rule.tz = "Europe/Lisbon";
 
-console.log(rule.hour)
+console.log(`Scheduler set for (${rule.hour}h, ${rule.minute}min, ${rule.tz} tz)`)
 
 schedule.scheduleJob(rule, async function () {
 

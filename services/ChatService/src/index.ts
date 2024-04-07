@@ -3,13 +3,7 @@ import { ChatClass } from './controllers/ChatClass';
 import * as schedule from "node-schedule";
 
 // TODO:
-// - save in memory last 50 or 100 messages
-// - prevent/filter suspicious messages with links or script/html injection
 // - prevent spam
-// - prevent really long usernames
-//  - dont allow html/script injection 
-//  - dont allow use of keywords e.g. CEO GEN etc ...
-// - [Implemented] create a chat for each New
 
 const PORT = 8002;
 const chatService = new ChatClass(PORT);
@@ -20,8 +14,10 @@ const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, We
 ruleForCloseDay.dayOfWeek = daysOfWeek;
 ruleForCloseDay.hour = process.env.HOUR || 2;
 ruleForCloseDay.minute = process.env.MIN || 30;
+ruleForCloseDay.tz = "Europe/Lisbon";
 
-console.log(ruleForCloseDay.hour)
+console.log(`Scheduler set for (${ruleForCloseDay.hour}h, ${ruleForCloseDay.minute}min, ${ruleForCloseDay.tz} tz)`)
+
 
 schedule.scheduleJob(ruleForCloseDay, function () {
     try {

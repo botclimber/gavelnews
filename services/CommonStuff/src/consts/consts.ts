@@ -1,13 +1,13 @@
 export const dateFormat: string = "YYYY-MM-DD"
 
 export enum Week {
-    MONDAY = 1,
+    SUNDAY = 0,
+    MONDAY,
     TUESDAY,
     WEDNESDAY,
     THURSDAY,
     FRIDAY,
-    SATURDAY,
-    SUNDAY
+    SATURDAY
   };
 
 export const pathMainData = "../Data/"

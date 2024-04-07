@@ -45,12 +45,12 @@ export class ChatClass {
           const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
           const messageAsObject: message = JSON.parse(ensureStringType)
 
-          const cleanMessageContent: message = await this.helper.checkMessageContent(messageAsObject);
+          messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
+          messageAsObject.user = await this.helper.checkMessageUsername(messageAsObject.user);
+          
+          if (messageAsObject.message !== "" && messageAsObject.user !== "") {
 
-          console.log(`Message is: ${cleanMessageContent}`)
-          if (cleanMessageContent.message !== "") {
-
-            const messageAsString = JSON.stringify(cleanMessageContent)
+            const messageAsString = JSON.stringify(messageAsObject)
 
             this.addMessageToChat(messageAsString, chatCode)
             this.checkHowManyMessagesSent(chatCode)
