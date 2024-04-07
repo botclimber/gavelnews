@@ -12,9 +12,12 @@ function loadEmojis() {
 
 // Sending a message to the server
 async function sendMessage() {
+    const date = new Date();
+    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} | ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+
     console.log("Sending message ...")
     const msg = msgInput.value
-    const toJson = { "user": userId, "message": msg, "date": new Date() }
+    const toJson = { "user": userId, "message": msg, "date": formattedDate }
 
     const s = await socket
     s.send(JSON.stringify(toJson));

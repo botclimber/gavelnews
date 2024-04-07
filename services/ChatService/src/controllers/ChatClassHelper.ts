@@ -50,8 +50,13 @@ export class ChatClassHelper {
 
     async checkMessageUsername (username: message["user"]): Promise<message["user"]> {
 
+        const unchangedUsername = username;
         username = username.replace(this.HTML_RE, "");
         username = username.replace(this.URL_RE, "");
+
+        if(unchangedUsername !== username) {
+            return ""
+        }
 
         for (const item of this.RESERVED_USERNAMES) {
             const key = Object.keys(item)[0]; // Extracting the key
