@@ -14,6 +14,12 @@ import random
 def randomVeracityValue():
     return random.randint(1, 250)
 
+def get_or_else_index(lst, index, default_value):
+    try:
+        return lst[index]
+    except IndexError:
+        return default_value
+
 PAGES_TO_READ = 1
 
 class ObservadorNewsCollector(scrapy.Spider):
@@ -40,7 +46,12 @@ class ObservadorNewsCollector(scrapy.Spider):
 	  
 		data = []
 		for x in range(len(news_title)):
-			data.append({"new_id":str(uuid.uuid4()), "new_link": news_link[x], "new_title": news_title[x], "new_desc": "", "new_date": news_date[x], "new_img": news_img[x], "new_source": "observador", "new_isTrue": randomVeracityValue(), "new_isFalse": randomVeracityValue(), "new_isUnclear": randomVeracityValue(), "new_noOpinion": randomVeracityValue(), "new_votedIps": []})
+			link = get_or_else_index(news_link, x, "")
+			title = get_or_else_index(news_title, x, "")
+			date = get_or_else_index(news_date, x, "")
+			img = get_or_else_index(news_img, x, "")		
+   
+			data.append({"new_id":str(uuid.uuid4()), "new_link": link, "new_title": title, "new_desc": "", "new_date": date, "new_img": img, "new_source": "observador", "new_isTrue": randomVeracityValue(), "new_isFalse": randomVeracityValue(), "new_isUnclear": randomVeracityValue(), "new_noOpinion": randomVeracityValue(), "new_votedIps": []})
 		
 		yield {"data": data}
 			
