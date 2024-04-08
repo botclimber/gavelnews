@@ -10,6 +10,21 @@ const generateRandomString = (len) => {
     return result;
 }
 
+const getChatIcon = () => {
+    const getIcon = localStorage.getItem("chatIcon")
+
+    if(!getIcon){
+        const nrOfIcons = chatIcons.length
+        const selIcon = Math.floor(Math.random() * nrOfIcons);
+        
+        localStorage.setItem("chatIcon", selIcon);
+
+        return selIcon
+    } 
+
+    return getIcon
+}
+
 const getUserId = () => {
 
     const userId = localStorage.getItem("userId")
@@ -26,3 +41,4 @@ const getUserId = () => {
   
 
 const userId = getUserId()
+const chatIcon = getChatIcon()

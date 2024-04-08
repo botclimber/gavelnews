@@ -4,10 +4,10 @@ const emojiContainer = document.getElementById("emojiContainer")
 
 function loadEmojis() {
 
-    for (let x in emojis){
+    for (let x in emojis) {
         emojiContainer.innerHTML += `<button class="emoji-button" onclick="selectEmoji('${emojis[x]}')">${emojis[x]}</button>`
     }
-    
+
 }
 
 // Sending a message to the server
@@ -17,7 +17,7 @@ async function sendMessage() {
 
     console.log("Sending message ...")
     const msg = msgInput.value
-    const toJson = { "user": userId, "message": msg, "date": formattedDate }
+    const toJson = {"icon": chatIcon, "user": userId, "message": msg, "date": formattedDate }
 
     const s = await socket
     s.send(JSON.stringify(toJson));
@@ -107,11 +107,9 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
         console.log('Received message from server');
 
         const data = JSON.parse(event.data)
-        console.log(data)
 
         if (data.chatsStatus) {
             for (let x in data.chatsStatus) {
-                console.log(x)
                 const chatIcon = document.getElementById(`chatIcon-${x}`)
 
                 console.log(chatIcon)
@@ -127,12 +125,14 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
             }
         } else {
             if (Array.isArray(data)) {
-                for (const item of data) {
-                    await printToChat(JSON.parse(item));
-                }
-            } else {
-                await printToChat(data);
-            }
+                for (const item of data) await printToChat(JSON.parse(item));
+
+            } else await printToChat(data);
+
+            console.log("xd 2")
+            const isAtBottom = isScrolledToBottom(chat);
+            if (isAtBottom) scrollToBottom(chat);
+            msgInput.value = "";
         }
 
     };

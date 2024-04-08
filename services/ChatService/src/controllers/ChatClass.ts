@@ -10,7 +10,7 @@ type chatCode = string
 export class ChatClass {
 
   // TODO: print messagesMemory and chatClientsMap memory occupation
-  private MESSAGES_LIMIT_PER_CHAT: number = 5
+  private MESSAGES_LIMIT_PER_CHAT: number = 25
   private wss: WebSocket.Server
   private messagesMemory: Map<chatCode, string[]>
   private chatClientsMap: Map<chatCode, WebSocket[]>
