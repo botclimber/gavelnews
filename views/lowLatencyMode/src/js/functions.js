@@ -19,9 +19,6 @@ window.addEventListener('scroll', function () {
     var menu = document.getElementById('menu');
     var scrollPosition = window.scrollY;
 
-    console.log(`Scroll height: ${chat.scrollHeight}`)
-    console.log(`Scroll top: ${chat.scrollTop}`)
-
     // Adjust class based on scroll position
     if (scrollPosition > 50 && !isMobileDevice()) {
         menu.classList.add('menu-scrolled');

@@ -6,7 +6,7 @@ readOnlyPage = false;
 async function vote(voteValue, newId) {
 
   // Make the PATCH request
-  fetch(`${api}/new/${newId}/${voteValue}`, {
+  fetch(`${api}/news/${newId}/${voteValue}`, {
     method: 'PATCH',
   })
     .then(async response => {
