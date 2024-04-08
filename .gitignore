@@ -15,4 +15,6 @@ node_modules/
 Data/
 
 # dont commit dist/ folders
-dist/
+services/*/dist/
+
+admin-template-backup/
