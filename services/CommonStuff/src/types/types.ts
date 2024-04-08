@@ -23,9 +23,10 @@ export type fromScrapyJsonFileFormat = fromRequestJsonFileFormat[]
 
 export type opinion = "new_isTrue" | "new_isFalse" | "new_isUnclear" | "new_noOpinion"
 
+export type ReservedUsername = { [key: string]: string }
 export type message = {
     chatIcon: number,
-    user: string,
+    user: ReservedUsername,
     message: string,
     date: Date
 }

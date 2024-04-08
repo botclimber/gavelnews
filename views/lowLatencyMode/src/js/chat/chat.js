@@ -18,7 +18,7 @@ async function sendMessage() {
 
     console.log("Sending message ...")
     const msg = msgInput.value
-    const toJson = {"icon": chatIcon, "user": userId, "message": msg, "date": formattedDate }
+    const toJson = {"icon": chatIcon, "user": userInfo, "message": msg, "date": formattedDate }
 
     const s = await socket
     s.send(JSON.stringify(toJson));

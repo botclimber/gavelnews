@@ -25,20 +25,24 @@ const getChatIcon = () => {
     return getIcon
 }
 
-const getUserId = () => {
+const getUserInfo = () => {
 
-    const userId = localStorage.getItem("userId")
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
 
-    if(userId === null){
-        const newUserId = generateRandomString(8)
-        localStorage.setItem("userId", newUserId)
+    if(userInfo === null){
 
-        return newUserId
+        const userKey = generateRandomString(8)
+        const userId = generateRandomString(8)
+
+        const newUserInfo = {[userKey]: userId}
+
+        localStorage.setItem("userInfo", JSON.stringify(newUserInfo));
+
+        return newUserInfo
     }
 
-    return userId
+    return userInfo
 }
   
-
-const userId = getUserId()
+const userInfo = getUserInfo()
 const chatIcon = getChatIcon()

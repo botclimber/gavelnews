@@ -1,20 +1,22 @@
-import { message } from "../../../CommonStuff/src/types/types";
+import { message, ReservedUsername } from "../../../CommonStuff/src/types/types";
 import { saveToFile } from "../../../CommonStuff/src/functions/functions";
-
-type ReservedUsernames = { [key: string]: string}
 
 export class ChatClassHelper {
 
     private USERNAME_CHAT_LIMIT = 15;
-    private RESERVED_USERNAMES: ReservedUsernames[] = [
-        {"#greedisgood": "CEO"}, 
-        {"#greedisgood": "CTO"}, 
-        {"#greedisgood": "CFO"},
-        {"#greedisgood": "Catarina"}, 
-        {"#greedisgood": "Daniel"}];
+    private reserved_usernames: Set<ReservedUsername>;
 
     HTML_RE: RegExp = /<[^>]*>/g;
     URL_RE: RegExp = /\b(?:https?|ftp):\/\/(?:www\.)?[^\s<>()]+|\bwww\.[^\s<>()]+|\b(?<!:\/\/)\b[^\s<>()]+\.[^\s<>()]+/gi;
+
+    constructor() {
+        this.reserved_usernames = new Set([
+            { "#greedisgood": "CEO" },
+            { "#greedisgood": "CTO" },
+            { "#greedisgood": "CFO" },
+            { "#greedisgood": "Catarina" },
+            { "#greedisgood": "Daniel" }]);
+    }
 
     /**
      * TODO: excess messages save to a file named (chat-${chatCode}) discuss extension
@@ -27,10 +29,10 @@ export class ChatClassHelper {
     async checkMessagesSizeLimit(messages: string[] | undefined, limit: number): Promise<{ rearrangedData: string[], slicedData: string[] }> {
         const data = messages ?? []
         const sizeDiff = data.length - limit
-    
+
         const rearrangedData = (sizeDiff > 0) ? data.slice(sizeDiff) : data
         const slicedData = (sizeDiff > 0) ? data.slice(0, sizeDiff) : []
-    
+
         return { rearrangedData, slicedData }
     }
 
@@ -48,31 +50,36 @@ export class ChatClassHelper {
         return message
     }
 
-    async checkMessageUsername (username: message["user"]): Promise<message["user"]> {
+    async checkMessageUsername(username: message["user"]): Promise<message["user"]> {
 
-        const unchangedUsername = username;
-        username = username.replace(this.HTML_RE, "");
-        username = username.replace(this.URL_RE, "");
+        var usernameKey = Object.keys(username)[0]
+        var usernameValue = username[usernameKey]
 
-        if(unchangedUsername !== username) {
-            return ""
+        const unchangedUsername = usernameValue;
+        
+        usernameValue = usernameValue.replace(this.HTML_RE, "");
+        usernameValue = usernameValue.replace(this.URL_RE, "");
+
+        if (unchangedUsername !== usernameValue) {
+            return {[usernameKey]: ""}
         }
 
-        for (const item of this.RESERVED_USERNAMES) {
+        usernameValue = usernameValue.substring(0, this.USERNAME_CHAT_LIMIT);
+        usernameValue = usernameValue.trim();
+
+        for (const item of this.reserved_usernames) {
+
             const key = Object.keys(item)[0]; // Extracting the key
             const value = item[key]; // Extracting the value
 
-            if (username.includes(value)) {
-                if(username.includes(key)) username = username.replace(key, "");
-                else username = "";
-                
-            }
+            if (usernameValue == value) {
+                if (usernameKey == key) return {[usernameKey]: usernameValue};
+                else return {[usernameKey]: ""};
+
+            }else this.reserved_usernames.add({[usernameKey]: usernameValue})
         }
 
-        username = username.substring(0, this.USERNAME_CHAT_LIMIT);
-        username = username.trim();
-
-        return username
+        return {[usernameKey]: usernameValue};
     }
 
     /**
@@ -83,14 +90,14 @@ export class ChatClassHelper {
      */
     async parseToString(message: Buffer): Promise<string> { return Buffer.from(message).toString('utf-8') }
 
-    async saveMessagesToFile( messages: string[], path: string): Promise<void>{
+    async saveMessagesToFile(messages: string[], path: string): Promise<void> {
 
-        try{
-            for (let x of messages){
-               await saveToFile(x, path, true)
+        try {
+            for (let x of messages) {
+                await saveToFile(x, path, true)
             }
-            
-        }catch(e){
+
+        } catch (e) {
             console.log(e)
             throw e
         }

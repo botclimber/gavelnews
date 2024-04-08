@@ -48,7 +48,7 @@ export class ChatClass {
           messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
           messageAsObject.user = await this.helper.checkMessageUsername(messageAsObject.user);
           
-          if (messageAsObject.message !== "" && messageAsObject.user !== "") {
+          if (messageAsObject.message !== "" && messageAsObject.user[Object.keys(messageAsObject.user)[0]] !== "") {
 
             const messageAsString = JSON.stringify(messageAsObject)
 

@@ -2,8 +2,6 @@ const chatTitle = document.getElementById('chatTitle')
 const chat = document.getElementById("chat-output")
 const msgInput = document.getElementById("chat-input-message")
 
-const usernameRegex = /#(\w+)/g;
-
 const newRegex = /\[new:(.*?)\]/g;
 const newCodeRegex = /\[new:([a-zA-Z0-9-]+)\]/;
 
@@ -112,12 +110,14 @@ async function printToChat(data) {
         const messageReplaceNewCodes = await replaceNewCode(data.message);
         const messageReplaceRoomCodes = await replaceRoomCode(messageReplaceNewCodes);
 
-        const userIdToCompare = userId.replace(usernameRegex, "").trim()
         const chatIconStyle = chatIcons[data.icon]
+        
+        const serverUserName = data.user[Object.keys(data.user)[0]]
+        const clientUserName = userInfo[Object.keys(userInfo)[0]]
 
-        if (data.user === userIdToCompare) {
+        if (clientUserName === serverUserName) {
             chat.innerHTML += `<div class="flex gap-3 my-4 text-gray-600 text-sm flex-1 justify-end">
-            <p class="leading-relaxed text-right"><span class="block font-bold text-gray-700">(${data.user}) You </span>${messageReplaceRoomCodes}
+            <p class="leading-relaxed text-right"><span class="block font-bold text-gray-700">(${serverUserName}) You </span>${messageReplaceRoomCodes}
                 <span class="block text-[6.5pt] text-gray-400 mt-2">${data.date}</span></p>
             <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
                 <div class="rounded-full border p-1">
@@ -136,7 +136,7 @@ async function printToChat(data) {
             </svg>
             </div>
         </span>
-        <p class="leading-relaxed"><span class="block font-bold text-gray-700">${data.user} </span>${messageReplaceRoomCodes}
+        <p class="leading-relaxed"><span class="block font-bold text-gray-700">${serverUserName} </span>${messageReplaceRoomCodes}
             <span class="block text-[6.5pt] text-gray-400 mt-2">${data.date}</span></p>
     </div>`;
         }
