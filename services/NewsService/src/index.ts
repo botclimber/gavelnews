@@ -28,6 +28,7 @@ app.use(bodyParser.json());
 app.use(loggingMiddleware);
 
 app.get("/", function (req: Request, res: Response) {
+    // TODO: regist connection using IP
 
     app.use(express.static(path.join(__dirname, viewsPath)));
 
