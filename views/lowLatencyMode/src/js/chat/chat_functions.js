@@ -108,16 +108,13 @@ function setChatTitle(chatCode = "/", general = true, title = "", goBackBtn = tr
 }
 
 async function printToChat(data) {
+    console.log("printing ....")
     try {
         const messageReplaceNewCodes = await replaceNewCode(data.message);
         const messageReplaceRoomCodes = await replaceRoomCode(messageReplaceNewCodes);
 
         const userIdToCompare = userId.replace(usernameRegex, "").trim()
         const chatIconStyle = chatIcons[data.icon]
-
-        console.log(data)
-        console.log("Chat icon")
-        console.log(data.icon)
 
         if (data.user === userIdToCompare) {
             chat.innerHTML += `<div class="flex gap-3 my-4 text-gray-600 text-sm flex-1 justify-end">
@@ -153,11 +150,15 @@ async function printToChat(data) {
 function isScrolledToBottom(element) {
     // Check if the scroll position is at the bottom within a threshold
     const errorMargin = element.clientHeight / 1.5
+    const scrollTarget = element.clientHeight + errorMargin
+    const scrollStatus = element.scrollHeight - element.scrollTop
 
-    return (element.scrollHeight - element.scrollTop) <= element.clientHeight + errorMargin
+    return scrollStatus <= scrollTarget
 }
 
 function scrollToBottom(element) {
+    console.log("scroll now !!!")
+
     // Scroll to the bottom of the element
-    element.scrollTop = element.scrollHeight * 2;
+    element.scrollTop = element.scrollHeight;
 }

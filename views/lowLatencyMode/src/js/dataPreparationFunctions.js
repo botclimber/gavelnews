@@ -11,8 +11,7 @@ async function sortBy(param) {
   next_page = 1
   contentSize = 0
 
-  setChatsStatusOnLoad()
-  withLoadScreen(() => { loadDataFromServerGET(currentReqUrl); })
+  withLoadScreen(async () => { await loadDataFromServerGET(currentReqUrl); setChatsStatusOnLoad();})
 }
 
 async function filterBy(filterValue) {
@@ -33,8 +32,7 @@ async function filterBy(filterValue) {
     next_page = 1
     contentSize = 0
 
-    setChatsStatusOnLoad()
-    withLoadScreen(() => { loadDataFromServerGET(currentReqUrl); })
+    withLoadScreen(async () => { await loadDataFromServerGET(currentReqUrl); setChatsStatusOnLoad(); })
   }
 }
 
@@ -48,8 +46,7 @@ async function serachByTextInTitle(textValue) {
     next_page = 1
     contentSize = 0
 
-    setChatsStatusOnLoad()
-    withLoadScreen(() => { loadDataFromServerPOST(currentReqUrl, { title: textValue }); })
+    withLoadScreen( async () => { await loadDataFromServerPOST(currentReqUrl, { title: textValue }); setChatsStatusOnLoad(); })
 
   } else window.location.reload()
 }
@@ -62,8 +59,8 @@ document.getElementById("searchComponent").addEventListener("keypress", function
 // Event listener for the "Load More" button click
 document.getElementById('loadMoreButton').addEventListener('click', () => {
 
-  setChatsStatusOnLoad()
-  withLoadScreen(() => { loadDataFromServerGET(currentReqUrl, true); })
+  
+  withLoadScreen(async () => {  await loadDataFromServerGET(currentReqUrl, true); setChatsStatusOnLoad();})
 });
 
 function setChatsStatusOnLoad() {

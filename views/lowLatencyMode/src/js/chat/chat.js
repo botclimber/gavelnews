@@ -1,5 +1,6 @@
 var activeNew = null
 var socket = chatConnection();
+var newConnection;
 const emojiContainer = document.getElementById("emojiContainer")
 
 function loadEmojis() {
@@ -61,10 +62,9 @@ async function changeConnection(chatCode = "/", general = true, newTitle = "", o
         s.close()
     }
 
-    socket = chatConnection(chatCode, general, newTitle)
-
     if (openChat) chatContainer.classList.remove('hidden');
 
+    socket = chatConnection(chatCode, general, newTitle)
 }
 
 function insertNewInInput(newCode = null) {
@@ -90,6 +90,7 @@ function insertRoomInInput(newCode = null) {
 }
 
 async function chatConnection(chatCode = "/", general = true, newTitle = "") {
+    newConnection = true
     await waitForAllData();
 
     setChatTitle(`#${chatCode.replace("/", "")}`, general, `${newTitle}`)
@@ -112,7 +113,6 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
             for (let x in data.chatsStatus) {
                 const chatIcon = document.getElementById(`chatIcon-${x}`)
 
-                console.log(chatIcon)
                 if (chatIcon && data.chatsStatus[x] && x !== "/")
                     chatIcon.innerHTML = `
                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -129,12 +129,11 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
 
             } else await printToChat(data);
 
-            console.log("xd 2")
             const isAtBottom = isScrolledToBottom(chat);
-            if (isAtBottom) scrollToBottom(chat);
+
+            if (isAtBottom || newConnection){ scrollToBottom(chat); newConnection = false }
             msgInput.value = "";
         }
-
     };
 
     // Event handler for errors

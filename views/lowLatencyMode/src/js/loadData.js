@@ -35,15 +35,13 @@ handleResponse = async (res, append = false) => {
     await handleResponse(news, append)
   }
 
-  function reloadData(){
+  async function reloadData(){
 
     currentReqUrl = pageBaseEndpoint;
     next_page = 1;
     contentSize = 0;
-
-    setChatsStatusOnLoad()
-    withLoadScreen(() => { loadDataFromServerGET(currentReqUrl); })
-
+    
+    withLoadScreen( async () => {  await loadDataFromServerGET(currentReqUrl); setChatsStatusOnLoad() })
   }
 
   
