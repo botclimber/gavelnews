@@ -216,8 +216,6 @@
   /* Style the emoji container */
   #emojiContainer {
     position: absolute;
-    top: 155px;
-    right: 34%;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;

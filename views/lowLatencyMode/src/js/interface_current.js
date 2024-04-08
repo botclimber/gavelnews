@@ -87,11 +87,11 @@ async function setContent(dataList, append = false) {
                     <button onclick="vote('new_isFalse','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-red-500 text-white font-bold">False</button>
                 </div>
         
-                  <h5 class="mb-3 text-lg font-bold"><a href="${r.new_link}" target="_blank">${r.new_title}</a></h5>
+                  <h5 class="mb-3 text-md font-bold"><a href="${r.new_link}" target="_blank">${r.new_title}</a></h5>
                   <div class="mb-3 flex items-center justify-center text-sm font-medium text-yellow-600">
                     ${newType}
                   </div>
-                  <p class="mb-4 text-neutral-500 dark:text-neutral-700">
+                  <p class="mb-4 text-sm text-neutral-500 dark:text-neutral-700">
                     ${desc}
                   </p>
                   <button title="Copy link to current chat" onclick="insertNewInInput('${r.new_id}')" class="bg-[#983e16] hover:bg-[#b97a5f] text-[8pt] text-white font-bold py-1 px-2 rounded inline-flex items-center">
