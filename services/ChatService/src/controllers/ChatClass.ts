@@ -3,8 +3,10 @@ import { ChatClassHelper } from './ChatClassHelper';
 import { message } from "../../../CommonStuff/src/types/types";
 import { pathMainData, pathBackupData, dateFormat, pathChatsData } from "../../../CommonStuff/src/consts/consts";
 import { formatDate, getPreviousDate } from "../../../CommonStuff/src/functions/functions";
+import { UsersUtils } from "../../../CommonStuff/src/controllers/UsersUtils";
 
 type chatCode = string
+const userUtils = new UsersUtils()
 
 // Define a class for the chat service
 export class ChatClass {
@@ -42,6 +44,8 @@ export class ChatClass {
         // Event handler for receiving messages
         ws.on('message', async (message: Buffer | string) => {
 
+          const ip = req.socket.remoteAddress ?? "";
+
           const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
           const messageAsObject: message = JSON.parse(ensureStringType)
 
@@ -51,6 +55,7 @@ export class ChatClass {
           if (messageAsObject.message !== "" && messageAsObject.user[Object.keys(messageAsObject.user)[0]] !== "") {
 
             const messageAsString = JSON.stringify(messageAsObject)
+            await userUtils.incrementChatMessage(ip)
 
             this.addMessageToChat(messageAsString, chatCode)
             this.checkHowManyMessagesSent(chatCode)

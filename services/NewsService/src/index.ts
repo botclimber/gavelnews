@@ -13,6 +13,7 @@ import GetChatRouter from './routes/get/chat/GetChatRoutes';
 import PostNewsRouter from './routes/post/news/PostNewsRoutes';
 import PatchNewsRouter from './routes/patch/news/PatchNewsRoutes';
 import loggingMiddleware from './middleware/recognizerMiddleware';
+import { UsersUtils } from '../../CommonStuff/src/controllers/UsersUtils';
 
 import { setupScheduler } from './cron/cronJob';
 
@@ -21,17 +22,18 @@ const viewsPath = "../../../../../views/lowLatencyMode/"
 const app = express();
 const PORT = 80;
 
+const userUtils = new UsersUtils()
+
 app.use(cors());
 
 app.use(bodyParser.json());
 
 app.use(loggingMiddleware);
 
-app.get("/", function (req: Request, res: Response) {
-    // TODO: regist connection using IP
-
+app.get("/", async function (req: Request, res: Response) {
     app.use(express.static(path.join(__dirname, viewsPath)));
 
+    await userUtils.registUser(req.ip ?? "", { "not found": "" })
     res.sendFile(path.join(__dirname, viewsPath))
 })
 

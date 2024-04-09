@@ -1,5 +1,5 @@
 export const dateFormat: string = "YYYY-MM-DD"
-export const fullDateFormat: string = "yyyy-MM-dd HH:mm:ss";
+export const fullDateFormat: string = "YYYY-MM-DD HH:mm:ss";
 
 export enum Week {
     SUNDAY = 0,

@@ -25,6 +25,7 @@ function compile(path, serviceName){
 // Services
 const services = {
     "NewsService": {"path": "./services/NewsService/"},
+    "AdminService": {"path": "./services/AdminService/"},
     "SchedulerService": {"path": "./services/SchedulerService/"},
     "CommonStuff": {"path": "./services/CommonStuff/"},
     "ChatService": {"path": "./services/ChatService/"}

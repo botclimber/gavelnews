@@ -1,4 +1,4 @@
-import { loadFromFile, filesFromFolder } from "../../../CommonStuff/src/functions/functions";
+import { loadFromFile, filesFromFolder, transform } from "../../../CommonStuff/src/functions/functions";
 import { pathChatsData } from "../../../CommonStuff/src/consts/consts";
 import { message } from "../../../CommonStuff/src/types/types";
 
@@ -20,22 +20,9 @@ export class ChatClass {
 
         const dataFromFile = loadFromFile(this.path)
 
-        const messages = await this.transform(dataFromFile)
+        const messages = await transform<message>(dataFromFile)
 
         return messages
-    }
-
-    async transform(data: string): Promise<message[]> {
-
-        try {
-            const lines = data.split('\n').filter(element => element !== "");
-            const messages: message[] = lines.map(line => JSON.parse(line.trim()));
-
-            return messages;
-
-        } catch (e) {
-            throw e
-        }
     }
 
     async getChatsStatus(): Promise<string[]> {

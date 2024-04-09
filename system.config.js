@@ -8,6 +8,10 @@ const NewsAndChatScheduler = {
     "MIN": 39
 }
 
+const AdminServiceEnvs = {
+    "SECRET": "greedisgood"
+}
+
 module.exports = {
     apps : [
         {
@@ -25,6 +29,14 @@ module.exports = {
             args   : "start",
             watch  : true,
             env    : ScrapperScheduler
+        },
+        {
+            name   : "AdminService",
+            cwd    : "./services/AdminService/",
+            script : "npm",
+            args   : "start",
+            watch  : true,
+            env    : AdminServiceEnvs
         },
         {
             name   : "ChatService",

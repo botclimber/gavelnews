@@ -1,4 +1,5 @@
-import {fromRequestJsonFileFormat, new_object, opinion} from "../../../CommonStuff/src/types/types"
+import { UsersUtils } from "../../../CommonStuff/src/controllers/UsersUtils"
+import {User, fromRequestJsonFileFormat, new_object, opinion} from "../../../CommonStuff/src/types/types"
 import * as eva from "eva-functional-utils"
 
 export class NewsManipulator {
@@ -9,6 +10,13 @@ export class NewsManipulator {
     }
 
     async updateNewVeracity(newId: string, op: opinion, ip: string | undefined ): Promise<new_object | undefined>{
+
+        const opinionToVote = {
+            new_isTrue: "true",
+            new_isFalse: "false",
+            new_isUnclear: "unclear",
+            new_noOpinion: "noopinion"
+        }
 
         try{
             
@@ -23,6 +31,8 @@ export class NewsManipulator {
                         this.data.data[x][op] += 1;
                         this.data.data[x].new_votedIps.push(ip);
                         new_object = this.data.data[x]
+
+                        await (new UsersUtils()).incrementVote(ip, opinionToVote[op] as keyof User["votes"])
 
                     }else throw Error(`User already voted for the specified New (${newId})!`)
                 }
