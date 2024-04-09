@@ -1,4 +1,5 @@
 export const dateFormat: string = "YYYY-MM-DD"
+export const fullDateFormat: string = "yyyy-MM-dd HH:mm:ss";
 
 export enum Week {
     SUNDAY = 0,
@@ -13,6 +14,7 @@ export enum Week {
 export const pathMainData = "../Data/"
 export const pathBackupData = "../Data/backup/"
 export const pathChatsData = "../Data/chats/"
+export const pathUsersData = "../Data/users/" 
 
 export const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
   

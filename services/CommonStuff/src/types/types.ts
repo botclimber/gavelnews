@@ -30,3 +30,13 @@ export type message = {
     message: string,
     date: Date
 }
+
+export type BlockActions = "temporary" | "permanent" | "remove"
+export type User = {
+    ip: string, 
+    username: {[key: string]: string}, 
+    votes: {true:number, false: number, unclear: number, noopinion: number}, 
+    chatMessages: number, 
+    createdAt: string, 
+    block: {status: true | false, time: string | undefined}
+}
