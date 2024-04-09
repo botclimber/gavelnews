@@ -2,11 +2,14 @@ import express from 'express';
 import { UsersUtils } from '../../CommonStuff/src/controllers/UsersUtils';
 import { BlockActions, User } from '../../CommonStuff/src/types/types';
 import { calculateFutureDate } from '../../CommonStuff/src/functions/functions';
+import { checkHeader } from './Middleware/middleware';
 
 const app = express();
 const port = 8003;
 
 const usersUtils = new UsersUtils();
+
+app.use(checkHeader);
 
 // Endpoint to get all users
 app.get('/admin/getUsers', async (req, res) => {
