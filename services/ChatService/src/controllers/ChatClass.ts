@@ -80,8 +80,10 @@ export class ChatClass {
           const userBlocked = await userUtils.checkRemoveExpiredBlock(ip)
 
           if (userBlocked !== undefined && userBlocked.block.status) {
-            const msg = {icon: 0, user:{'': 'System'}, message: `<span class="text-[10pt] text-orange-400 italic">User [${messageAsObject.user[Object.keys(messageAsObject.user)[0]]}] blocked ${this.MESSAGE_BLOCK_TIME}min from spam!</span>`, date:''};
-            this.broadcast(JSON.stringify(msg), chatCode)
+            const msg = `<span class="text-[10pt] text-orange-400 italic">User [${messageAsObject.user[Object.keys(messageAsObject.user)[0]]}] blocked ${this.MESSAGE_BLOCK_TIME}min from spam!</span>`
+
+            const msgObject = {icon: 0, user:{'': 'System'}, message: msg, date:''};
+            this.broadcast(JSON.stringify(msgObject), chatCode)
           
           } else {
             messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
