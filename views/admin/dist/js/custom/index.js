@@ -17,8 +17,6 @@ async function loadData(){
 
         const data = await response.json();
         allData = data
-
-        console.log('Data:', data); // Handle the retrieved data here
     
     } catch (error) {
         console.error('Error fetching data:', error);

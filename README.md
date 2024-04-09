@@ -27,5 +27,6 @@ TODO:
 - [x] implement lazyload on scroll event;
 - [x] create endpoints for filtering and sorting;
 - [x] search function should request from server instead of looking on the client existing data;
-- [ ] backoffice page and service to check platform utilization;
-- [ ] implement chat backend validations (username limit chars, block script/html injection and reserved username keywors).
+- [x] backoffice page and service to check platform utilization;
+- [x] implement chat backend validations (username limit chars, block script/html injection and reserved username keywors).
+- [ ] implement localStorage cleaner regarding votes
