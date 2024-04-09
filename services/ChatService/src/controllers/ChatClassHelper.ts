@@ -20,7 +20,7 @@ export class ChatClassHelper {
     }
 
     /**
-     * TODO: excess messages save to a file named (chat-${chatCode}) discuss extension
+     * Excess messages save to a file named (chat-${chatCode}) discuss extension
      * persist in memory only the last {limit} number of messages
      * 
      * @param messages 

@@ -9,7 +9,6 @@ const loggingMiddleware = async (req: Request, res: Response, next: NextFunction
     console.log(`Request Endpoint: ${req.path}`);
 
     try {
-        // TODO: regist connection using IP
         const userBlocked = await userUtils.checkRemoveExpiredBlock(ip ?? "")
 
         if (userBlocked !== undefined && userBlocked.block.status) return res.status(403).json({ msg: `Sry but you are blocked. timeout until ${userBlocked.block.time}` });

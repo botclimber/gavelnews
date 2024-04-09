@@ -2,9 +2,6 @@ import { Week } from '../../CommonStuff/src/consts/consts';
 import { ChatClass } from './controllers/ChatClass';
 import * as schedule from "node-schedule";
 
-// TODO:
-// - prevent spam
-
 const PORT = 8002;
 const chatService = new ChatClass(PORT);
 

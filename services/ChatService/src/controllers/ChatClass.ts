@@ -13,8 +13,9 @@ export class ChatClass {
 
   // TODO: print messagesMemory and chatClientsMap memory occupation
   private MESSAGES_LIMIT_PER_CHAT: number = 25
-  private MESSAGE_RATE_LIMIT: number = 1 // Max messages allowed per second per client
+  private MESSAGE_RATE_LIMIT: number = 10 // Max messages allowed per second per client
   private MESSAGE_RATE_LIMIT_WINDOW: number = 1000 // 1 second window
+  private REPEATED_MESSAGES_SPAM: number = 5
   private MESSAGE_BLOCK_TIME: number = 1 // 1 min
 
   private messageRate: Map<WebSocket, { lastMessageTime: number[] }>
@@ -53,28 +54,46 @@ export class ChatClass {
         ws.on('message', async (message: Buffer | string) => {
 
           const ip = req.socket.remoteAddress ?? "";
-          // TODO: check if user is blocked | prevent spam, if spam block user | maybe update username at this level
+
+          const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
+          const messageAsObject: message = JSON.parse(ensureStringType)
+
+          messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
+          messageAsObject.user = await this.helper.checkMessageUsername(messageAsObject.user);
+
+          // TODO: Maybe update username at this level
 
           // Rate limiting: Check if the client has exceeded the message rate limit
           const currentTime = Date.now();
           const messageRateData = this.messageRate.get(ws);
+          const blockUser = async (blockReason: string) => {
+            // Client has sent messages too frequently within the rate limit window
+            console.log(blockReason);
+            // block user
+            const time = calculateFutureDate(new Date(), this.MESSAGE_BLOCK_TIME, "mins");
+            await userUtils.blockUser(ip, "temporary", time);
+          }
 
           if (messageRateData) {
             const lastMessageTimes = messageRateData.lastMessageTime.filter(time => currentTime - time < this.MESSAGE_RATE_LIMIT_WINDOW);
-            if (lastMessageTimes.length >= this.MESSAGE_RATE_LIMIT) {
-              // Client has sent messages too frequently within the rate limit window
-              console.log(`Rate limiting: Client at IP ${ip} exceeded message rate limit`);
-              // block user
-              const time = calculateFutureDate(new Date(), this.MESSAGE_BLOCK_TIME, "mins")
-              await userUtils.blockUser(ip, "temporary", time)
-
-            }
+            if (lastMessageTimes.length >= this.MESSAGE_RATE_LIMIT) await blockUser(`Rate limiting: Client at IP ${ip} exceeded message rate limit`);
 
             messageRateData.lastMessageTime.push(currentTime);
+
           }
 
-          const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
-          const messageAsObject: message = JSON.parse(ensureStringType)
+          /* Check if user is using macro and repeating messages */
+          const chatMessages = this.messagesMemory.get(chatCode) || [];
+          const repeatedMessages = chatMessages.filter(msg => {
+            const contentObject: message = JSON.parse(msg)
+
+            return (contentObject.message === messageAsObject.message && contentObject.user[Object.keys(contentObject.user)[0]] === messageAsObject.user[Object.keys(messageAsObject.user)[0]])
+          });
+
+          const isRepeated = repeatedMessages.length > this.REPEATED_MESSAGES_SPAM;
+
+          if (isRepeated) await blockUser(`Repeated Messages: Client at IP ${ip} exceeded repeated messages limit`);
+
 
           // check if user is blocked
           const userBlocked = await userUtils.checkRemoveExpiredBlock(ip)
@@ -82,12 +101,10 @@ export class ChatClass {
           if (userBlocked !== undefined && userBlocked.block.status) {
             const msg = `<span class="text-[10pt] text-orange-400 italic">User [${messageAsObject.user[Object.keys(messageAsObject.user)[0]]}] blocked ${this.MESSAGE_BLOCK_TIME}min from spam!</span>`
 
-            const msgObject = {icon: 0, user:{'': 'System'}, message: msg, date:''};
+            const msgObject = { icon: 0, user: { '': 'System' }, message: msg, date: '' };
             this.broadcast(JSON.stringify(msgObject), chatCode)
-          
+
           } else {
-            messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
-            messageAsObject.user = await this.helper.checkMessageUsername(messageAsObject.user);
 
             if (messageAsObject.message !== "" && messageAsObject.user[Object.keys(messageAsObject.user)[0]] !== "") {
 
@@ -158,7 +175,6 @@ export class ChatClass {
    * @param chatCode 
    */
   private async addMessageToChat(message: string, chatCode: chatCode): Promise<void> {
-    // TODO: verify if message already reached limit
 
     try {
       const checkIfMessageMemoryExists = this.messagesMemory.get(chatCode)
