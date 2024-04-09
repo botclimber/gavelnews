@@ -12,6 +12,7 @@ export class ChatClassHelper {
     constructor() {
         this.reserved_usernames = new Set([
             { "#greedisgood": "CEO" },
+            { "#greedisgood": "System" },
             { "#greedisgood": "CTO" },
             { "#greedisgood": "CFO" },
             { "#greedisgood": "Catarina" },

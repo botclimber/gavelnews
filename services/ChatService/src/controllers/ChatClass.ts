@@ -1,8 +1,8 @@
 import * as WebSocket from 'ws';
 import { ChatClassHelper } from './ChatClassHelper';
 import { message } from "../../../CommonStuff/src/types/types";
-import { pathMainData, pathBackupData, dateFormat, pathChatsData } from "../../../CommonStuff/src/consts/consts";
-import { formatDate, getPreviousDate } from "../../../CommonStuff/src/functions/functions";
+import { pathMainData, pathBackupData, dateFormat, pathChatsData, fullDateFormat } from "../../../CommonStuff/src/consts/consts";
+import { calculateFutureDate, formatDate, getPreviousDate } from "../../../CommonStuff/src/functions/functions";
 import { UsersUtils } from "../../../CommonStuff/src/controllers/UsersUtils";
 
 type chatCode = string
@@ -13,6 +13,11 @@ export class ChatClass {
 
   // TODO: print messagesMemory and chatClientsMap memory occupation
   private MESSAGES_LIMIT_PER_CHAT: number = 25
+  private MESSAGE_RATE_LIMIT: number = 1 // Max messages allowed per second per client
+  private MESSAGE_RATE_LIMIT_WINDOW: number = 1000 // 1 second window
+  private MESSAGE_BLOCK_TIME: number = 1 // 1 min
+
+  private messageRate: Map<WebSocket, { lastMessageTime: number[] }>
   private wss: WebSocket.Server
   private messagesMemory: Map<chatCode, string[]>
   private chatClientsMap: Map<chatCode, WebSocket[]>
@@ -22,6 +27,7 @@ export class ChatClass {
     this.wss = new WebSocket.Server({ port });
     this.messagesMemory = new Map();
     this.chatClientsMap = new Map();
+    this.messageRate = new Map();
     this.helper = new ChatClassHelper()
     this.setupWebSocket();
   }
@@ -41,28 +47,57 @@ export class ChatClass {
         this.connectClientToChat(ws, chatCode)
         this.onConnection(ws, chatCode)
 
+        this.messageRate.set(ws, { lastMessageTime: [] });
+
         // Event handler for receiving messages
         ws.on('message', async (message: Buffer | string) => {
 
           const ip = req.socket.remoteAddress ?? "";
           // TODO: check if user is blocked | prevent spam, if spam block user | maybe update username at this level
 
+          // Rate limiting: Check if the client has exceeded the message rate limit
+          const currentTime = Date.now();
+          const messageRateData = this.messageRate.get(ws);
+
+          if (messageRateData) {
+            const lastMessageTimes = messageRateData.lastMessageTime.filter(time => currentTime - time < this.MESSAGE_RATE_LIMIT_WINDOW);
+            if (lastMessageTimes.length >= this.MESSAGE_RATE_LIMIT) {
+              // Client has sent messages too frequently within the rate limit window
+              console.log(`Rate limiting: Client at IP ${ip} exceeded message rate limit`);
+              // block user
+              const time = calculateFutureDate(new Date(), this.MESSAGE_BLOCK_TIME, "mins")
+              await userUtils.blockUser(ip, "temporary", time)
+
+            }
+
+            messageRateData.lastMessageTime.push(currentTime);
+          }
+
           const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
           const messageAsObject: message = JSON.parse(ensureStringType)
 
-          messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
-          messageAsObject.user = await this.helper.checkMessageUsername(messageAsObject.user);
+          // check if user is blocked
+          const userBlocked = await userUtils.checkRemoveExpiredBlock(ip)
+
+          if (userBlocked !== undefined && userBlocked.block.status) {
+            const msg = {icon: 0, user:{'': 'System'}, message: `<span class="text-[10pt] text-orange-400 italic">User [${messageAsObject.user[Object.keys(messageAsObject.user)[0]]}] blocked ${this.MESSAGE_BLOCK_TIME}min from spam!</span>`, date:''};
+            this.broadcast(JSON.stringify(msg), chatCode)
           
-          if (messageAsObject.message !== "" && messageAsObject.user[Object.keys(messageAsObject.user)[0]] !== "") {
+          } else {
+            messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
+            messageAsObject.user = await this.helper.checkMessageUsername(messageAsObject.user);
 
-            const messageAsString = JSON.stringify(messageAsObject)
-            await userUtils.incrementChatMessage(ip)
+            if (messageAsObject.message !== "" && messageAsObject.user[Object.keys(messageAsObject.user)[0]] !== "") {
 
-            this.addMessageToChat(messageAsString, chatCode)
-            this.checkHowManyMessagesSent(chatCode)
-            this.broadcast(messageAsString, chatCode); // Broadcast the message to all clients
-            this.broadcastChatsStatus()
+              const messageAsString = JSON.stringify(messageAsObject)
+              await userUtils.incrementChatMessage(ip)
 
+              this.addMessageToChat(messageAsString, chatCode)
+              this.checkHowManyMessagesSent(chatCode)
+              this.broadcast(messageAsString, chatCode); // Broadcast the message to all clients
+              this.broadcastChatsStatus()
+
+            }
           }
         });
 

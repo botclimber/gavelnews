@@ -107,6 +107,7 @@ function setChatTitle(chatCode = "/", general = true, title = "", goBackBtn = tr
 
 async function printToChat(data) {
     try {
+        console.log(data)
         const messageReplaceNewCodes = await replaceNewCode(data.message);
         const messageReplaceRoomCodes = await replaceRoomCode(messageReplaceNewCodes);
 
