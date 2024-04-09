@@ -40,8 +40,8 @@ class VisaoNewsCollector(scrapy.Spider):
 		news = response.xpath("//div[@class='row item-list ']")
 
 		news_link = [link.strip() for link in news.xpath(".//a[@class='article-block-title']/@href").getall()]
-		news_title = list( filter(lambda x: x != "" , [title.strip() for title in news.xpath(".//a[@class='article-block-title']/h4/span/text()").getall()])) # remove empty titles
-		news_desc = list( filter(lambda x: x != "" , [title.strip() for title in news.xpath(".//p[@class='article-block-excerpt']/text()").getall()]))
+		news_title = [title.strip() for title in news.xpath(".//a[@class='article-block-title']/h4/span/text()").getall()] # remove empty titles
+		news_desc = [desc.strip() if desc.strip() else "" for desc in news.xpath(".//div[@class='article-block-content ']/p[@class='article-block-excerpt']/text()").getall()]
 		#news_date = [date.strip() for date in news.xpath(".//time[@class='timeago']/text()").getall()]
 		news_img = [img.strip() for img in news.xpath(".//div[@class='article-block-media ']/a/img/@data-src").getall()]
 		news_type = [img.strip() for img in news.xpath(".//div[@class='article-block-section']/a/text()").getall()]        
