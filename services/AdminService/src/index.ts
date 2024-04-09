@@ -1,4 +1,7 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import cors from "cors";
+
 import { UsersUtils } from '../../CommonStuff/src/controllers/UsersUtils';
 import { BlockActions, User } from '../../CommonStuff/src/types/types';
 import { calculateFutureDate } from '../../CommonStuff/src/functions/functions';
@@ -6,6 +9,10 @@ import { checkHeader } from './Middleware/middleware';
 
 const app = express();
 const port = 8003;
+
+app.use(cors());
+
+app.use(bodyParser.json());
 
 const usersUtils = new UsersUtils();
 
@@ -35,6 +42,8 @@ app.put('/admin/block', async (req, res) => {
 
     try {
         // Block, unblock, or remove block from user
+        console.log("Time to Add")
+        console.log(timeToAdd)
         const time = (timeToAdd)? calculateFutureDate(new Date(), timeToAdd.timeToAdd, timeToAdd.toAddType) : undefined
         const result: User = await usersUtils.blockUser(userIp, action, time);
 

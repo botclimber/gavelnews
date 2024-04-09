@@ -3,7 +3,7 @@
 2024 (updated)
 
 # Setup
-0. if not existing create Data/ folder inside ./services/ dir and chats/ folder inside ./services/Data/ dir
+0. if not existing create Data/ folder inside ./services/ dir, chats/ folder inside ./services/Data/ dir and users/ folder inside ./service/Data/
 1. npm install
 3. gulp build
 4. gulp compile

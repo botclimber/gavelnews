@@ -259,7 +259,7 @@
                         <div class="col-12">
                           <div class="bg-dark p-10 text-white text-center">
                             <i class="mdi mdi-account fs-3 mb-1 font-16"></i>
-                            <h5 class="mb-0 mt-1">2540</h5>
+                            <h5 class="mb-0 mt-1" id="totalUsers"></h5>
                             <small class="font-light">Total Users</small>
                           </div>
                         </div>
@@ -311,47 +311,7 @@
     <!--Custom JavaScript -->
     <script src="../dist/js/custom.min.js"></script>
 
-    <script>
-      // Data for the chart
-      const data = {
-          labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7', 'Day 8', 'Day 9', 'Day 10', 'Day 11', 'Day 12', 'Day 13', 'Day 14', 'Day 15', 'Day 16', 'Day 17', 'Day 18', 'Day 19', 'Day 20', 'Day 21', 'Day 22', 'Day 23', 'Day 24', 'Day 25', 'Day 26', 'Day 27', 'Day 28', 'Day 29', 'Day 30', 'Day 31'],
-          datasets: [{
-              label: 'New Users',
-              data: [10, 20, 15, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 320, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160],
-              backgroundColor: 'green',
-              borderColor: 'green',
-              borderWidth: 1
-          }]
-      };
-
-      // Chart configuration
-      const config = {
-          type: 'line',
-          data: data,
-          options: {
-              scales: {
-                  y: {
-                      beginAtZero: true,
-                      title: {
-                          display: true,
-                          text: 'Number of Users'
-                      }
-                  },
-                  x: {
-                      title: {
-                          display: true,
-                          text: 'Day of Month'
-                      }
-                  }
-              }
-          }
-      };
-
-      // Render the chart
-      const newUsersChart = new Chart(
-          document.getElementById('newUsersChart'),
-          config
-      );
-  </script>
+    <script src="../dist/js/custom/index.js"></script>
+    <script src="../dist/js/custom/home.js"></script>
   </body>
 </html>

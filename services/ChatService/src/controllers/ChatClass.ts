@@ -1,6 +1,6 @@
 import * as WebSocket from 'ws';
 import { ChatClassHelper } from './ChatClassHelper';
-import { message } from "../../../CommonStuff/src/types/types";
+import { User, message } from "../../../CommonStuff/src/types/types";
 import { pathMainData, pathBackupData, dateFormat, pathChatsData, fullDateFormat } from "../../../CommonStuff/src/consts/consts";
 import { calculateFutureDate, formatDate, getPreviousDate } from "../../../CommonStuff/src/functions/functions";
 import { UsersUtils } from "../../../CommonStuff/src/controllers/UsersUtils";
@@ -71,7 +71,7 @@ export class ChatClass {
             console.log(blockReason);
             // block user
             const time = calculateFutureDate(new Date(), this.MESSAGE_BLOCK_TIME, "mins");
-            await userUtils.blockUser(ip, "temporary", time);
+            return await userUtils.blockUser(ip, "temporary", time);
           }
 
           if (messageRateData) {
@@ -99,10 +99,10 @@ export class ChatClass {
           const userBlocked = await userUtils.checkRemoveExpiredBlock(ip)
 
           if (userBlocked !== undefined && userBlocked.block.status) {
-            const msg = `<span class="text-[10pt] text-orange-400 italic">User [${messageAsObject.user[Object.keys(messageAsObject.user)[0]]}] blocked ${this.MESSAGE_BLOCK_TIME}min from spam!</span>`
+            const msg = `<span class="text-[10pt] text-orange-400 italic">(${messageAsObject.user[Object.keys(messageAsObject.user)[0]]}) you are blocked [blockTimeUntil: ${userBlocked.block.time}].</span>`
 
             const msgObject = { icon: 0, user: { '': 'System' }, message: msg, date: '' };
-            this.broadcast(JSON.stringify(msgObject), chatCode)
+            this.broadcastToOne(JSON.stringify(msgObject), ws)
 
           } else {
 
@@ -113,7 +113,7 @@ export class ChatClass {
 
               this.addMessageToChat(messageAsString, chatCode)
               this.checkHowManyMessagesSent(chatCode)
-              this.broadcast(messageAsString, chatCode); // Broadcast the message to all clients
+              this.broadcastToAll(messageAsString, chatCode); // Broadcast the message to all clients
               this.broadcastChatsStatus()
 
             }
@@ -203,7 +203,7 @@ export class ChatClass {
    * @param message 
    * @param chatCode 
    */
-  private broadcast(message: string, chatCode: string) {
+  private broadcastToAll(message: string, chatCode: string) {
     try {
       this.chatClientsMap.get(chatCode)?.map(client => {
 
@@ -214,7 +214,19 @@ export class ChatClass {
       })
 
     } catch (e) {
-      console.log(this.broadcast.toString)
+      console.log(this.broadcastToAll.toString)
+      console.log(e)
+    }
+  }
+
+  private broadcastToOne(message: string, client: WebSocket){
+    try{
+      if (client.readyState === WebSocket.OPEN) {
+
+        client.send(message);
+      }
+    }catch(e){
+      console.log(this.broadcastToOne.toString)
       console.log(e)
     }
   }
