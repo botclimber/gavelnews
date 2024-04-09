@@ -75,7 +75,7 @@ export class UsersUtils {
         }
     }
 
-    async checkRemoveExpiredBlocks(userIp: User["ip"]): Promise<User> {
+    async checkRemoveExpiredBlock(userIp: User["ip"]): Promise<User> {
         try {
             let users = await this.loadUsers();
 
@@ -119,6 +119,52 @@ export class UsersUtils {
             return userIndex;
         } catch (error) {
             console.error("Error getting user index by IP:", error);
+            throw error;
+        }
+    }
+
+    async incrementVote(userIp: User["ip"], vote: keyof User["votes"]): Promise<void> {
+        try {
+            let users = await this.loadUsers();
+    
+            // Find the user in the list
+            const userIndex = await this.getUserIndexByIp(users, userIp);
+            if (!userIndex) {
+                throw new Error('User not found');
+            }
+    
+            // Increment the specified vote
+            if (users[userIndex].votes[vote] !== undefined) {
+                users[userIndex].votes[vote]++;
+            } else {
+                throw new Error('Invalid vote type');
+            }
+    
+            // Save the updated users list
+            await this.saveUsers(users);
+        } catch (error) {
+            console.error("Error incrementing vote:", error);
+            throw error;
+        }
+    }
+    
+    async incrementChatMessage(userIp: User["ip"]): Promise<void> {
+        try {
+            let users = await this.loadUsers();
+    
+            // Find the user in the list
+            const userIndex = await this.getUserIndexByIp(users, userIp);
+            if (!userIndex) {
+                throw new Error('User not found');
+            }
+    
+            // Increment chatMessages
+            users[userIndex].chatMessages++;
+    
+            // Save the updated users list
+            await this.saveUsers(users);
+        } catch (error) {
+            console.error("Error incrementing chat message:", error);
             throw error;
         }
     }
