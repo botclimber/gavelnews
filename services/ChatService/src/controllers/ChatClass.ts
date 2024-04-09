@@ -45,6 +45,7 @@ export class ChatClass {
         ws.on('message', async (message: Buffer | string) => {
 
           const ip = req.socket.remoteAddress ?? "";
+          // TODO: check if user is blocked | prevent spam, if spam block user | maybe update username at this level
 
           const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
           const messageAsObject: message = JSON.parse(ensureStringType)
