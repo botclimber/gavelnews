@@ -1,5 +1,5 @@
 import { UsersUtils } from "../../../CommonStuff/src/controllers/UsersUtils"
-import {User, fromRequestJsonFileFormat, new_object, opinion, UserInfo} from "../../../CommonStuff/src/types/types"
+import {User, fromRequestJsonFileFormat, new_object, opinion, UserInfo, ResponseData} from "../../../CommonStuff/src/types/types"
 import * as eva from "eva-functional-utils"
 
 export class NewsManipulator {
@@ -67,4 +67,33 @@ export class NewsManipulator {
                 return element
             })
     }
+
+    async getData(userInfo?: UserInfo): Promise<ResponseData> {
+    // Assuming `this.data` represents your data of type fromRequestJsonFileFormat
+    const responseData: ResponseData = {
+        data: this.data.map((item: new_object) => {
+            const isVoted = userInfo ? item.new_votedEmails.includes(userInfo.email) : undefined;
+            const responseItem: ResponseNewObject = {
+                new_id: item.new_id,
+                new_link: item.new_link,
+                new_title: item.new_title,
+                new_desc: item.new_desc,
+                new_img: item.new_img,
+                new_type: item.new_type,
+                new_date: item.new_date,
+                new_source: item.new_source,
+                new_isTrue: item.new_isTrue,
+                new_isFalse: item.new_isFalse,
+                new_isUnclear: item.new_isUnclear,
+                new_noOpinion: item.new_noOpinion,
+                created_at: item.created_at,
+                updated_at: item.updated_at,
+                isVoted: isVoted
+            };
+            
+            return responseItem;
+        })
+    };
+    return responseData;
+}
 }
