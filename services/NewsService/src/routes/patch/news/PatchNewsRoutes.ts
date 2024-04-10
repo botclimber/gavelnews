@@ -13,9 +13,9 @@ PatchNewsRouter.patch("/:newId/:opinion", (req: Request, res: Response) => {
 
     if(userInfo){
     jsonData.updateNewVeracity(newId, opinion, userInfo)
-        .then(response => {
+        .then( async (response) => {
 
-            if (response !== undefined) res.status(200).json({ "new_data": response, "allData": jsonData });
+            if (response !== undefined) res.status(200).json({ "new_data": response, "allData": await jsonData.getData(userInfo) });
             else res.status(401).json({ "msg": "new not found in our db." })
         })
         .catch(e => { console.log(e.message); res.status(400).json({ "msg": e.message }) })
