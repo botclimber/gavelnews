@@ -1,6 +1,6 @@
 import { fullDateFormat, pathUsersData } from "../consts/consts";
 import { loadFromFile, transform } from "../functions/functions";
-import { BlockActions, User } from "../types/types";
+import { BlockActions, User, UserInfo, UserIdentifier } from "../types/types";
 import * as dateAndTime from 'date-and-time';
 import fs from 'fs';
 
@@ -33,16 +33,17 @@ export class UsersUtils {
         }
     }
 
-    async registUser(userIp: User["ip"], username: User["username"]): Promise<void> {
+    async registUser(userIdentifier: UserIdentifier, username: User["username"], userInfo?: UserInfo): Promise<void> {
         try {
             let users = await this.loadUsers();
             console.log(users)
             // Check if the user exists in the file
-            const userExists = await this.getUserIndexByIp(users, userIp);
+            const userExists = await this.getUserIndex(users, userIdentifier, userInfo);
 
             if (userExists === undefined) {
                 const newUser: User = {
-                    ip: userIp,
+                    userInfo: userInfo,
+                    userIdentifier: userIdentifier,
                     username: username,
                     votes: { true: 0, false: 0, unclear: 0, noopinion: 0 },
                     chatMessages: 0,
@@ -57,13 +58,13 @@ export class UsersUtils {
         }
     }
 
-    async blockUser(userIp: string, action: BlockActions, time: string | undefined): Promise<User> {
+    async blockUser(userIdentifier: UserIdentifier, action: BlockActions, time: string | undefined, userInfo?: UserInfo): Promise<User> {
         try {
             // Load users from file
             let users = await this.loadUsers();
 
-            // Find the user with the given IP
-            const userIndex = await this.getUserIndexByIp(users, userIp)
+            // Find the user with the given identifier
+            const userIndex = await this.getUserIndex(users, userIdentifier, userInfo)
             if (userIndex === undefined) {
                 throw new Error('User not found');
             }
@@ -83,12 +84,12 @@ export class UsersUtils {
         }
     }
 
-    async checkRemoveExpiredBlock(userIp: User["ip"]): Promise<User | undefined> {
+    async checkRemoveExpiredBlock(userIdentifier: UserIdentifier, userInfo?: UserInfo): Promise<User | undefined> {
         try {
             let users = await this.loadUsers();
 
             // Find the user in the list
-            const userIndex = await this.getUserIndexByIp(users, userIp)
+            const userIndex = await this.getUserIndex(users, userIdentifier, userInfo)
             if (userIndex === undefined) return undefined;
 
             // Get current time
@@ -115,27 +116,37 @@ export class UsersUtils {
         }
     }
 
-    async getUserIndexByIp(users: User[], ip: string): Promise<number | undefined> {
-        try {
-            const userIndex = users.findIndex(user => user.ip === ip);
-
-            if (userIndex === -1) {
-                return undefined; // Return undefined if user is not found
+    async getUserIndex(users: User[], userIdentifier: UserIdentifier, userInfo?: UserInfo): Promise<number | undefined> {
+    try {
+        // Prioritize search by userInfo.email if userInfo is provided
+        if (userInfo && userInfo.email) {
+            const userInfoEmailIndex = users.findIndex(user => user.userInfo?.email === userInfo.email);
+            if (userInfoEmailIndex !== -1) {
+                return userInfoEmailIndex;
             }
-
-            return userIndex;
-        } catch (error) {
-            console.error("Error getting user index by IP:", error);
-            throw error;
         }
-    }
 
-    async incrementVote(userIp: User["ip"], vote: keyof User["votes"]): Promise<void> {
+        // If userInfo is not provided or userInfo.email is undefined, combine userIdentifier.ip and userIdentifier.userAgent
+        const combinedIdentifier = userIdentifier.ip + userIdentifier.userAgent;
+        const combinedIndex = users.findIndex(user => {
+            const userCombinedIdentifier = user.userIdentifier.ip + user.userIdentifier.userAgent;
+            return userCombinedIdentifier === combinedIdentifier;
+        });
+
+        return combinedIndex !== -1 ? combinedIndex : undefined;
+    } catch (error) {
+        console.error("Error getting user index by UserInfo:", error);
+        throw error;
+    }
+}
+
+
+    async incrementVote(userIdentifier: UserIdentifier, vote: keyof User["votes"], userInfo?: UserInfo): Promise<void> {
         try {
             let users = await this.loadUsers();
 
             // Find the user in the list
-            const userIndex = await this.getUserIndexByIp(users, userIp);
+            const userIndex = await this.getUserIndex(users, userIdentifier, userInfo);
             if (userIndex === undefined) {
                 throw new Error('User not found');
             }
@@ -155,12 +166,12 @@ export class UsersUtils {
         }
     }
 
-    async incrementChatMessage(userIp: User["ip"]): Promise<void> {
+    async incrementChatMessage(userIdentifier: UserIdentifier, userInfo?: UserInfo): Promise<void> {
         try {
             let users = await this.loadUsers();
 
             // Find the user in the list
-            const userIndex = await this.getUserIndexByIp(users, userIp);
+            const userIndex = await this.getUserIndex(users, userIdentifier, userInfo);
             if (userIndex === undefined) {
                 throw new Error('User not found');
             }
@@ -176,3 +187,4 @@ export class UsersUtils {
         }
     }
 }
+
