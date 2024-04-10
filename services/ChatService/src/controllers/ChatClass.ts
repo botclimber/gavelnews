@@ -60,13 +60,12 @@ export class ChatClass {
 
           const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
           const messageAsObject: message = JSON.parse(ensureStringType)
-
-          // TODO: !!! check if token in the messageObject if yes and valid replace username and icon with one coming from userInfo
-          // const userInfo = (token)? google.checkToken(...) : undefined
+          
+          //TODO: const userInfo = (token)? google.checkToken(...) : undefined
           messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
-          messageAsObject.user = await this.helper.checkMessageUsername(messageAsObject.user);
+          messageAsObject.usernameId = await this.helper.checkMessageUsername(messageAsObject.usernameId);
 
-          // TODO: Maybe update username at this level
+          // IDEA: Maybe update username on users file at this level
 
           // Rate limiting: Check if the client has exceeded the message rate limit
           const currentTime = Date.now();
@@ -92,7 +91,7 @@ export class ChatClass {
           const repeatedMessages = chatMessages.filter(msg => {
             const contentObject: message = JSON.parse(msg)
 
-            return (contentObject.message === messageAsObject.message && contentObject.user[Object.keys(contentObject.user)[0]] === messageAsObject.user[Object.keys(messageAsObject.user)[0]])
+            return (contentObject.message === messageAsObject.message && contentObject.user[Object.keys(contentObject.user)[0]] === messageAsObject.usernameId[Object.keys(messageAsObject.usernameId)[0]])
           });
 
           const isRepeated = repeatedMessages.length > this.REPEATED_MESSAGES_SPAM;
@@ -104,16 +103,23 @@ export class ChatClass {
           const userBlocked = await userUtils.checkRemoveExpiredBlock(ip)
 
           if (userBlocked !== undefined && userBlocked.block.status) {
-            const msg = `<span class="text-[10pt] text-orange-400 italic">(${messageAsObject.user[Object.keys(messageAsObject.user)[0]]}) you are blocked [blockTimeUntil: ${userBlocked.block.time}].</span>`
+            const msg = `<span class="text-[10pt] text-orange-400 italic">(${messageAsObject.usernameId[Object.keys(messageAsObject.usernameId)[0]]}) you are blocked [blockTimeUntil: ${userBlocked.block.time}].</span>`
 
             const msgObject = { icon: 0, user: { '': 'System' }, message: msg, date: '' };
             this.broadcastToOne(JSON.stringify(msgObject), ws)
 
           } else {
 
-            if (messageAsObject.message !== "" && messageAsObject.user[Object.keys(messageAsObject.user)[0]] !== "") {
+            if (messageAsObject.message !== "" && messageAsObject.usernameId[Object.keys(messageAsObject.usernameId)[0]] !== "") {
 
-              const messageAsString = JSON.stringify(messageAsObject)
+              // TODO:
+              // add username and userImg if userInfo !undefined
+              // remove token before broadcast
+              // mask usernameId key before broadcast
+              // add userType (if token ? knownUser : guest)
+              const reworkedMessage: message = await this.helper.reworkMessageObject(messageAsObject, userInfo);
+
+              const messageAsString = JSON.stringify(reworkedMessage)
               await userUtils.incrementChatMessage(ip)
 
               this.addMessageToChat(messageAsString, chatCode)
