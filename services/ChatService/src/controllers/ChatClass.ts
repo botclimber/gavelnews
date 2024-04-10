@@ -58,6 +58,8 @@ export class ChatClass {
           const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
           const messageAsObject: message = JSON.parse(ensureStringType)
 
+          // TODO: !!! check if token in the messageObject if yes and valid replace username and icon with one coming from userInfo
+          // const userInfo = (token)? google.checkToken(...) : undefined
           messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
           messageAsObject.user = await this.helper.checkMessageUsername(messageAsObject.user);
 
