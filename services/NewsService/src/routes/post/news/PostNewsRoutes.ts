@@ -5,7 +5,8 @@ import { search, sliceData, isValidDateFormat } from '../../../controllers/NewsH
 
 const PostNewsRouter = express.Router();
 
-PostNewsRouter.post("/:date/search/:page", (req: Request, res: Response) => {
+PostNewsRouter.post("/:date/search/:page", async (req: Request, res: Response) => {
+    const userInfo = req.userInfo
 
     try {
 
@@ -18,8 +19,8 @@ PostNewsRouter.post("/:date/search/:page", (req: Request, res: Response) => {
         if(title === "") return res.status(400).json({"msg": "Invalid request, either no title param or empty!"});
 
         const data = (date == "current")? 
-        jsonData.data :
-        new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data;
+        await jsonData.getData(userInfo) :
+        await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))).getData(userInfo);
 
         const matchedNews = search(data, title)
         const dataToBeSent = sliceData(matchedNews, page, CONTENT_PER_PAGE)
