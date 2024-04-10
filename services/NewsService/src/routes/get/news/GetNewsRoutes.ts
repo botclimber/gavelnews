@@ -8,6 +8,7 @@ import { fromRequestJsonFileFormat, new_object, opinion } from "../../../../../C
 const GetNewsRouter = express.Router();
 
 GetNewsRouter.get("/:date", function (req: Request, res: Response) {
+    const userInfo = req.userInfo
 
     try {
         const date = req.params.date
@@ -15,8 +16,8 @@ GetNewsRouter.get("/:date", function (req: Request, res: Response) {
         if (date !== "current" && !isValidDateFormat(date)) return res.status(400).json({ "msg": "Not a valid date" });
 
         const dataToBeSent = (date == "current") ?
-            jsonData.data :
-            new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data
+            jsonData.getData(userInfo) :
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
 
 
         res.status(200).json({ "allContentSize": dataToBeSent.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
@@ -26,6 +27,7 @@ GetNewsRouter.get("/:date", function (req: Request, res: Response) {
 })
 
 GetNewsRouter.get("/:date/:page", function (req: Request, res: Response) {
+    const userInfo = req.userInfo
 
     try {
         const date = req.params.date
@@ -35,8 +37,8 @@ GetNewsRouter.get("/:date/:page", function (req: Request, res: Response) {
         if (isNaN(page) || page <= 0) return res.status(400).json({ "msg": `Invalid page number ${page}` });
 
         const data = (date == "current") ?
-            jsonData.data :
-            new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data
+            jsonData.getData(userInfo) :
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
         const dataToBeSent: fromRequestJsonFileFormat = sliceData(data, page, CONTENT_PER_PAGE)
 
         res.status(200).json({ "allContentSize": data.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
@@ -45,6 +47,7 @@ GetNewsRouter.get("/:date/:page", function (req: Request, res: Response) {
 })
 
 GetNewsRouter.get("/:date/sortBy/:param/:page", function (req: Request, res: Response) {
+    const userInfo = req.userInfo
 
     try {
         const param = req.params.param as keyof new_object
@@ -56,8 +59,8 @@ GetNewsRouter.get("/:date/sortBy/:param/:page", function (req: Request, res: Res
         if (!(param in jsonData.data.data[0])) return res.status(400).json({ "msg": `${param} key not valid!` });
 
         const data = (date == "current") ?
-            jsonData.data :
-            new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data;
+            jsonData.getData(userInfo) :
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
         const sortData = sortBy(data, param);
         const dataToBeSent = sliceData(sortData, page, CONTENT_PER_PAGE);
 
@@ -67,6 +70,7 @@ GetNewsRouter.get("/:date/sortBy/:param/:page", function (req: Request, res: Res
 })
 
 GetNewsRouter.get("/:date/filterBy/:param/:value/:page", function (req: Request, res: Response) {
+    const userInfo = req.userInfo
 
     try {
 
@@ -80,8 +84,8 @@ GetNewsRouter.get("/:date/filterBy/:param/:value/:page", function (req: Request,
         if (!(param in jsonData.data.data[0])) return res.status(400).json({ "msg": `${param} key not valid!` });
 
         const data = (date == "current") ?
-            jsonData.data :
-            new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data;
+            jsonData.getData(userInfo) :
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
 
         const filteredData = filterBy(data, param, value);
         const dataToBeSent = sliceData(filteredData, page, CONTENT_PER_PAGE);
@@ -91,6 +95,7 @@ GetNewsRouter.get("/:date/filterBy/:param/:value/:page", function (req: Request,
 })
 
 GetNewsRouter.get("/:date/sortFilterBy/:sortParam/:filterParam/:filterValue/:page", function (req: Request, res: Response) {
+    const userInfo = req.userInfo
 
     try {
 
@@ -105,8 +110,8 @@ GetNewsRouter.get("/:date/sortFilterBy/:sortParam/:filterParam/:filterValue/:pag
         if (!(filterParam in jsonData.data.data[0]) || !(sortParam in jsonData.data.data[0])) return res.status(400).json({ "msg": `SORT_PARAm:${sortParam} or FILTER_PARAM:${filterParam} key not valid!` });
 
         const data = (date == "current") ?
-            jsonData.data :
-            new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data;
+            jsonData.getData(userInfo) :
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
 
         const filteredData = filterBy(data, filterParam, filterValue);
         const sortData = sortBy(filteredData, sortParam);
@@ -118,6 +123,7 @@ GetNewsRouter.get("/:date/sortFilterBy/:sortParam/:filterParam/:filterValue/:pag
 })
 
 GetNewsRouter.get("/:date/getNew/:id", (req: Request, res: Response) => {
+    const userInfo = req.userInfo
 
     const id = req.params.id
     const date = req.params.date
@@ -130,8 +136,8 @@ GetNewsRouter.get("/:date/getNew/:id", (req: Request, res: Response) => {
         }
 
         const data = (date == "current") ?
-            jsonData.data :
-            new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).data;
+            jsonData.getData(userInfo) :
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
 
         const newData = getSingleNewData(data, id)
         return res.status(200).json(newData)
