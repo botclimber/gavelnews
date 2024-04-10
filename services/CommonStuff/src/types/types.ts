@@ -46,20 +46,20 @@ export type message = {
 
 export type BlockActions = "temporary" | "permanent" | "remove"
 
-export type userIdentifier = {
+export type UserIdentifier = {
     ip: string,
     userAgent: string
 }
 
-export type userInfo = {
+export type UserInfo = {
     email: string,
     fullName: string,
     img: string
 }
 
 export type User = {
-    userInfo?: userInfo,
-    userIdentifier: userIdentifier, 
+    userInfo?: UserInfo,
+    userIdentifier: UserIdentifier, 
     username: ReservedUsername, 
     votes: {"true":number, "false": number, "unclear": number, "noopinion": number}, 
     chatMessages: number, 
