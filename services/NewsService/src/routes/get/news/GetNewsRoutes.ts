@@ -17,7 +17,7 @@ GetNewsRouter.get("/:date", async function (req: Request, res: Response) {
 
         const dataToBeSent = (date == "current") ?
             await jsonData.getData(userInfo) :
-            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))).getData(userInfo))
 
 
         res.status(200).json({ "allContentSize": dataToBeSent.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
@@ -38,7 +38,7 @@ GetNewsRouter.get("/:date/:page", async function (req: Request, res: Response) {
 
         const data = (date == "current") ?
             await jsonData.getData(userInfo) :
-            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))).getData(userInfo))
         const dataToBeSent: fromRequestJsonFileFormat = sliceData(data, page, CONTENT_PER_PAGE)
 
         res.status(200).json({ "allContentSize": data.data.length, "contentSize": dataToBeSent.data.length, "content": dataToBeSent })
@@ -60,7 +60,7 @@ GetNewsRouter.get("/:date/sortBy/:param/:page", async function (req: Request, re
 
         const data = (date == "current") ?
             await jsonData.getData(userInfo) :
-            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))).getData(userInfo))
         const sortData = sortBy(data, param);
         const dataToBeSent = sliceData(sortData, page, CONTENT_PER_PAGE);
 
@@ -85,7 +85,7 @@ GetNewsRouter.get("/:date/filterBy/:param/:value/:page", async function (req: Re
 
         const data = (date == "current") ?
             await jsonData.getData(userInfo) :
-            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))).getData(userInfo))
 
         const filteredData = filterBy(data, param, value);
         const dataToBeSent = sliceData(filteredData, page, CONTENT_PER_PAGE);
@@ -111,7 +111,7 @@ GetNewsRouter.get("/:date/sortFilterBy/:sortParam/:filterParam/:filterValue/:pag
 
         const data = (date == "current") ?
             await jsonData.getData(userInfo) :
-            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))).getData(userInfo))
 
         const filteredData = filterBy(data, filterParam, filterValue);
         const sortData = sortBy(filteredData, sortParam);
@@ -137,7 +137,7 @@ GetNewsRouter.get("/:date/getNew/:id", async (req: Request, res: Response) => {
 
         const data = (date == "current") ?
             await jsonData.getData(userInfo) :
-            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date))).getData(userInfo))
+            await (new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))).getData(userInfo))
 
         const newData = getSingleNewData(data, id)
         return res.status(200).json(newData)
