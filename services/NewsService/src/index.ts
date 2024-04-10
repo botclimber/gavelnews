@@ -31,9 +31,13 @@ app.use(bodyParser.json());
 app.use(loggingMiddleware);
 
 app.get("/", async function (req: Request, res: Response) {
+
+    const userInfo = req.userInfo
+    const userIdentifier = req.userIdentifier
+    
     app.use(express.static(path.join(__dirname, viewsPath)));
 
-    await userUtils.registUser(req.ip ?? "", { "not found": "" })
+    await userUtils.registUser(userIdentifier, userInfo)
     res.sendFile(path.join(__dirname, viewsPath))
 })
 
