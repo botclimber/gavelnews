@@ -38,8 +38,12 @@ export type opinion = "new_isTrue" | "new_isFalse" | "new_isUnclear" | "new_noOp
 
 export type ReservedUsername = { [key: string]: string }
 export type message = {
-    chatIcon: number,
-    user: ReservedUsername,
+    userImg?: string, // its added when handling message
+    username?: string, // its added when handling message
+    userType?: string // its added when handling message
+    token: string, // to be removed before broadcast
+    icon: number,
+    usernameId: ReservedUsername, // hide key before broadcast
     message: string,
     date: Date
 }
