@@ -28,8 +28,9 @@ TODO:
 - [x] create endpoints for filtering and sorting;
 - [x] search function should request from server instead of looking on the client existing data;
 - [x] backoffice page and service to check platform utilization;
-- [x] implement chat backend validations (username limit chars, block script/html injection and reserved username keywors).
-- [ ] implement localStorage cleaner regarding votes ?
-- [ ] implement google auth for people that want to vote
-- [ ] implement (ip + useragent) identifier for guests
-- [ ] guests are allowed to text in the chat and are indentified as guests
+- [x] implement chat backend validations (username limit chars, block script/html injection and reserved username keywors);
+- [ ] implement localStorage cleaner regarding votes ? ;
+- [ ] implement google auth for people that want to vote;
+- [ ] implement (ip + useragent) identifier for guests;
+- [ ] guests are allowed to text in the chat and are indentified as guests;
+- [ ] send only necessary information as response, rename new_votedIps to new_votedEmails and remove it when sending the news data.
