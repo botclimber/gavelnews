@@ -116,7 +116,7 @@ export class UsersUtils {
         }
     }
 
-    async getUserIndex(users: User[], userIdentifier: UserIdentifier, userInfo?: UserInfo): Promise<number | undefined> {
+    async getUserIndex(users: User[], userIdentifier?: UserIdentifier, userInfo?: UserInfo): Promise<number | undefined> {
     try {
         // Prioritize search by userInfo.email if userInfo is provided
         if (userInfo && userInfo.email) {
@@ -127,6 +127,7 @@ export class UsersUtils {
         }
 
         // If userInfo is not provided or userInfo.email is undefined, combine userIdentifier.ip and userIdentifier.userAgent
+        if(userIdentifier){
         const combinedIdentifier = userIdentifier.ip + userIdentifier.userAgent;
         const combinedIndex = users.findIndex(user => {
             const userCombinedIdentifier = user.userIdentifier.ip + user.userIdentifier.userAgent;
@@ -134,6 +135,9 @@ export class UsersUtils {
         });
 
         return combinedIndex !== -1 ? combinedIndex : undefined;
+        }
+
+        return undefined
     } catch (error) {
         console.error("Error getting user index by UserInfo:", error);
         throw error;
@@ -141,7 +145,7 @@ export class UsersUtils {
 }
 
 
-    async incrementVote(userIdentifier: UserIdentifier, vote: keyof User["votes"], userInfo?: UserInfo): Promise<void> {
+    async incrementVote(vote: keyof User["votes"], userInfo: UserInfo): Promise<void> {
         try {
             let users = await this.loadUsers();
 
