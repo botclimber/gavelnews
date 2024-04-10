@@ -12,13 +12,16 @@ const userUtils = new UsersUtils()
 export class ChatClass {
 
   // TODO: print messagesMemory and chatClientsMap memory occupation
-  private MESSAGES_LIMIT_PER_CHAT: number = 25
-  private MESSAGE_RATE_LIMIT: number = 10 // Max messages allowed per second per client
-  private MESSAGE_RATE_LIMIT_WINDOW: number = 1000 // 1 second window
-  private REPEATED_MESSAGES_SPAM: number = 5
-  private MESSAGE_BLOCK_TIME: number = 1 // 1 min
+
+  //TODO: move this constants to be env variables
+  private MESSAGES_LIMIT_PER_CHAT: number = 25 // process.env.MESSAGES_LIMIT_PER_CHAT
+  private MESSAGE_RATE_LIMIT: number = 10 // process.env.MESSAGE_RATE_LIMIT Max messages allowed per second per client
+  private MESSAGE_RATE_LIMIT_WINDOW: number = 1000 // process.env.MESSAGE_RATE_LIMIT_WINDOW 1 second window
+  private REPEATED_MESSAGES_SPAM: number = 5 // process.env.REPEATED_MESSAGES_SPAM
+  private MESSAGE_BLOCK_TIME: number = 1 // process.env.MESSAGE_BLOCK_TIME 1 min
 
   private messageRate: Map<WebSocket, { lastMessageTime: number[] }>
+  
   private wss: WebSocket.Server
   private messagesMemory: Map<chatCode, string[]>
   private chatClientsMap: Map<chatCode, WebSocket[]>
