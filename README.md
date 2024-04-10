@@ -29,4 +29,7 @@ TODO:
 - [x] search function should request from server instead of looking on the client existing data;
 - [x] backoffice page and service to check platform utilization;
 - [x] implement chat backend validations (username limit chars, block script/html injection and reserved username keywors).
-- [ ] implement localStorage cleaner regarding votes
+- [ ] implement localStorage cleaner regarding votes ?
+- [ ] implement google auth for people that want to vote
+- [ ] implement (ip + useragent) identifier for guests
+- [ ] guests are allowed to text in the chat and are indentified as guests
