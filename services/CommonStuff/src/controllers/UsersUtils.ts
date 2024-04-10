@@ -33,7 +33,7 @@ export class UsersUtils {
         }
     }
 
-    async registUser(userIdentifier: UserIdentifier, username: User["username"], userInfo?: UserInfo): Promise<void> {
+    async registUser(userIdentifier: UserIdentifier, userInfo?: UserInfo): Promise<void> {
         try {
             let users = await this.loadUsers();
             console.log(users)
@@ -41,6 +41,8 @@ export class UsersUtils {
             const userExists = await this.getUserIndex(users, userIdentifier, userInfo);
 
             if (userExists === undefined) {
+                const username = {"": ""}
+                
                 const newUser: User = {
                     userInfo: userInfo,
                     userIdentifier: userIdentifier,
