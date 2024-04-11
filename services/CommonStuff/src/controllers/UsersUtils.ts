@@ -1,196 +1,200 @@
 import { fullDateFormat, pathUsersData } from "../consts/consts";
-import { loadFromFile, transform } from "../functions/functions";
+import { loadFromFile, saveToFile} from "../functions/functions";
 import { BlockActions, User, UserInfo, UserIdentifier } from "../types/types";
 import * as dateAndTime from 'date-and-time';
 import fs from 'fs';
 
-export class UsersUtils {
-    private path: string = `${pathUsersData}allUsers.txt`;
+class UsersUtils {
+    
+    private path: string = `${pathUsersData}allUsers.json`;
+    private users: User[];
 
-    async loadUsers(): Promise<User[]> {
+    getUsers (): User[] {
+        return this.users
+    }
+
+    setUsers(): void{
+        this.users = this.loadUsers()
+    }
+
+    loadUsers(): User[] {
         try {
-            const dataFromFile = await loadFromFile(this.path);
-            const users = await transform<User>(dataFromFile);
+            const dataFromFile = JSON.parse(loadFromFile(this.path));
 
-            return users;
+            return dataFromFile;
         } catch (error) {
             console.error("Error loading users:", error);
             return [];
         }
     }
 
-    async saveUsers(users: User[]): Promise<void> {
+    async saveUsers(): Promise<void> {
         try {
-            const dataToWrite = users.map(user => JSON.stringify(user)).join('\n'); // Convert users to JSON strings and join them with newlines
-
-            // Write data to the file, creating or erasing existing content and then appending
-            await fs.promises.writeFile(this.path, dataToWrite, { flag: 'w+' }); // 'w+' flag opens the file for reading and writing, creating or truncating it
-
-            console.log('Users saved successfully');
+            await saveToFile(JSON.stringify(this.users), this.path)
+    
         } catch (error) {
             console.error('Error saving users:', error);
-            throw error; // Re-throw the error for the caller to handle
+            return; // Re-throw the error for the caller to handle
         }
     }
 
     async registUser(userIdentifier: UserIdentifier, userInfo?: UserInfo): Promise<void> {
+
         try {
-            let users = await this.loadUsers();
-            console.log(users)
+
             // Check if the user exists in the file
-            const userExists = await this.getUserIndex(users, userIdentifier, userInfo);
+            const userExists = await this.getUserIndex(userIdentifier, userInfo);
 
             if (userExists === undefined) {
-                const username = {"": ""}
-                
+                const username = { "": "" }
+
                 const newUser: User = {
                     userInfo: userInfo,
                     userIdentifier: userIdentifier,
-                    username: username,
+                    usernameId: username,
                     votes: { true: 0, false: 0, unclear: 0, noopinion: 0 },
                     chatMessages: 0,
                     createdAt: dateAndTime.format(new Date(), fullDateFormat),
                     block: { status: false, time: '' }
                 };
-                users.push(newUser);
-                await this.saveUsers(users);
+
+                this.users.push(newUser);
+
             }
         } catch (error) {
             console.error("Error registering user:", error);
         }
     }
 
-    async blockUser(userIdentifier: UserIdentifier, action: BlockActions, time: string | undefined, userInfo?: UserInfo): Promise<User> {
+    async blockUser(userIdentifier: UserIdentifier, action: BlockActions, time: string | undefined, userInfo?: UserInfo): Promise<User | void> {
         try {
-            // Load users from file
-            let users = await this.loadUsers();
 
             // Find the user with the given identifier
-            const userIndex = await this.getUserIndex(users, userIdentifier, userInfo)
+            const userIndex = await this.getUserIndex(userIdentifier, userInfo)
             if (userIndex === undefined) {
-                throw new Error('User not found');
+                console.log('User not found');
+                return 
             }
 
             // Update block status and time
-            users[userIndex].block.status = action === 'remove' ? false : true;
-            users[userIndex].block.time = action === 'temporary' && time ? time : undefined;
+            this.users[userIndex].block.status = action === 'remove' ? false : true;
+            this.users[userIndex].block.time = action === 'temporary' && time ? time : undefined;
 
-            // Save the updated users list
-            await this.saveUsers(users);
-
-            return users[userIndex];
+            return this.users[userIndex];
 
         } catch (error) {
             console.error("Error blocking user:", error);
-            throw error; // Re-throwing the error for the caller to handle
+            return 
         }
     }
 
     async checkRemoveExpiredBlock(userIdentifier: UserIdentifier, userInfo?: UserInfo): Promise<User | undefined> {
         try {
-            let users = await this.loadUsers();
 
             // Find the user in the list
-            const userIndex = await this.getUserIndex(users, userIdentifier, userInfo)
+            const userIndex = await this.getUserIndex(userIdentifier, userInfo)
             if (userIndex === undefined) return undefined;
 
             // Get current time
             const currentTime = new Date();
-            const userTime = users[userIndex].block.time;
+            const userTime = this.users[userIndex].block.time;
 
             // Check block status and time
-            if (users[userIndex].block.status && userTime) {
+            if (this.users[userIndex].block.status && userTime) {
                 const blockTime = dateAndTime.parse(userTime, fullDateFormat)
 
                 if (blockTime <= currentTime) {
-                    users[userIndex].block.status = false;
-                    users[userIndex].block.time = '';
+                    this.users[userIndex].block.status = false;
+                    this.users[userIndex].block.time = '';
                 }
             }
 
-            // Save the updated users list
-            await this.saveUsers(users);
-
-            return users[userIndex]
+            return this.users[userIndex]
         } catch (error) {
             console.error("Error removing expired blocks:", error);
-            throw error
+            return undefined;
         }
     }
 
-    async getUserIndex(users: User[], userIdentifier?: UserIdentifier, userInfo?: UserInfo): Promise<number | undefined> {
-    try {
-        // Prioritize search by userInfo.email if userInfo is provided
-        if (userInfo && userInfo.email) {
-            const userInfoEmailIndex = users.findIndex(user => user.userInfo?.email === userInfo.email);
-            if (userInfoEmailIndex !== -1) {
-                return userInfoEmailIndex;
+    async getUserIndex(userIdentifier?: UserIdentifier, userInfo?: UserInfo): Promise<number | undefined> {
+        try {
+
+            if(!(this.users.length > 0)) return undefined
+
+            if (userInfo && userInfo.email) {
+                const userInfoEmailIndex = this.users.findIndex(user => user.userInfo?.email === userInfo.email );
+
+                if (userInfoEmailIndex !== -1) {
+                    return userInfoEmailIndex;
+                
+                }else return undefined;
             }
+
+            // If userInfo is not provided or userInfo.email is undefined, combine userIdentifier.ip and userIdentifier.userAgent
+            if (userIdentifier) {
+                const combinedIdentifier = userIdentifier.ip + userIdentifier.userAgent;
+                const combinedIndex = this.users.findIndex(user => {
+
+                    // && !user.userInfo cause otherwise this would be written in the existing non anon row
+                    const userCombinedIdentifier = (user.userIdentifier && !user.userInfo)? user.userIdentifier.ip + user.userIdentifier.userAgent : "";
+
+                    return userCombinedIdentifier === combinedIdentifier;
+                });
+
+                return combinedIndex !== -1 ? combinedIndex : undefined;
+            }
+
+            return undefined
+        } catch (error) {
+            console.error("Error getting user index by UserInfo:", error);
+            return;
         }
-
-        // If userInfo is not provided or userInfo.email is undefined, combine userIdentifier.ip and userIdentifier.userAgent
-        if(userIdentifier){
-        const combinedIdentifier = userIdentifier.ip + userIdentifier.userAgent;
-        const combinedIndex = users.findIndex(user => {
-            const userCombinedIdentifier = user.userIdentifier.ip + user.userIdentifier.userAgent;
-            return userCombinedIdentifier === combinedIdentifier;
-        });
-
-        return combinedIndex !== -1 ? combinedIndex : undefined;
-        }
-
-        return undefined
-    } catch (error) {
-        console.error("Error getting user index by UserInfo:", error);
-        throw error;
     }
-}
 
 
     async incrementVote(vote: keyof User["votes"], userInfo: UserInfo): Promise<void> {
         try {
-            let users = await this.loadUsers();
 
             // Find the user in the list
-            const userIndex = await this.getUserIndex(users, userIdentifier, userInfo);
+            const userIndex = await this.getUserIndex(undefined, userInfo);
             if (userIndex === undefined) {
-                throw new Error('User not found');
+                console.log('User not found');
+                return
             }
 
             // Increment the specified vote
-            if (users[userIndex].votes[vote] !== undefined) {
-                users[userIndex].votes[vote]++;
+            if (this.users[userIndex].votes[vote] !== undefined) {
+                this.users[userIndex].votes[vote]++;
             } else {
-                throw new Error('Invalid vote type');
+                console.log('Invalid vote type');
+                return;
             }
 
-            // Save the updated users list
-            await this.saveUsers(users);
         } catch (error) {
             console.error("Error incrementing vote:", error);
-            throw error;
+            return;
         }
     }
 
     async incrementChatMessage(userIdentifier: UserIdentifier, userInfo?: UserInfo): Promise<void> {
         try {
-            let users = await this.loadUsers();
 
             // Find the user in the list
-            const userIndex = await this.getUserIndex(users, userIdentifier, userInfo);
+            const userIndex = await this.getUserIndex(userIdentifier, userInfo);
+
             if (userIndex === undefined) {
-                throw new Error('User not found');
+                console.log('User not found');
+                return;
             }
 
             // Increment chatMessages
-            users[userIndex].chatMessages++;
+            this.users[userIndex].chatMessages++;
 
-            // Save the updated users list
-            await this.saveUsers(users);
         } catch (error) {
             console.error("Error incrementing chat message:", error);
-            throw error;
+            return
         }
     }
 }
 
+export const allUsers = new UsersUtils();

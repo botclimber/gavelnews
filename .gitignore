@@ -1,3 +1,6 @@
+# ignore configuration file
+system.config.js
+
 # ignore file package-lock.json
 package-lock.json
 

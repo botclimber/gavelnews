@@ -14,6 +14,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./src/css/main.css">
 
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async></script>
+
 </head>
 
 <body>
@@ -120,30 +123,28 @@
 
             <div id="menu" class="menu flex flex-col sm:flex-row items-center justify-between">
                 <div class="mb-3 sm:mb-0">
-                    <button onclick="withLoadScreen(() => sortBy('new_isTrue'))"
-                        class="filter-btn bg-green-500">True</button>
-                    <button onclick="withLoadScreen(() => sortBy('new_noOpinion'))" class="filter-btn bg-gray-500">No
-                        Opinion</button>
-                    <button onclick="withLoadScreen(() => sortBy('new_isUnclear'))"
-                        class="filter-btn bg-orange-500">Unclear</button>
-                    <button onclick="withLoadScreen(() => sortBy('new_isFalse'))"
-                        class="filter-btn bg-red-500">False</button>
+                    <button onclick="withLoadScreen(() => sortBy('new_isTrue'))" class="filter-btn bg-green-500">True</button>
+                    <button onclick="withLoadScreen(() => sortBy('new_noOpinion'))" class="filter-btn bg-gray-500">No Opinion</button>
+                    <button onclick="withLoadScreen(() => sortBy('new_isUnclear'))" class="filter-btn bg-orange-500">Unclear</button>
+                    <button onclick="withLoadScreen(() => sortBy('new_isFalse'))" class="filter-btn bg-red-500">False</button>
                 </div>
-                <input id="searchComponent" type="text" value="" class="search-box mb-3 sm:mb-0"
-                    placeholder="Search...">
-                <div class="dropdown">
-                    <button class="filter-btn" style="color:black; background-color: white;">News Source</button>
-                    <div class="dropdown-content">
-                        <a href="#" onclick="withLoadScreen(() => filterBy('*'))">All</a>
-                        <a href="#" onclick="withLoadScreen(() => filterBy('publico'))">Publico</a>
-                        <a href="#" onclick="withLoadScreen(() => filterBy('expresso'))">Expresso</a>
-                        <a href="#" onclick="withLoadScreen(() => filterBy('sic noticias'))">Sic Noticias</a>
-                        <a href="#" onclick="withLoadScreen(() => filterBy('jornal noticias'))">Jornal Noticias</a>
-                        <a href="#" onclick="withLoadScreen(() => filterBy('observador'))">Observador</a>
-                        <a href="#" onclick="withLoadScreen(() => filterBy('cnnPortugal'))">Cnn Portugal</a>
-                        <a href="#" onclick="withLoadScreen(() => filterBy('visao'))">Visao</a>
+                <input id="searchComponent" type="text" value="" class="search-box mb-3 sm:mb-0" placeholder="Search...">
+                <div class="relative">
+                    <div class="dropdown">
+                        <button class="filter-btn" style="color:black; background-color: white;">News Source</button>
+                        <div class="dropdown-content">
+                            <a href="#" onclick="withLoadScreen(() => filterBy('*'))">All</a>
+                            <a href="#" onclick="withLoadScreen(() => filterBy('publico'))">Publico</a>
+                            <a href="#" onclick="withLoadScreen(() => filterBy('expresso'))">Expresso</a>
+                            <a href="#" onclick="withLoadScreen(() => filterBy('sic noticias'))">Sic Noticias</a>
+                            <a href="#" onclick="withLoadScreen(() => filterBy('jornal noticias'))">Jornal Noticias</a>
+                            <a href="#" onclick="withLoadScreen(() => filterBy('observador'))">Observador</a>
+                            <a href="#" onclick="withLoadScreen(() => filterBy('cnnPortugal'))">Cnn Portugal</a>
+                            <a href="#" onclick="withLoadScreen(() => filterBy('visao'))">Visao</a>
+                        </div>
                     </div>
                 </div>
+                <div id="buttonLL"></div>
             </div>
 
             <div id="loading-container" class="loading-container">

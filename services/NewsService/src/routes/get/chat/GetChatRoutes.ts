@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { ChatClass } from '../../../controllers/ChatHandler';
+import { ChatHandlerClass } from '../../../controllers/Chat/ChatHandler';
 
 const GetChatRouter = express.Router();
 
@@ -9,7 +9,7 @@ GetChatRouter.get("/old/chats/:date/:chatId", async (req: Request, res: Response
     const date = req.params.date
 
     try {
-        const handler = new ChatClass(chatCode, date)
+        const handler = new ChatHandlerClass(chatCode, date)
 
         if (chatCode === "*") {
 

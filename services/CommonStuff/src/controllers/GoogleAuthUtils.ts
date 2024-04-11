@@ -10,7 +10,8 @@ export class GoogleAuth {
     constructor() {
         // Check if clientId and clientSecret are provided
         if (!this.clientId || !this.clientSecret) {
-            throw new Error('Google client ID and client secret are required.');
+            console.log('Google client ID and client secret are required.');
+            return;
         }
 
         // Create OAuth2 client instance
@@ -40,7 +41,7 @@ export class GoogleAuth {
           
         } catch (error) {
             console.error('Error verifying Google token:', error);
-            return null;
+            return undefined;
         }
     }
 }

@@ -1,14 +1,16 @@
 import * as schedule from 'node-schedule';
 import { getPreviousDate, formatDate, saveToFile } from "../../../CommonStuff/src/functions/functions"
-import { NewsManipulator } from '../controllers/NewsManipulator';
+import { NewsManipulator } from '../controllers/News/NewsManipulator';
 import { pathBackupData, pathMainData, Week, dateFormat } from "../../../CommonStuff/src/consts/consts"
 import { jsonData, loadData, updateJsonData } from '../utils/JsonDataHandler'
+import { ChatClass } from '../controllers/Chat/ChatClass';
+import { allUsers } from '../../../CommonStuff/src/controllers/UsersUtils';
 
 /**
  * CRON JOB
  */
 
-export function setupScheduler() {
+export function setupScheduler(chatService: ChatClass) {
     const ruleForSaveLoadData = new schedule.RecurrenceRule();
 
     const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
@@ -21,7 +23,8 @@ export function setupScheduler() {
     console.log(`Scheduler set for (${ruleForSaveLoadData.hour}h, ${ruleForSaveLoadData.minute}min, ${ruleForSaveLoadData.tz} tz)`)
 
     schedule.scheduleJob(ruleForSaveLoadData, async function () {
-        try {
+
+        try{
             const twoDaysBefore = formatDate(getPreviousDate(2), dateFormat)
 
             // save manipulated data to file
@@ -33,18 +36,19 @@ export function setupScheduler() {
 
             console.log("Saving data to file: finish.")
 
-        } catch (error) {
-            console.log(`An error ocurred while SAVING: ${error}`)
-        }
-
-        try {
             // load newly generated data 
             updateJsonData(new NewsManipulator(loadData(pathMainData, getPreviousDate(1))))
 
             console.log(`Loading recent Data into memory, with the size of ${jsonData.dataSize().toFixed(2)} `)
 
-        } catch (error) {
-            console.log(`An error ocurred while LOADING: ${error}`)
+            console.log("Saving and restarting Chat rooms")
+            chatService.closeDay();
+
+            console.log("persiting users data")
+            await allUsers.saveUsers();
+
+        }catch(error){
+            console.log(error)
         }
     });
 }

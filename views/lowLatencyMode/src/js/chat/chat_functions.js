@@ -10,7 +10,7 @@ const roomCodeRegex = /\[room:([a-zA-Z0-9-]+)\]/;
 
 async function getNewFromServer(id) {
 
-    const date = (readOnlyPage)? dateAsGlobal : "current"
+    const date = (readOnlyPage) ? dateAsGlobal : "current"
     const request = await fetch(`${api}/news/${date}/getNew/${id}`)
     const response = await request.json()
 
@@ -105,43 +105,53 @@ function setChatTitle(chatCode = "/", general = true, title = "", goBackBtn = tr
         `
 }
 
+// data: {userImg?, username?, userType, icon, usernameId, message, date}
 async function printToChat(data) {
     try {
-        console.log(data)
         const messageReplaceNewCodes = await replaceNewCode(data.message);
         const messageReplaceRoomCodes = await replaceRoomCode(messageReplaceNewCodes);
 
         const chatIconStyle = chatIcons[data.icon]
-        
-        const serverUserName = data.user[Object.keys(data.user)[0]]
+        const img = (data.userImg) ?
+            `<div class="rounded-full border">
+            <img src="${data.userImg}" class="w-full h-full object-cover rounded-full">
+        </div>` :
+            `<div class="rounded-full border p-1">
+            <svg class="w-5 h-5" fill="${chatIconStyle.color}" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 123.051 123.052" xml:space="preserve" stroke="${chatIconStyle.color}">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <rect x="23.097" y="71.551" width="76.007" height="51.501"></rect> <path d="M106.292,61.748C109.04,43.56,94.383,34.54,88.855,31.15c-0.231-0.142-0.478-0.244-0.72-0.347 c-1.547-1.033-3.284-1.793-5.058-2.228l-3.458,3.482l-3.354-3.521c-0.012,0.003-0.023,0.003-0.034,0.006 c-1.806,0.433-3.577,1.207-5.149,2.261c-0.423,0.18-0.836,0.396-1.215,0.693c-11.464,8.958-16.564,4.152-17.171,3.729 c-2.007-1.42-4.639-1.25-6.467,0.214l-8.606-8.103l1.722-2.063c0.721-0.864,1.066-1.916,1.062-2.96l-5.377-4.487 c-1.029,0.182-2.001,0.711-2.723,1.575l-4.994,5.988c-0.684,0.818-1.029,1.803-1.06,2.791l5.54,4.622 c0.966-0.208,1.873-0.723,2.555-1.54l1.807-2.166l8.554,8.103l0.148-0.105c-1.269,2.364-0.628,5.349,1.618,6.937 c0.599,0.424,11.919,6.51,18.933,1.287v16.429H37.39c0.916,0,1.659-0.743,1.659-1.66s-0.743-1.661-1.659-1.661h-0.13 c0-1.631-1.324-2.954-2.954-2.954H22.125c-1.631,0-2.954,1.323-2.954,2.954h-0.13c-0.917,0-1.659,0.744-1.659,1.661 s0.742,1.66,1.659,1.66h-6.007v6.032h96.984v-6.032L106.292,61.748L106.292,61.748z M79.588,32.574h0.064l3.35,22.384l-3.35,4.583 h-0.064l-3.349-4.583L79.588,32.574z M93.833,49.92c1.801,3.138,2.543,6.969,1.479,11.829h-1.479V49.92z"></path> <circle cx="79.622" cy="13.885" r="13.885"></circle> </g> </g> </g>
+            </svg>
+        </div>`
+
         const clientUserName = userInfo[Object.keys(userInfo)[0]]
 
-        if (clientUserName === serverUserName) {
+        const userType = (data.userType === "guest") ? "(Guest)" : "";
+        const userTagOrName = (data.username) ? data.username : data.usernameId["*"];
+
+        const nameToBeDisplayed = `<span style="color:${chatIconStyle.color};">${userType}</span> ${userTagOrName}`
+
+        const imMsgOwner = clientUserName == data.usernameId["*"];
+
+        if (imMsgOwner) {
             chat.innerHTML += `<div class="flex gap-3 my-4 text-gray-600 text-sm flex-1 justify-end">
-            <p class="leading-relaxed text-right"><span class="block font-bold text-gray-700">(${serverUserName}) You </span>${messageReplaceRoomCodes}
-                <span class="block text-[6.5pt] text-gray-400 mt-2">${data.date}</span></p>
-            <span class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
-                <div class="rounded-full border p-1">
-                <svg class="w-5 h-5" fill="${chatIconStyle.color}" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 123.051 123.052" xml:space="preserve" stroke="${chatIconStyle.color}">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <rect x="23.097" y="71.551" width="76.007" height="51.501"></rect> <path d="M106.292,61.748C109.04,43.56,94.383,34.54,88.855,31.15c-0.231-0.142-0.478-0.244-0.72-0.347 c-1.547-1.033-3.284-1.793-5.058-2.228l-3.458,3.482l-3.354-3.521c-0.012,0.003-0.023,0.003-0.034,0.006 c-1.806,0.433-3.577,1.207-5.149,2.261c-0.423,0.18-0.836,0.396-1.215,0.693c-11.464,8.958-16.564,4.152-17.171,3.729 c-2.007-1.42-4.639-1.25-6.467,0.214l-8.606-8.103l1.722-2.063c0.721-0.864,1.066-1.916,1.062-2.96l-5.377-4.487 c-1.029,0.182-2.001,0.711-2.723,1.575l-4.994,5.988c-0.684,0.818-1.029,1.803-1.06,2.791l5.54,4.622 c0.966-0.208,1.873-0.723,2.555-1.54l1.807-2.166l8.554,8.103l0.148-0.105c-1.269,2.364-0.628,5.349,1.618,6.937 c0.599,0.424,11.919,6.51,18.933,1.287v16.429H37.39c0.916,0,1.659-0.743,1.659-1.66s-0.743-1.661-1.659-1.661h-0.13 c0-1.631-1.324-2.954-2.954-2.954H22.125c-1.631,0-2.954,1.323-2.954,2.954h-0.13c-0.917,0-1.659,0.744-1.659,1.661 s0.742,1.66,1.659,1.66h-6.007v6.032h96.984v-6.032L106.292,61.748L106.292,61.748z M79.588,32.574h0.064l3.35,22.384l-3.35,4.583 h-0.064l-3.349-4.583L79.588,32.574z M93.833,49.92c1.801,3.138,2.543,6.969,1.479,11.829h-1.479V49.92z"></path> <circle cx="79.622" cy="13.885" r="13.885"></circle> </g> </g> </g>
-                </svg>
-                </div>
+            <p class="leading-relaxed text-right">
+                <span class="block font-bold text-gray-700">${nameToBeDisplayed} - You </span>${messageReplaceRoomCodes}
+                <span class="block text-[6.5pt] text-gray-400 mt-2">${data.date}</span>
+            </p>
+            <span class="relative flex-shrink-0 overflow-hidden rounded-full w-8 h-8">
+                ${img}
             </span>
-        </div>`;
+        </div>
+        `;
         } else {
             chat.innerHTML += `<div class="flex gap-3 my-4 text-gray-600 text-sm flex-1"><span
             class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
-            <div class="rounded-full border p-1">
-            <svg class="w-5 h-5" fill="${chatIconStyle.color}" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 123.051 123.052" xml:space="preserve" transform="rotate(0)matrix(-1, 0, 0, 1, 0, 0)">
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <rect x="23.097" y="71.551" width="76.007" height="51.501"></rect> <path d="M106.292,61.748C109.04,43.56,94.383,34.54,88.855,31.15c-0.231-0.142-0.478-0.244-0.72-0.347 c-1.547-1.033-3.284-1.793-5.058-2.228l-3.458,3.482l-3.354-3.521c-0.012,0.003-0.023,0.003-0.034,0.006 c-1.806,0.433-3.577,1.207-5.149,2.261c-0.423,0.18-0.836,0.396-1.215,0.693c-11.464,8.958-16.564,4.152-17.171,3.729 c-2.007-1.42-4.639-1.25-6.467,0.214l-8.606-8.103l1.722-2.063c0.721-0.864,1.066-1.916,1.062-2.96l-5.377-4.487 c-1.029,0.182-2.001,0.711-2.723,1.575l-4.994,5.988c-0.684,0.818-1.029,1.803-1.06,2.791l5.54,4.622 c0.966-0.208,1.873-0.723,2.555-1.54l1.807-2.166l8.554,8.103l0.148-0.105c-1.269,2.364-0.628,5.349,1.618,6.937 c0.599,0.424,11.919,6.51,18.933,1.287v16.429H37.39c0.916,0,1.659-0.743,1.659-1.66s-0.743-1.661-1.659-1.661h-0.13 c0-1.631-1.324-2.954-2.954-2.954H22.125c-1.631,0-2.954,1.323-2.954,2.954h-0.13c-0.917,0-1.659,0.744-1.659,1.661 s0.742,1.66,1.659,1.66h-6.007v6.032h96.984v-6.032L106.292,61.748L106.292,61.748z M79.588,32.574h0.064l3.35,22.384l-3.35,4.583 h-0.064l-3.349-4.583L79.588,32.574z M93.833,49.92c1.801,3.138,2.543,6.969,1.479,11.829h-1.479V49.92z"></path> <circle cx="79.622" cy="13.885" r="13.885"></circle> </g> </g> </g>
-            </svg>
-            </div>
+            ${img}
         </span>
-        <p class="leading-relaxed"><span class="block font-bold text-gray-700">${serverUserName} </span>${messageReplaceRoomCodes}
+        <p class="leading-relaxed"><span class="block font-bold text-gray-700">${nameToBeDisplayed} </span>${messageReplaceRoomCodes}
             <span class="block text-[6.5pt] text-gray-400 mt-2">${data.date}</span></p>
     </div>`;
         }
-        
+
     } catch (error) {
         console.error("Error in printToChat:", error);
     }
@@ -157,7 +167,6 @@ function isScrolledToBottom(element) {
 }
 
 function scrollToBottom(element) {
-    console.log("scroll now !!!")
 
     // Scroll to the bottom of the element
     element.scrollTop = element.scrollHeight;

@@ -1,14 +1,21 @@
 import express, { Request, Response } from 'express';
-import { NewsManipulator } from '../../../controllers/NewsManipulator';
+import { NewsManipulator } from '../../../controllers/News/NewsManipulator';
 import { jsonData, loadData, CONTENT_PER_PAGE } from '../../../utils/JsonDataHandler';
-import { search, sliceData, isValidDateFormat } from '../../../controllers/NewsHelper';
+import { search, sliceData, isValidDateFormat } from '../../../controllers/News/NewsHelper';
+import { UserIdentifier } from '../../../../../CommonStuff/src/types/types';
+import { allUsers } from '../../../../../CommonStuff/src/controllers/UsersUtils';
 
 const PostNewsRouter = express.Router();
 
 PostNewsRouter.post("/:date/search/:page", async (req: Request, res: Response) => {
-    const userInfo = req.userInfo
 
     try {
+
+        const userInfo = req.userInfo
+        const userIdentifier = req.userIdentifier as UserIdentifier
+
+        const userBlocked = await allUsers.checkRemoveExpiredBlock(userIdentifier, userInfo)
+        if (userBlocked !== undefined && userBlocked.block.status) return res.status(403).json({ msg: `Sry but you are blocked. timeout until ${userBlocked.block.time}` });
 
         const title = req.body.title ?? ""
         const page = parseInt(req.params.page)

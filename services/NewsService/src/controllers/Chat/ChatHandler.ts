@@ -1,8 +1,8 @@
-import { loadFromFile, filesFromFolder, transform } from "../../../CommonStuff/src/functions/functions";
-import { pathChatsData } from "../../../CommonStuff/src/consts/consts";
-import { message } from "../../../CommonStuff/src/types/types";
+import { loadFromFile, filesFromFolder, transform } from "../../../../CommonStuff/src/functions/functions";
+import { pathChatsData } from "../../../../CommonStuff/src/consts/consts";
+import { message } from "../../../../CommonStuff/src/types/types";
 
-export class ChatClass {
+export class ChatHandlerClass {
 
     private chatCode: string
     private date: string
@@ -42,7 +42,7 @@ export class ChatClass {
 
         } catch (error) {
             console.log(error)
-            throw error
+            return [];
         }
 
     }

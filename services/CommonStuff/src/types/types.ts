@@ -40,8 +40,8 @@ export type ReservedUsername = { [key: string]: string }
 export type message = {
     userImg?: string, // its added when handling message
     username?: string, // its added when handling message
-    userType?: string // its added when handling message
-    token: string, // to be removed before broadcast
+    token?: string, // to be removed before broadcast
+    userType: string // its added when handling message
     icon: number,
     usernameId: ReservedUsername, // hide key before broadcast
     message: string,
@@ -64,7 +64,7 @@ export type UserInfo = {
 export type User = {
     userInfo?: UserInfo,
     userIdentifier: UserIdentifier, 
-    username: ReservedUsername, 
+    usernameId: ReservedUsername, 
     votes: {"true":number, "false": number, "unclear": number, "noopinion": number}, 
     chatMessages: number, 
     createdAt: string, 

@@ -1,4 +1,4 @@
-import { NewsManipulator } from '../controllers/NewsManipulator';
+import { NewsManipulator } from '../controllers/News/NewsManipulator';
 import { pathMainData, dateFormat } from '../../../CommonStuff/src/consts/consts'
 import { fromRequestJsonFileFormat } from "../../../CommonStuff/src/types/types"
 import { getPreviousDate, loadFromFile, formatDate } from "../../../CommonStuff/src/functions/functions"
@@ -35,7 +35,5 @@ export const updateJsonData = (newData: NewsManipulator) => {
     jsonData = newData;
     transformData();
 };
-
-
 
 initializeJsonData()

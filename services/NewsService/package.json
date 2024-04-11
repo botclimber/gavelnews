@@ -15,6 +15,7 @@
     "@types/cors": "2.8.13",
     "@types/express": "^4.17.21",
     "@types/node": "20.8.4",
+    "@types/ws": "^8.5.10",
     "@types/node-schedule": "2.1.0",
     "body-parser": "^1.20.2",
     "cors": "2.8.5",
@@ -22,9 +23,15 @@
     "eva-functional-utils": "^1.8.10",
     "express": "^4.18.3",
     "node": "21.7.1",
+    "ws": "^8.16.0",
+    "google-auth-library": "9.7.0",
     "node-schedule": "2.1.1"
   },
   "devDependencies": {
     "typescript": "^5.4.2"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.8",
+    "utf-8-validate": "^6.0.3"
   }
 }

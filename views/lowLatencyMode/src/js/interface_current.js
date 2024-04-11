@@ -8,11 +8,11 @@ async function vote(voteValue, newId) {
   // Make the PATCH request
   fetch(`${api}/news/${newId}/${voteValue}`, {
     method: 'PATCH',
+    headers: headerWithToken
   })
     .then(async response => {
 
       await hideButtons(newId)
-      await markNewAsVoted(newId)
 
       const data = await response.json()
 
@@ -45,7 +45,7 @@ async function setContent(dataList, append = false) {
     const noOpinionPerc = percentages.noOpinionPerc
     const isUnclearPerc = percentages.isUnclearPerc
 
-    const isVoted = (checkVote(r.new_id)) ? "hidden" : ""
+    const isVoted = (r.isVoted === undefined || r.isVoted) ? "hidden" : ""
 
     const img = r.new_img ?? ""
     const desc = r.new_desc ?? ""
@@ -113,3 +113,5 @@ async function setContent(dataList, append = false) {
 
   allDataIsSet = true;
 }
+
+if(!readOnlyPage) eitherLoginOrLogout();

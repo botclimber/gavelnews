@@ -49,7 +49,7 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
                 "new_isFalse": randomVeracityValue(),
                 "new_isUnclear": randomVeracityValue(),
                 "new_noOpinion": randomVeracityValue(),
-                "new_votedIps": []
+                "new_votedEmails": []
             }
             
             print("\t",dataset, "\n")	

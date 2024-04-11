@@ -1,12 +1,13 @@
 import * as WebSocket from 'ws';
 import { ChatClassHelper } from './ChatClassHelper';
-import { User, message } from "../../../CommonStuff/src/types/types";
-import { pathMainData, pathBackupData, dateFormat, pathChatsData, fullDateFormat } from "../../../CommonStuff/src/consts/consts";
-import { calculateFutureDate, formatDate, getPreviousDate } from "../../../CommonStuff/src/functions/functions";
-import { UsersUtils } from "../../../CommonStuff/src/controllers/UsersUtils";
+import { User, UserIdentifier, message } from "../../../../CommonStuff/src/types/types";
+import { pathMainData, pathBackupData, dateFormat, pathChatsData, fullDateFormat } from "../../../../CommonStuff/src/consts/consts";
+import { calculateFutureDate, formatDate, getPreviousDate } from "../../../../CommonStuff/src/functions/functions";
+import { allUsers } from "../../../../CommonStuff/src/controllers/UsersUtils";
+import { GoogleAuth } from "../../../../CommonStuff/src/controllers/GoogleAuthUtils";
 
 type chatCode = string
-const userUtils = new UsersUtils()
+const googleUtils = new GoogleAuth()
 
 // Define a class for the chat service
 export class ChatClass {
@@ -45,6 +46,10 @@ export class ChatClass {
       this.wss.on('connection', (ws: WebSocket, req) => {
 
         // Extract chat code from URL
+        const userAgent = req.headers['user-agent'] ?? "";
+        const ip = req.socket.remoteAddress ?? "";
+        const userIdentifier: UserIdentifier = {ip: ip, userAgent: userAgent}
+
         const urlParts = req.url?.split('/');
         const chatCode = (urlParts && urlParts.length > 1 && urlParts[1] !== "") ? urlParts[1] : "/"; // Assuming "/" as default chat code if none specified
 
@@ -55,13 +60,13 @@ export class ChatClass {
 
         // Event handler for receiving messages
         ws.on('message', async (message: Buffer | string) => {
-
-          const ip = req.socket.remoteAddress ?? "";
+          
 
           const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
           const messageAsObject: message = JSON.parse(ensureStringType)
           
-          //TODO: const userInfo = (token)? google.checkToken(...) : undefined
+          const userInfo = (messageAsObject.token)? await googleUtils.checkGoogleToken(messageAsObject.token) : undefined
+
           messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
           messageAsObject.usernameId = await this.helper.checkMessageUsername(messageAsObject.usernameId);
 
@@ -75,7 +80,7 @@ export class ChatClass {
             console.log(blockReason);
             // block user
             const time = calculateFutureDate(new Date(), this.MESSAGE_BLOCK_TIME, "mins");
-            return await userUtils.blockUser(ip, "temporary", time);
+            return await allUsers.blockUser(userIdentifier, "temporary", time, userInfo);
           }
 
           if (messageRateData) {
@@ -91,7 +96,7 @@ export class ChatClass {
           const repeatedMessages = chatMessages.filter(msg => {
             const contentObject: message = JSON.parse(msg)
 
-            return (contentObject.message === messageAsObject.message && contentObject.user[Object.keys(contentObject.user)[0]] === messageAsObject.usernameId[Object.keys(messageAsObject.usernameId)[0]])
+            return (contentObject.message === messageAsObject.message && contentObject.usernameId[Object.keys(contentObject.usernameId)[0]] === messageAsObject.usernameId[Object.keys(messageAsObject.usernameId)[0]])
           });
 
           const isRepeated = repeatedMessages.length > this.REPEATED_MESSAGES_SPAM;
@@ -100,27 +105,22 @@ export class ChatClass {
 
 
           // check if user is blocked
-          const userBlocked = await userUtils.checkRemoveExpiredBlock(ip)
+          const userBlocked = await allUsers.checkRemoveExpiredBlock(userIdentifier, userInfo)
 
           if (userBlocked !== undefined && userBlocked.block.status) {
             const msg = `<span class="text-[10pt] text-orange-400 italic">(${messageAsObject.usernameId[Object.keys(messageAsObject.usernameId)[0]]}) you are blocked [blockTimeUntil: ${userBlocked.block.time}].</span>`
 
-            const msgObject = { icon: 0, user: { '': 'System' }, message: msg, date: '' };
+            const msgObject = { icon: 0, usernameId: { '*': 'System' }, message: msg, date: '' };
             this.broadcastToOne(JSON.stringify(msgObject), ws)
 
           } else {
 
             if (messageAsObject.message !== "" && messageAsObject.usernameId[Object.keys(messageAsObject.usernameId)[0]] !== "") {
-
-              // TODO:
-              // add username and userImg if userInfo !undefined
-              // remove token before broadcast
-              // mask usernameId key before broadcast
-              // add userType (if token ? knownUser : guest)
               const reworkedMessage: message = await this.helper.reworkMessageObject(messageAsObject, userInfo);
 
               const messageAsString = JSON.stringify(reworkedMessage)
-              await userUtils.incrementChatMessage(ip)
+
+              await allUsers.incrementChatMessage(userIdentifier, userInfo)
 
               this.addMessageToChat(messageAsString, chatCode)
               this.checkHowManyMessagesSent(chatCode)
@@ -198,7 +198,8 @@ export class ChatClass {
         const messages = this.messagesMemory.get(chatCode)
         const rearrangedMessages = await this.helper.checkMessagesSizeLimit(messages, this.MESSAGES_LIMIT_PER_CHAT)
 
-        this.helper.saveMessagesToFile(rearrangedMessages.slicedData, `${pathChatsData}${chatCode}_${formatDate(getPreviousDate(1), dateFormat)}.txt`)
+        if(chatCode !== "/") this.helper.saveMessagesToFile(rearrangedMessages.slicedData, `${pathChatsData}${chatCode}_${formatDate(getPreviousDate(1), dateFormat)}.txt`);
+        
         this.messagesMemory.set(chatCode, rearrangedMessages.rearrangedData)
       }
 
@@ -305,7 +306,7 @@ export class ChatClass {
 
     } catch (e) {
       console.log(e)
-      throw e
+      return;
     }
   }
 }

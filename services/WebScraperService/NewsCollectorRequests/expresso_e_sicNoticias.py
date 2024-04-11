@@ -40,7 +40,7 @@ def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url,
                     "new_isFalse": randomVeracityValue(),
                     "new_isUnclear": randomVeracityValue(),
                     "new_noOpinion": randomVeracityValue(),
-                    "new_votedIps": []
+                    "new_votedEmails": []
                 }
                 
                 print("\t",dataset, "\n")	

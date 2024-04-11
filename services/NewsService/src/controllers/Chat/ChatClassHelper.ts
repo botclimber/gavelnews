@@ -1,5 +1,5 @@
-import { message, ReservedUsername } from "../../../CommonStuff/src/types/types";
-import { saveToFile } from "../../../CommonStuff/src/functions/functions";
+import { message, ReservedUsername, UserInfo } from "../../../../CommonStuff/src/types/types";
+import { saveToFile } from "../../../../CommonStuff/src/functions/functions";
 
 export class ChatClassHelper {
 
@@ -51,18 +51,18 @@ export class ChatClassHelper {
         return message
     }
 
-    async checkMessageUsername(username: message["user"]): Promise<message["user"]> {
+    async checkMessageUsername(username: message["usernameId"]): Promise<message["usernameId"]> {
 
         var usernameKey = Object.keys(username)[0]
         var usernameValue = username[usernameKey]
 
         const unchangedUsername = usernameValue;
-        
+
         usernameValue = usernameValue.replace(this.HTML_RE, "");
         usernameValue = usernameValue.replace(this.URL_RE, "");
 
         if (unchangedUsername !== usernameValue) {
-            return {[usernameKey]: ""}
+            return { [usernameKey]: "" }
         }
 
         usernameValue = usernameValue.substring(0, this.USERNAME_CHAT_LIMIT);
@@ -74,13 +74,13 @@ export class ChatClassHelper {
             const value = item[key]; // Extracting the value
 
             if (usernameValue == value) {
-                if (usernameKey == key) return {[usernameKey]: usernameValue};
-                else return {[usernameKey]: ""};
+                if (usernameKey == key) return { [usernameKey]: usernameValue };
+                else return { [usernameKey]: "" };
 
-            }else this.reserved_usernames.add({[usernameKey]: usernameValue})
+            } else this.reserved_usernames.add({ [usernameKey]: usernameValue })
         }
 
-        return {[usernameKey]: usernameValue};
+        return { [usernameKey]: usernameValue };
     }
 
     /**
@@ -100,7 +100,35 @@ export class ChatClassHelper {
 
         } catch (e) {
             console.log(e)
-            throw e
+            return;
         }
+    }
+
+    // TODO:
+    // add username and userImg if userInfo !undefined
+    // remove token before broadcast
+    // mask usernameId key before broadcast
+    // add userType (if token ? knownUser : guest)
+    async reworkMessageObject(message: message, userInfo?: UserInfo): Promise<message> {
+        // Create a new message object to avoid modifying the original
+        const modifiedMessage: message = { ...message };
+
+        // Add username and userImg if userInfo is not undefined
+        if (userInfo) {
+            modifiedMessage.username = userInfo.fullName;
+            modifiedMessage.userImg = userInfo.img;
+        }
+
+        // Remove token before broadcast
+        delete modifiedMessage.token;
+
+        // Mask usernameId key before broadcast
+        const maskedUsernameId: ReservedUsername = {"*": message.usernameId[Object.keys(message.usernameId)[0]]};
+        modifiedMessage.usernameId = maskedUsernameId;
+
+        // Add userType (if token exists ? knownUser : guest)
+        modifiedMessage.userType = message.token ? 'knownUser' : 'guest';
+
+        return modifiedMessage;
     }
 }

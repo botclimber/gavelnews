@@ -1,5 +1,5 @@
-import {fromRequestJsonFileFormat, new_object} from "../../../CommonStuff/src/types/types"
-import {dateRegex} from "../../../CommonStuff/src/consts/consts"
+import {ResponseData, ResponseNewObject} from "../../../../CommonStuff/src/types/types"
+import {dateRegex} from "../../../../CommonStuff/src/consts/consts"
 
 function calcPercentage (nr: number, total: number): number {
 
@@ -11,7 +11,7 @@ export function isValidDateFormat(dateString: string): boolean {
 }
 
 // TODO: add param for ASC | DESC
-export function sortBy(data: fromRequestJsonFileFormat, param: keyof new_object): fromRequestJsonFileFormat {
+export function sortBy(data: ResponseData, param: keyof ResponseNewObject): ResponseData {
 
   const veracityValues = ["new_isTrue", "new_isFalse", "new_isUnclear", "new_noOpinion"]
 
@@ -54,12 +54,12 @@ export function sortBy(data: fromRequestJsonFileFormat, param: keyof new_object)
   return { data: sortedData };
 }
 
-export function filterBy(data: fromRequestJsonFileFormat, param: keyof new_object, value: any): fromRequestJsonFileFormat {
+export function filterBy(data: ResponseData, param: keyof ResponseNewObject, value: any): ResponseData {
   const filteredData = data.data.filter(item => item[param] === value);
   return { data: filteredData };
 }
 
-export function sliceData (data: fromRequestJsonFileFormat, page: number, contentPerPage: number): fromRequestJsonFileFormat {
+export function sliceData (data: ResponseData, page: number, contentPerPage: number): ResponseData {
 
   const startIndex = (page - 1) * contentPerPage;
   const endIndex = startIndex + contentPerPage;
@@ -68,7 +68,7 @@ export function sliceData (data: fromRequestJsonFileFormat, page: number, conten
   return { data: slicedData}; 
 }
 
-export function search(data: fromRequestJsonFileFormat, title: string): fromRequestJsonFileFormat {
+export function search(data: ResponseData, title: string): ResponseData {
   // Use filter to find objects with matching titles
   const filteredNews = data.data.filter(item => item.new_title.toLowerCase().includes(title.toLowerCase()))
   return {data: filteredNews}
@@ -77,7 +77,7 @@ export function search(data: fromRequestJsonFileFormat, title: string): fromRequ
 /**
 * this is used for replacement functions on client side
 */
-export function getSingleNewData(data: fromRequestJsonFileFormat, newId: string): new_object | undefined {
+export function getSingleNewData(data: ResponseData, newId: string): ResponseNewObject | undefined {
   const newContent = data.data.find(row => row.new_id === newId)
 
   return newContent

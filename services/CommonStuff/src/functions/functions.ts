@@ -13,7 +13,8 @@ export async function saveToFile(content: string, path: string, append: boolean 
         else await fs.promises.writeFile(path, content);
 
     }catch(e){
-        throw e
+        console.log(e)
+        return;
     }
 }
 
@@ -23,7 +24,8 @@ export function loadFromFile(path: string): string {
         return fs.readFileSync(path, "utf-8")
 
     }catch(e){
-        throw e
+        console.log(e)
+        return "";
     }
 
 }
@@ -37,11 +39,12 @@ export async function transform<T>(data: string): Promise<T[]> {
         return messages;
 
     } catch (e) {
-        throw e
+        console.log(e)
+        return []
     }
 }
 
-export async function filesFromFolder(folderPath: string){
+export async function filesFromFolder(folderPath: string): Promise<string[]>{
     try {
         // Read the filenames in the folder
         const files = await fs.promises.readdir(folderPath);
@@ -50,7 +53,7 @@ export async function filesFromFolder(folderPath: string){
     
     } catch (error) {
         console.error(error);
-        throw error
+        return [];
     }
 }
 
@@ -62,7 +65,9 @@ export function calculateFutureDate(baseDate: Date, timeToAdd: number, toAddType
             return dateAndTime.format(dateAndTime.addHours(baseDate, timeToAdd), fullDateFormat);
         case "days":
             return dateAndTime.format(dateAndTime.addDays(baseDate, timeToAdd), fullDateFormat);
-        default:
-            throw new Error("Please specify a valid 'toAddType' (mins, hours, or days)");
+        default:{
+            console.log("Please specify a valid 'toAddType' (mins, hours, or days)");
+            return "";
+        }
     }
 }

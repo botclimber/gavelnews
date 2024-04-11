@@ -14,6 +14,7 @@
     "@types/node": "20.8.4",
     "date-and-time": "2.4.2",
     "eva-functional-utils": "^1.8.10",
+    "google-auth-library": "9.7.0",
     "node": "21.7.1"
   },
   "devDependencies": {
