@@ -13,7 +13,7 @@ import PatchNewsRouter from './routes/patch/news/PatchNewsRoutes';
 import loggingMiddleware from './middleware/recognizerMiddleware';
 import { checkHeader } from './middleware/AdminMiddleware';
 import { allUsers } from '../../CommonStuff/src/controllers/UsersUtils';
-import { setupScheduler } from './cron/cronJob';
+import { changeDay, persistNewsData, persistSensitiveData, persistUsersData } from './cron/cronJob';
 import { ChatClass } from './controllers/Chat/ChatClass';
 
 const viewsPath = "../../../../../views/lowLatencyMode/"
@@ -48,11 +48,12 @@ app.use("/admin", checkHeader, PutAdminRouter);
 // setup chat service
 const chatService = new ChatClass(CHAT_PORT);
 
-// Start scheduler
-setupScheduler(chatService);
-
 // Initialize users
 allUsers.setUsers();
+
+// Start schedulers
+persistSensitiveData();
+changeDay(chatService);
 
 // Start the server
 app.listen(PORT, () => {

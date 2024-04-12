@@ -11,9 +11,6 @@ GetAdminRouter.get('/getUsers', async (req, res) => {
         // Get all users
         const users: User[] = allUsers.getUsers()
 
-        console.log("USERS")
-        console.log(users)
-
         // Send the users as JSON response
         res.status(200).json(users);
     

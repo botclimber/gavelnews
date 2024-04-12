@@ -288,10 +288,8 @@ export class ChatClass {
 
   }
 
-  async closeDay(): Promise<void> {
-
+  async persistDataInDisc(): Promise<void> {
     try {
-
       this.messagesMemory.forEach((messages, key) => {
         if (key !== "/" && messages.length > 0) {
           //const date = getPreviousDate(2)
@@ -300,7 +298,17 @@ export class ChatClass {
           this.helper.saveMessagesToFile(messages, `${pathChatsData}${key}_${formatDate(date, dateFormat)}.txt`)
         }
       })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
+  async closeDay(): Promise<void> {
+
+    try {
+
+      
+      await this.persistDataInDisc();
       this.chatClientsMap = new Map();
       this.messagesMemory = new Map();
 

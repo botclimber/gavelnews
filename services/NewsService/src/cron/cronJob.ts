@@ -1,54 +1,76 @@
 import * as schedule from 'node-schedule';
-import { getPreviousDate, formatDate, saveToFile } from "../../../CommonStuff/src/functions/functions"
+import { getPreviousDate, formatDate, saveToFile } from "../../../CommonStuff/src/functions/functions";
 import { NewsManipulator } from '../controllers/News/NewsManipulator';
-import { pathBackupData, pathMainData, Week, dateFormat } from "../../../CommonStuff/src/consts/consts"
-import { jsonData, loadData, updateJsonData } from '../utils/JsonDataHandler'
+import { pathBackupData, pathMainData, Week, dateFormat } from "../../../CommonStuff/src/consts/consts";
+import { jsonData, loadData, updateJsonData } from '../utils/JsonDataHandler';
 import { ChatClass } from '../controllers/Chat/ChatClass';
 import { allUsers } from '../../../CommonStuff/src/controllers/UsersUtils';
 
-/**
- * CRON JOB
- */
+const ONE_DAY_BEFORE = formatDate(getPreviousDate(1), dateFormat);
+const TWO_DAYS_BEFORE = formatDate(getPreviousDate(2), dateFormat);
 
-export function setupScheduler(chatService: ChatClass) {
-    const ruleForSaveLoadData = new schedule.RecurrenceRule();
+const EUROPE_LISBON_TZ = "Europe/Lisbon";
+const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
 
-    const daysOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
+const ruleChangeDay = new schedule.RecurrenceRule();
+ruleChangeDay.dayOfWeek = daysOfWeek;
+ruleChangeDay.hour = process.env.HOUR || 0;
+ruleChangeDay.minute = process.env.MIN || 5;
+ruleChangeDay.tz = EUROPE_LISBON_TZ;
 
-    ruleForSaveLoadData.dayOfWeek = daysOfWeek;
-    ruleForSaveLoadData.hour = process.env.HOUR || 2;
-    ruleForSaveLoadData.minute = process.env.MIN || 30;
-    ruleForSaveLoadData.tz = "Europe/Lisbon";
+const rulePersistData = new schedule.RecurrenceRule();
+rulePersistData.dayOfWeek = daysOfWeek;
+rulePersistData.minute = process.env.SAVE_INTERVAL || 30;
+rulePersistData.tz = EUROPE_LISBON_TZ;
 
-    console.log(`Scheduler set for (${ruleForSaveLoadData.hour}h, ${ruleForSaveLoadData.minute}min, ${ruleForSaveLoadData.tz} tz)`)
+export async function persistNewsData(path: string): Promise<void> {
+    console.log("Saving data to file: Start ...");
+    if (jsonData.data.data.length > 0) {
+        await saveToFile(JSON.stringify(jsonData.data), path);
+    } else {
+        console.log("\tNothing to be saved!");
+    }
+    console.log("Saving data to file: finish.");
+}
 
-    schedule.scheduleJob(ruleForSaveLoadData, async function () {
+export async function persistUsersData(): Promise<void> {
+    console.log("Persisting users data");
+    await allUsers.saveUsers();
+}
 
-        try{
-            const twoDaysBefore = formatDate(getPreviousDate(2), dateFormat)
+export async function saveDataAndRestartChat(chatService: ChatClass): Promise<void> {
+    console.log("Saving and restarting Chat rooms");
+    await chatService.closeDay();
+}
 
-            // save manipulated data to file
-            console.log("Saving data to file: Start ...")
+export async function persistSensitiveData(): Promise<void> {
+    console.log(`Scheduler persist data set for (${rulePersistData.hour}h, ${rulePersistData.minute}min, ${EUROPE_LISBON_TZ} tz)`);
 
-            if (jsonData.data.data.length > 0) await saveToFile(JSON.stringify(jsonData.data), `${pathBackupData}/${twoDaysBefore}/allData_${twoDaysBefore}.json`);
+    schedule.scheduleJob(rulePersistData, async () => {
+        try {
+            await persistNewsData(`${pathMainData}/allData_${ONE_DAY_BEFORE}.json`);
+            await persistUsersData();
+        } catch (error) {
+            console.error("Error occurred while persisting sensitive data:", error);
+        }
+    });
+}
 
-            else console.log("\tNothing to be saved!")
+export async function changeDay(chatService: ChatClass): Promise<void> {
+    console.log(`Scheduler close day set for (${ruleChangeDay.hour}h, ${ruleChangeDay.minute}min, ${EUROPE_LISBON_TZ} tz)`);
 
-            console.log("Saving data to file: finish.")
+    schedule.scheduleJob(ruleChangeDay, async () => {
+        try {
 
-            // load newly generated data 
-            updateJsonData(new NewsManipulator(loadData(pathMainData, getPreviousDate(1))))
+            await persistNewsData(`${pathBackupData}/allData_${TWO_DAYS_BEFORE}.json`);
+            await persistUsersData();
+            await saveDataAndRestartChat(chatService);
 
-            console.log(`Loading recent Data into memory, with the size of ${jsonData.dataSize().toFixed(2)} `)
-
-            console.log("Saving and restarting Chat rooms")
-            chatService.closeDay();
-
-            console.log("persiting users data")
-            await allUsers.saveUsers();
-
-        }catch(error){
-            console.log(error)
+            updateJsonData(new NewsManipulator(loadData(pathMainData, getPreviousDate(1))));
+            console.log(`Loading recent Data into memory, with the size of ${jsonData.dataSize().toFixed(2)} `);
+            
+        } catch (error) {
+            console.error("Error occurred while changing day:", error);
         }
     });
 }
