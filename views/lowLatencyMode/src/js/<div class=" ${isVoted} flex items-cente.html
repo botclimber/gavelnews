@@ -1,0 +1,12 @@
+<div class=" ${isVoted} flex items-center mb-5" id = "toVoteButtons-${r.new_id}">
+                    <button onclick="vote('new_isTrue','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-green-500 text-white font-bold mr-1"></button>
+                    <button onclick="vote('new_noOpinion','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-gray-500 text-white font-bold mr-1">
+                    
+                    </button>
+                    <button onclick="vote('new_isUnclear','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-orange-500 text-white font-bold mr-1">
+                     
+                    </button>
+                    <button onclick="vote('new_isFalse','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-red-500 text-white font-bold">
+                    
+                    </button>
+                </div>

@@ -74,4 +74,4 @@ function getSubtractedDate(dayToSubtract) {
 }
 
 // Generate date options and insert them into the container
-container.innerHTML = generateDateOptions();
+//container.innerHTML = generateDateOptions();

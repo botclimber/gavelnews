@@ -52,39 +52,44 @@ async function setContent(dataList, append = false) {
 
     news_div.innerHTML += /* html */
       `<div id="${r.new_id}" class="mb-6 lg:mb-0">
-                <div>
-                  <div class="relative mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20"
-                    data-te-ripple-init data-te-ripple-color="light">
-                    <img src="${img}" class="w-full" alt="" />
-                    <a href="${r.new_link}" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)" target="_blank">
-                      <div
-                        class="absolute top-0 right-0 bottom-0 left-0 h-full w-full overflow-hidden bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100 bg-[hsla(0,0%,98.4%,.15)]">
-                      </div>
-                    </a>
+                <div >
+                <a href="${r.new_link}" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)" target="_blank">  
+                  <div class="relative h-[150px] mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20"
+                data-te-ripple-init data-te-ripple-color="light">
+                    <img src="${img}" class="w-full h-full object-cover" alt="" />
                   </div>
+                </a>
         
                   <!-- Colored bar based on user votes -->
                   <div class="flex justify-center mb-2" id="bar-${r.new_id}">
-                    <div class="w-full h-4 bg-green-500 rounded-l-full relative" style="width: ${isTruePerc}%;">
+                    <div class="w-full h-3 bg-green-500 rounded-l-full relative" style="width: ${isTruePerc}%;">
                       <span class="tooltip-text">${isTruePerc}% (${r.new_isTrue})</span>
                     </div>
-                    <div class="w-full h-4 bg-gray-500 relative" style="width: ${noOpinionPerc}%;">
+                    <div class="w-full h-3 bg-gray-500 relative" style="width: ${noOpinionPerc}%;">
                       <span class="tooltip-text">${noOpinionPerc}% (${r.new_noOpinion})</span>
                     </div>
-                    <div class="w-full h-4 bg-orange-500 relative" style="width: ${isUnclearPerc}%;">
+                    <div class="w-full h-3 bg-orange-500 relative" style="width: ${isUnclearPerc}%;">
                       <span class="tooltip-text">${isUnclearPerc}% (${r.new_isUnclear})</span>
                     </div>
-                    <div class="w-full h-4 bg-red-500 rounded-r-full relative" style="width: ${isFalsePerc}%;">
+                    <div class="w-full h-3 bg-red-500 rounded-r-full relative" style="width: ${isFalsePerc}%;">
                       <span class="tooltip-text">${isFalsePerc}% (${r.new_isFalse})</span>
                     </div>
                 </div>
         
                 <!-- Buttons for user feedback -->
-                <div class=" ${isVoted} flex justify-between mb-5" id = "toVoteButtons-${r.new_id}">
-                    <button onclick="vote('new_isTrue','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-green-500 text-white font-bold mr-1">True</button>
-                    <button onclick="vote('new_noOpinion','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-gray-500 text-white font-bold mr-1">No Opinion</button>
-                    <button onclick="vote('new_isUnclear','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-orange-500 text-white font-bold mr-1">Unclear</button>
-                    <button onclick="vote('new_isFalse','${r.new_id}')" class="text-sm px-2 py-1 rounded-md bg-red-500 text-white font-bold">False</button>
+                <div class=" ${isVoted} flex justify-center items-center mb-5" id = "toVoteButtons-${r.new_id}">
+                    <button onclick="vote('new_isTrue','${r.new_id}')" class="text-sm px-[8px] py-[2px] rounded-[5px] bg-green-500 text-white font-bold mr-1">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.8640000000000001"></g><g id="SVGRepo_iconCarrier"> <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    </button>
+                    <button onclick="vote('new_noOpinion','${r.new_id}')" class="text-sm px-[8px] py-[2px] rounded-[5px] bg-gray-500 text-white font-bold mr-1">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 13.75C12.9665 13.75 13.75 12.9665 13.75 12C13.75 11.0335 12.9665 10.25 12 10.25C11.0335 10.25 10.25 11.0335 10.25 12C10.25 12.9665 11.0335 13.75 12 13.75Z" fill="#ffffff"></path> <path d="M19 13.75C19.9665 13.75 20.75 12.9665 20.75 12C20.75 11.0335 19.9665 10.25 19 10.25C18.0335 10.25 17.25 11.0335 17.25 12C17.25 12.9665 18.0335 13.75 19 13.75Z" fill="#ffffff"></path> <path d="M5 13.75C5.9665 13.75 6.75 12.9665 6.75 12C6.75 11.0335 5.9665 10.25 5 10.25C4.0335 10.25 3.25 11.0335 3.25 12C3.25 12.9665 4.0335 13.75 5 13.75Z" fill="#ffffff"></path> </g></svg>
+                    </button>
+                    <button onclick="vote('new_isUnclear','${r.new_id}')" class="text-sm px-[8px] py-[2px] rounded-[5px] bg-orange-500 text-white font-bold mr-1">
+                    <svg class="w-5 h-5" fill="#ffffff" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff" stroke-width="0.00008"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2.47 0c-.85 0-1.48.26-1.88.66-.4.4-.54.9-.59 1.28l1 .13c.04-.25.12-.5.31-.69.19-.19.49-.38 1.16-.38.66 0 1.02.16 1.22.34.2.18.28.4.28.66 0 .83-.34 1.06-.84 1.5-.5.44-1.16 1.08-1.16 2.25v.25h1v-.25c0-.83.31-1.06.81-1.5.5-.44 1.19-1.08 1.19-2.25 0-.48-.17-1.02-.59-1.41-.43-.39-1.07-.59-1.91-.59zm-.5 7v1h1v-1h-1z" transform="translate(2)"></path> </g></svg>
+                    </button>
+                    <button onclick="vote('new_isFalse','${r.new_id}')" class="text-sm px-[8px] py-[2px] rounded-[5px] bg-red-500 text-white font-bold">
+                    <svg class="w-5 h-5" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 5L4.99998 19M5.00001 5L19 19" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                    </button>
                 </div>
         
                   <h5 class="mb-3 text-md font-bold"><a href="${r.new_link}" target="_blank">${r.new_title}</a></h5>
@@ -114,4 +119,4 @@ async function setContent(dataList, append = false) {
   allDataIsSet = true;
 }
 
-if(!readOnlyPage) eitherLoginOrLogout();
+if (!readOnlyPage) eitherLoginOrLogout();

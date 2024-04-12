@@ -1,3 +1,9 @@
+* {
+    font-family: "Jersey 10", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 .tooltip-text {
     position: absolute;
     top: -1.5rem;
@@ -23,8 +29,10 @@
     align-items: center;
     border-radius: 10px;
     z-index: 1;
-    top: 30px; /* Initial position above the viewport */
-    transition: top 0.3s; /* Smooth transition effect */
+    top: 30px;
+    /* Initial position above the viewport */
+    transition: top 0.3s;
+    /* Smooth transition effect */
 }
 
 .menu.menu-scrolled {
@@ -53,7 +61,7 @@
 }
 
 .filter-btn {
-    padding: 2px 12px;
+    padding: 2px 8px;
     border: 1px solid #d0d0d0;
     border-radius: 5px;
     background-color: #b97a5f;
@@ -180,7 +188,7 @@
     /* Border color */
     border-radius: 0px;
     /* Round border to create circular shape */
-    background-color:#983e16;
+    background-color: #983e16;
     /* Background color */
     color: #FFFFFF;
     /* Text color */
@@ -211,28 +219,28 @@
     cursor: pointer;
     border: none;
     background: none;
-  }
+}
 
-  /* Style the emoji container */
-  #emojiContainer {
+/* Style the emoji container */
+#emojiContainer {
     position: absolute;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
+}
 
-  /* Style each emoji button */
-  .emoji-button {
+/* Style each emoji button */
+.emoji-button {
     font-size: 20px;
     margin: 5px;
     cursor: pointer;
     border: none;
     background: none;
-  }
+}
 
-  @media only screen and (max-width: 640px) {
+@media only screen and (max-width: 640px) {
     .chat-container {
         width: 70%;
         height: 55%;
