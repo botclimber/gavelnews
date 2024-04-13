@@ -22,7 +22,7 @@ export class ChatClass {
   private MESSAGE_BLOCK_TIME: number = 1 // process.env.MESSAGE_BLOCK_TIME 1 min
 
   private messageRate: Map<WebSocket, { lastMessageTime: number[] }>
-  
+
   private wss: WebSocket.Server
   private messagesMemory: Map<chatCode, string[]>
   private chatClientsMap: Map<chatCode, WebSocket[]>
@@ -48,7 +48,7 @@ export class ChatClass {
         // Extract chat code from URL
         const userAgent = req.headers['user-agent'] ?? "";
         const ip = req.socket.remoteAddress ?? "";
-        const userIdentifier: UserIdentifier = {ip: ip, userAgent: userAgent}
+        const userIdentifier: UserIdentifier = { ip: ip, userAgent: userAgent }
 
         const urlParts = req.url?.split('/');
         const chatCode = (urlParts && urlParts.length > 1 && urlParts[1] !== "") ? urlParts[1] : "/"; // Assuming "/" as default chat code if none specified
@@ -60,12 +60,12 @@ export class ChatClass {
 
         // Event handler for receiving messages
         ws.on('message', async (message: Buffer | string) => {
-          
+
 
           const ensureStringType: string = (message instanceof Buffer) ? await this.helper.parseToString(message) : message
           const messageAsObject: message = JSON.parse(ensureStringType)
-          
-          const userInfo = (messageAsObject.token)? await googleUtils.checkGoogleToken(messageAsObject.token) : undefined
+
+          const userInfo = (messageAsObject.token) ? await googleUtils.checkGoogleToken(messageAsObject.token) : undefined
 
           messageAsObject.message = await this.helper.checkMessageContent(messageAsObject.message);
           messageAsObject.usernameId = await this.helper.checkMessageUsername(messageAsObject.usernameId);
@@ -198,8 +198,8 @@ export class ChatClass {
         const messages = this.messagesMemory.get(chatCode)
         const rearrangedMessages = await this.helper.checkMessagesSizeLimit(messages, this.MESSAGES_LIMIT_PER_CHAT)
 
-        if(chatCode !== "/") this.helper.saveMessagesToFile(rearrangedMessages.slicedData, `${pathChatsData}${chatCode}_${formatDate(getPreviousDate(1), dateFormat)}.txt`);
-        
+        if (chatCode !== "/") this.helper.saveMessagesToFile(rearrangedMessages.slicedData, `${pathChatsData}${chatCode}_${formatDate(getPreviousDate(1), dateFormat)}.txt`);
+
         this.messagesMemory.set(chatCode, rearrangedMessages.rearrangedData)
       }
 
@@ -231,13 +231,13 @@ export class ChatClass {
     }
   }
 
-  private broadcastToOne(message: string, client: WebSocket){
-    try{
+  private broadcastToOne(message: string, client: WebSocket) {
+    try {
       if (client.readyState === WebSocket.OPEN) {
 
         client.send(message);
       }
-    }catch(e){
+    } catch (e) {
       console.log(this.broadcastToOne.toString)
       console.log(e)
     }
@@ -276,16 +276,15 @@ export class ChatClass {
   }
 
   private async broadcastChatsStatus() {
-    const chatsStatus: { [key: string]: boolean } = Array.from(this.messagesMemory.entries())
+    const chatsStatus: { [key: string]: number } = Array.from(this.messagesMemory.entries())
       .reduce((acc, [chatCode, messages]) => {
-        acc[chatCode] = (messages.length > 0) ? true : false;
+        acc[chatCode] = messages.length;
         return acc;
-      }, {} as { [key: string]: boolean });
+      }, {} as { [key: string]: number });
 
     this.wss.clients.forEach(client => {
       client.send(JSON.stringify({ "chatsStatus": chatsStatus }))
-    })
-
+    });
   }
 
   async persistDataInDisc(): Promise<void> {
@@ -307,7 +306,7 @@ export class ChatClass {
 
     try {
 
-      
+
       await this.persistDataInDisc();
       this.chatClientsMap = new Map();
       this.messagesMemory = new Map();

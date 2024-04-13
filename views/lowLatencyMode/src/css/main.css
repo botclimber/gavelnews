@@ -1,7 +1,26 @@
+/* 
 * {
-    font-family: "Jersey 10", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-style: normal;
+} 
+*/
+
+/* Custom scrollbar styles */
+.datePickerScrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.datePickerScrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.datePickerScrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.datePickerScrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .tooltip-text {
@@ -53,7 +72,7 @@
 
 .search-box {
     flex-grow: 1;
-    margin: 0 20px;
+    margin: 0 0.5rem;
     padding: 2px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -61,7 +80,7 @@
 }
 
 .filter-btn {
-    padding: 2px 8px;
+    padding: 3px 5px;
     border: 1px solid #d0d0d0;
     border-radius: 5px;
     background-color: #b97a5f;

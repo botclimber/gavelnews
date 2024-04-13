@@ -15,16 +15,16 @@ async function setBarsContent(new_data) {
     const isUnclearPerc = computeAvg(new_data.new_isUnclear, totalVotes)
 
     bar.innerHTML = `
-    <div class="w-full h-4 bg-green-500 rounded-l-full relative" style="width: ${isTruePerc}%;">
+    <div class="w-full h-3 bg-[#8CB369] rounded-l-full relative" style="width: ${isTruePerc}%;">
                     <span class="tooltip-text">${isTruePerc}% (${new_data.new_isTrue})</span>
                   </div>
-                  <div class="w-full h-4 bg-gray-500 relative" style="width: ${noOpinionPerc}%;">
+                  <div class="w-full h-3 bg-[#717171] relative" style="width: ${noOpinionPerc}%;">
                     <span class="tooltip-text">${noOpinionPerc}% (${new_data.new_noOpinion})</span>
                   </div>
-                  <div class="w-full h-4 bg-orange-500 relative" style="width: ${isUnclearPerc}%;">
+                  <div class="w-full h-3 bg-[#F4A259] relative" style="width: ${isUnclearPerc}%;">
                     <span class="tooltip-text">${isUnclearPerc}% (${new_data.new_isUnclear})</span>
                   </div>
-                  <div class="w-full h-4 bg-red-500 rounded-r-full relative" style="width: ${isFalsePerc}%;">
+                  <div class="w-full h-3 bg-[#BC4B51] rounded-r-full relative" style="width: ${isFalsePerc}%;">
                     <span class="tooltip-text">${isFalsePerc}% (${new_data.new_isFalse})</span>
                   </div>
     `
