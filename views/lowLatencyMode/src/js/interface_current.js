@@ -60,7 +60,7 @@ async function setContent(dataList, append = false) {
       `<div id="${r.new_id}" class="mb-6 lg:mb-0">
                 <div >
                 <a href="${r.new_link}" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)" target="_blank">  
-                <div class="relative h-[250px] mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20" data-te-ripple-init data-te-ripple-color="light">
+                <div class="relative h-[220px] mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20" data-te-ripple-init data-te-ripple-color="light">
                   <img src="${img}" class="w-full h-full object-cover" alt="" />
                 </div>
                 </a>
