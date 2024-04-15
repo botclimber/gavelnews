@@ -89,7 +89,7 @@ async function replaceRoomCode(message) {
 
 function setChatTitle(chatCode = "/", general = true, title = "", goBackBtn = true) {
 
-    const backBtn = (goBackBtn) ? `<button onclick="changeConnection()" class="bg-[#983e16] hover:bg-[#b97a5f] text-[8pt] text-white font-bold p-1 mr-1 rounded inline-flex items-center">
+    const backBtn = (goBackBtn) ? `<button onclick="changeConnection()" class="bg-[#2c2c2c] hover:bg-[#7b7575] text-[8pt] text-white font-bold p-1 mr-1 rounded inline-flex items-center">
     Go back
 </button>` : ""
 

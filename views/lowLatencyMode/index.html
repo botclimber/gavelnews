@@ -18,6 +18,11 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://accounts.google.com/gsi/client" async></script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+
 </head>
 
 <body style="background-color: #e6e6de;color:#2c2c2c;">
@@ -26,7 +31,7 @@
     <button id="chatBtn" style="z-index: 1;"
         class="fixed bottom-[50px] right-5 inline-flex items-center justify-center text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border-[5px] rounded-full w-[70px] h-[70px] hover:bg-gray-100 m-0 cursor-pointer border-[#2c2c2c] bg-none p-0 normal-case leading-5 hover:text-gray-900"
         type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">
-        <img src = "src/images/Discussion.svg" style="backdrop-filter: blur(5px);" class="rounded-full"/>
+        <img src="src/images/Discussion.svg" style="backdrop-filter: blur(5px);" class="rounded-full" />
     </button>
 
     <!-- <div class="flex space-x-[1px] overflow-x-auto" id="dateContainer">
@@ -38,7 +43,8 @@
         <section class="mb-12 text-center">
 
             <div id="menu" class="menu flex flex-col sm:flex-row items-center justify-between">
-                <div onclick="reloadData()" style="cursor: pointer;" class="text-center flex items-center justify-center mr-1">
+                <div onclick="reloadData()" style="cursor: pointer;"
+                    class="text-center flex items-center justify-center mr-1">
                     <img src="./src/images/logoPreto.png" width="65px" />
                 </div>
                 <div class="mt-1 ml-[0.5rem]">
@@ -228,8 +234,9 @@
             <div id="loading-container" class="loading-container">
                 <div class="loading-gavel">
                     <!-- SVG code for gavel -->
-                    <img src = "src/images/logoPreto.png" width="100px" height="100px">
-                    <img src = "./src/images/loadicon.gif" style="width: 30px; height: 15px;margin-top: 20px;margin-left: 5px;"/>
+                    <img src="src/images/logoPreto.png" width="100px" height="100px">
+                    <img src="./src/images/loadicon.gif"
+                        style="width: 30px; height: 15px;margin-top: 20px;margin-left: 5px;" />
                     <!-- End of SVG code -->
                 </div>
             </div>
@@ -268,14 +275,13 @@
         <div class="container mx-auto flex justify-between items-center grid gap-3 grid-cols-3">
             <div class="text-left ml-4">
                 <p>CONTACTO:</p>
-                <a href="mailto:gnewsgeral@gmail.com"
-                        class="text-[#e6e6de]">gnewsgeral@gmail.com</a>
+                <a href="mailto:gnewsgeral@gmail.com" class="text-[#e6e6de]">gnewsgeral@gmail.com</a>
 
             </div>
             <div class="text-center">
                 <!-- <p class="text-sm">COMO NAVEGAR NESTE SITE</p>
                 <p class="text-sm">POLÍTICA DE PRIVACIDADE</p> -->
-            </div> 
+            </div>
             <div class="text-right mr-4">
                 <p class="text-sm">2024 Gavel News.</p>
             </div>
@@ -311,7 +317,7 @@
                         class="flex h-10 w-full rounded-md border border-[#e5e7eb] px-3 py-2 text-sm placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#9ca3af] disabled:cursor-not-allowed disabled:opacity-50 text-[#030712] focus-visible:ring-offset-2"
                         placeholder="Type your message" value="">
                     <button type="button" onclick="sendMessage()"
-                        class="inline-flex items-center justify-center rounded-md text-sm font-medium text-[#f9fafb] disabled:pointer-events-none disabled:opacity-50 bg-[#983e16] hover:bg-[#b97a5f] h-10 px-4 py-2">
+                        class="inline-flex items-center justify-center rounded-md text-sm font-medium text-[#f9fafb] disabled:pointer-events-none disabled:opacity-50 bg-[#2c2c2c] hover:bg-[#7b7575] h-10 px-4 py-2">
                         Send</button>
                 </div>
             </div>
