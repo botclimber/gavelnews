@@ -39,11 +39,11 @@ TODO:
 - [x] guests are allowed to text in the chat and are indentified as guests;
 - [x] send only necessary information as response, rename new_votedIps to new_votedEmails and remove it when sending the news data.
 - [ ] display only allowed dates in the date picker
-- [ ] align on background color
+- [x] align on background color
 - [ ] adapt previous dates page design
-- [ ] logo
-- [ ] button colors
-- [ ] menu and footer colors
+- [x] logo
+- [x] button colors
+- [x] menu and footer colors
 - [ ] filter by category
 - [ ] search input box smaller
 - [ ] about page ? 
