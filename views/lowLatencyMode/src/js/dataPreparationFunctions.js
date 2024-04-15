@@ -36,6 +36,28 @@ async function filterBy(filterValue) {
   }
 }
 
+async function filterByCat(filterValue) {
+
+  if (filterValue === "*") {
+    window.location.reload();
+
+  }
+  else {
+
+    filterObject.isActive = true
+    filterObject.param = "new_type"
+    filterObject.value = filterValue
+
+    const url = `${pageBaseEndpoint}/filterBy/new_type/${filterValue}`
+
+    currentReqUrl = url
+    next_page = 1
+    contentSize = 0
+
+    withLoadScreen(async () => { await loadDataFromServerGET(currentReqUrl); setChatsStatusOnLoad(); })
+  }
+}
+
 async function serachByTextInTitle(textValue) {
 
   if (textValue !== "") {

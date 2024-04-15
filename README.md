@@ -44,9 +44,9 @@ TODO:
 - [x] logo
 - [x] button colors
 - [x] menu and footer colors
-- [ ] filter by category
-- [ ] search input box smaller
+- [x] filter by category
+- [ ] search input box smaller ?
 - [ ] about page ? 
 - [ ] contact page ?
 - [ ] welcome page for first users ?
-- [ ] google auth refresh token
+- [ ] google auth refresh token 

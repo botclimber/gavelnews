@@ -31,6 +31,29 @@ GetNewsRouter.get("/:date", async function (req: Request, res: Response) {
 
 });
 
+GetNewsRouter.get("/categories/:date", async (req: Request, res: Response) => {
+
+    const date = req.params.date
+
+    try {
+        if (date !== "current" && !isValidDateFormat(date)) {
+            return res.status(400).json({ "msg": "Not a valid date" })
+        }
+
+        const data: NewsManipulator = (date == "current") ?
+            jsonData :
+            new NewsManipulator(loadData(`../Data/backup/${date}/`, new Date(date)))
+
+        const categories = data.getCategories()
+
+        console.log(categories)
+        return res.status(200).json({"cats": Array.from(categories)})
+
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({ "msg": e })
+    }
+});
 
 GetNewsRouter.get("/:date/:page", async function (req: Request, res: Response) {
 

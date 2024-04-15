@@ -34,7 +34,7 @@ export class NewsManipulator {
 
                         await allUsers.incrementVote(opinionToVote[op] as keyof User["votes"], userInfo)
 
-                    } else {console.log(`User already voted for the specified New (${newId})!`); return;}
+                    } else { console.log(`User already voted for the specified New (${newId})!`); return; }
                 }
             }
 
@@ -95,5 +95,16 @@ export class NewsManipulator {
             })
         };
         return responseData;
+    }
+
+    getCategories(): Set<string> {
+        const categoriesSet: Set<string> = new Set();
+
+        // Iterate over each new_object and extract the new_type
+        this.data.data.forEach((item) => {
+            categoriesSet.add(item.new_type);
+        });
+
+        return categoriesSet;
     }
 }

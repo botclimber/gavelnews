@@ -202,8 +202,15 @@
                 <input id="searchComponent" type="text" value="" class="search-box mt-1" placeholder="Search...">
                 <div class="relative mt-1">
                     <div class="dropdown">
+                        <button class="filter-btn" style="color:#2c2c2c;">Categories</button>
+                        <div class="dropdown-content max-h-[400px] overflow-y-auto" id="categoriesDropDown">
+                        </div>
+                    </div>
+                </div>
+                <div class="relative ml-[0.5rem] mt-1">
+                    <div class="dropdown">
                         <button class="filter-btn" style="color:#2c2c2c;">News Source</button>
-                        <div class="dropdown-content">
+                        <div class="dropdown-content max-h-[500px] overflow-y-auto">
                             <a href="#" onclick="withLoadScreen(() => filterBy('*'))">All</a>
                             <a href="#" onclick="withLoadScreen(() => filterBy('publico'))">Publico</a>
                             <a href="#" onclick="withLoadScreen(() => filterBy('expresso'))">Expresso</a>
