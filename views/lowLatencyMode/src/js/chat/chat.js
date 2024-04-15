@@ -108,7 +108,6 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
         console.log('Received message from server');
 
         const data = JSON.parse(event.data)
-        console.log(data)
 
         if (data.chatsStatus) {
             for (let x in data.chatsStatus) {
