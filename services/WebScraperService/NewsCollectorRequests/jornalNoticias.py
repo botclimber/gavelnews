@@ -45,6 +45,7 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
                 "updated_at": x.get("updatedAt", strDefaultValue),
                 "new_date": new_metadata.get('publishedAt', strDefaultValue),
                 "new_source": "jornal noticias",
+                "new_type": "",
                 "new_isTrue": randomVeracityValue(),
                 "new_isFalse": randomVeracityValue(),
                 "new_isUnclear": randomVeracityValue(),

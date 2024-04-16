@@ -38,9 +38,9 @@ TODO:
 - [x] implement (ip + useragent) identifier for guests;
 - [x] guests are allowed to text in the chat and are indentified as guests;
 - [x] send only necessary information as response, rename new_votedIps to new_votedEmails and remove it when sending the news data.
-- [ ] display only allowed dates in the date picker
+- [x] display only allowed dates in the date picker
 - [x] align on background color
-- [ ] adapt previous dates page design
+- [x] adapt previous dates page design
 - [x] logo
 - [x] button colors
 - [x] menu and footer colors
@@ -50,3 +50,4 @@ TODO:
 - [ ] contact page ?
 - [ ] welcome page for first users ?
 - [ ] google auth refresh token 
+- [ ] let votes open until lock

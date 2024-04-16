@@ -68,6 +68,20 @@ async function reloadData() {
   withLoadScreen(async () => { await loadDataFromServerGET(currentReqUrl); setChatsStatusOnLoad() })
 }
 
+async function setCategories(){
+  const cats = document.getElementById("categoriesDropDown")
+  const dateForCategories = (readOnlyPage)? dateAsGlobal : "current"
+  console.log(`requesting categories ${dateForCategories}`)
+  const request = await fetch(`${api}/news/categories/${dateForCategories}`)
+  const response = await request.json()
 
+  if(request.ok){
+    response.cats.map( cat => {
+      if(cat) cats.innerHTML += `<a href="#" onclick="withLoadScreen(() => filterByCat('${cat}'))">${cat}</a>`;
+    });
+  }else showErrorMessage(response.msg);
 
+}
+
+setCategories();
 withLoadScreen(() => { currentReqUrl = pageBaseEndpoint; loadDataFromServerGET(currentReqUrl); })

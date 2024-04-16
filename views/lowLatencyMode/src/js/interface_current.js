@@ -2,6 +2,7 @@ pageBaseEndpoint = `${api}/news/current`
 
 dateAsGlobal = getSubtractedDate(1);
 readOnlyPage = false;
+console.log(getSubtractedDate(0))
 
 async function vote(voteValue, newId) {
 
@@ -59,10 +60,11 @@ async function setContent(dataList, append = false) {
     news_div.innerHTML += /* html */
       `<div id="${r.new_id}" class="mb-6 lg:mb-0">
                 <div >
+
                 <a href="${r.new_link}" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)" target="_blank">  
-                <div class="relative h-[220px] mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20" data-te-ripple-init data-te-ripple-color="light">
-                  ${img}
-                </div>
+                  <div class="relative h-[220px] mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20" data-te-ripple-init data-te-ripple-color="light">
+                    ${img}
+                  </div>
                 </a>
         
                   <!-- Colored bar based on user votes -->

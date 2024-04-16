@@ -52,20 +52,3 @@ function getSubtractedDate(dayToSubtract) {
 
   return date.toISOString().slice(0, 10)
 }
-
-async function setCategories(){
-  const cats = document.getElementById("categoriesDropDown")
-  const dateForCategories = (readOnlyPage)? dateAsGlobal : "current"
-
-  const request = await fetch(`${api}/news/categories/${dateForCategories}`)
-  const response = await request.json()
-
-  if(request.ok){
-    response.cats.map( cat => {
-      if(cat) cats.innerHTML += `<a href="#" onclick="withLoadScreen(() => filterByCat('${cat}'))">${cat}</a>`;
-    });
-  }else showErrorMessage(response.msg);
-
-}
-
-setCategories();
