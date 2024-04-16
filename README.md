@@ -51,3 +51,4 @@ TODO:
 - [ ] welcome page for first users ?
 - [ ] google auth refresh token 
 - [ ] let votes open until lock
+- [ ] write log system

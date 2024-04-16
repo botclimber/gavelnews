@@ -46,7 +46,6 @@ GetNewsRouter.get("/categories/:date", async (req: Request, res: Response) => {
 
         const categories = data.getCategories()
 
-        console.log(categories)
         return res.status(200).json({"cats": Array.from(categories)})
 
     } catch (e) {
