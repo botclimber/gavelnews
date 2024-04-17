@@ -11,7 +11,7 @@ async function sortBy(param) {
   next_page = 1
   contentSize = 0
 
-  withLoadScreen(async () => { await loadDataFromServerGET(currentReqUrl); setChatsStatusOnLoad();})
+  withLoadScreen(async () => { await loadDataFromServerGET(currentReqUrl); setChatsStatusOnLoad(); })
 }
 
 async function filterBy(filterValue) {
@@ -37,25 +37,14 @@ async function filterBy(filterValue) {
 }
 
 async function filterByCat(filterValue) {
+  const url = `${pageBaseEndpoint}/filterBy/new_type/${filterValue}`
 
-  if (filterValue === "*") {
-    window.location.reload();
+  currentReqUrl = url
+  next_page = 1
+  contentSize = 0
 
-  }
-  else {
+  withLoadScreen(async () => { await loadDataFromServerGET(currentReqUrl); setChatsStatusOnLoad(); })
 
-    filterObject.isActive = true
-    filterObject.param = "new_type"
-    filterObject.value = filterValue
-
-    const url = `${pageBaseEndpoint}/filterBy/new_type/${filterValue}`
-
-    currentReqUrl = url
-    next_page = 1
-    contentSize = 0
-
-    withLoadScreen(async () => { await loadDataFromServerGET(currentReqUrl); setChatsStatusOnLoad(); })
-  }
 }
 
 async function serachByTextInTitle(textValue) {
@@ -68,7 +57,7 @@ async function serachByTextInTitle(textValue) {
     next_page = 1
     contentSize = 0
 
-    withLoadScreen( async () => { await loadDataFromServerPOST(currentReqUrl, { title: textValue }); setChatsStatusOnLoad(); })
+    withLoadScreen(async () => { await loadDataFromServerPOST(currentReqUrl, { title: textValue }); setChatsStatusOnLoad(); })
 
   } else window.location.reload()
 }
@@ -81,8 +70,8 @@ document.getElementById("searchComponent").addEventListener("keypress", function
 // Event listener for the "Load More" button click
 document.getElementById('loadMoreButton').addEventListener('click', () => {
 
-  
-  withLoadScreen(async () => {  await loadDataFromServerGET(currentReqUrl, true); setChatsStatusOnLoad();})
+
+  withLoadScreen(async () => { await loadDataFromServerGET(currentReqUrl, true); setChatsStatusOnLoad(); })
 });
 
 function setChatsStatusOnLoad() {
