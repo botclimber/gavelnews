@@ -55,8 +55,8 @@ async function setContent(dataList, append = false) {
     const isVoted = (r.isVoted === undefined || r.isVoted) ? "hidden" : ""
 
     const img = (r.new_img)? `<img src="${r.new_img}" class="w-full h-full object-cover" alt="" />` : `<img src="https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg" class="w-full h-full object-cover" alt="" />`
-    const desc = r.new_desc ?? ""
-
+    //const desc = r.new_desc ?? ""
+    const desc = ""
     news_div.innerHTML += /* html */
       `<div id="${r.new_id}" class="mb-6 lg:mb-0">
                 <div >

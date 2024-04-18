@@ -27,7 +27,14 @@
 > Schedulers
 > Scraper and News day change must run between 00:00 - 00:30
 
-TODO:
+## Project Structure:
+### Architecture
+![Arch](./project_imgs/fixed_GavelNewsArch.png)
+
+### Version Control Flow
+![Versioning](./project_imgs/versionFlow.png)
+
+## TODO:
 - [x] ``` waitForAllData() ``` change interval time from 100 to 1 or a bit higher, this is supposed to not run longer;
 - [x] implement lazyload on scroll event;
 - [x] create endpoints for filtering and sorting;
@@ -52,3 +59,12 @@ TODO:
 - [ ] google auth refresh token 
 - [ ] let votes open until lock
 - [ ] write log system
+- [ ] description only appears on detailed page, also allow comments
+- [ ] link and chat buttons on same row
+- [ ] overlay explaining concept that appears only once
+- [ ] only 3 buttons (true, false, unclear)
+- [ ] separator for trending news (not prio)
+- [ ] change icons to (check, cross and question mark)
+- [ ] backoffice - news with most activity
+- [ ] date formatted to text
+- [ ] width/height fixed in categories and news source buttons 
