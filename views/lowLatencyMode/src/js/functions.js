@@ -34,7 +34,7 @@ function computeAvg(rawValue, totalValue) {
   return (comp != "NaN") ? comp : 0;
 }
 
-function transformToPercentages(isTrue, isFalse, noOpinion, isUnclear) {
+function transformToPercentages(isTrue, isFalse, isUnclear, noOpinion = 0) {
 
   const totalVotes = (isTrue) + (isFalse) + (isUnclear) + (noOpinion)
 

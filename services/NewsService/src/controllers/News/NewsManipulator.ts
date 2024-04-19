@@ -1,5 +1,5 @@
 import { allUsers } from "../../../../CommonStuff/src/controllers/UsersUtils"
-import { User, fromRequestJsonFileFormat, new_object, opinion, UserInfo, ResponseData, ResponseNewObject } from "../../../../CommonStuff/src/types/types"
+import { User, fromRequestJsonFileFormat, new_object, opinion, UserInfo, ResponseData, ResponseNewObject, votes, voteId } from "../../../../CommonStuff/src/types/types"
 import * as eva from "eva-functional-utils"
 
 export class NewsManipulator {
@@ -10,12 +10,34 @@ export class NewsManipulator {
     }
 
     async updateNewVeracity(newId: string, op: opinion, userInfo: UserInfo): Promise<new_object | undefined> {
+        const voteToOpinion = {
+            true: "new_isTrue",
+            false: "new_isFalse",
+            unclear: "new_isUnclear",
+            noopinion: "new_noOpinion"
+        }
 
         const opinionToVote = {
             new_isTrue: "true",
             new_isFalse: "false",
             new_isUnclear: "unclear",
             new_noOpinion: "noopinion"
+        }
+
+        const removeVote = async (vote: votes, idx: number) => {
+            const keyToDecrement = voteToOpinion[vote] as opinion
+            this.data.data[idx][keyToDecrement] -= 1
+
+            this.data.data[idx].new_votedEmails.filter( (obj: voteId) => { obj.email !== userInfo.email } )
+
+            // also decrement on users data
+        }
+
+        const addVote = async (vote: votes, idx: number) => {
+            this.data.data[idx][op] += 1
+            this.data.data[idx].new_votedEmails.push({ email: userInfo.email, vote: vote as votes });
+            
+            await allUsers.incrementVote(vote as keyof User["votes"], userInfo)
         }
 
         try {
@@ -25,16 +47,14 @@ export class NewsManipulator {
             for (let x in this.data.data) {
                 if (this.data.data[x].new_id == newId) {
 
-                    // check if ip is included
-                    if (!this.data.data[x].new_votedEmails.includes(userInfo.email)) {
+                    const currentVote = this.getUserVote(userInfo.email, this.data.data[x].new_votedEmails)
+                    const vote = opinionToVote[op]
 
-                        this.data.data[x][op] += 1;
-                        this.data.data[x].new_votedEmails.push(userInfo.email);
-                        new_object = this.data.data[x]
+                    if(currentVote) await removeVote(currentVote, +x)
+                    await addVote(vote as votes, +x)
 
-                        await allUsers.incrementVote(opinionToVote[op] as keyof User["votes"], userInfo)
+                    new_object = this.data.data[x];
 
-                    } else { console.log(`User already voted for the specified New (${newId})!`); return; }
                 }
             }
 
@@ -72,7 +92,9 @@ export class NewsManipulator {
 
         const responseData: ResponseData = {
             data: this.data.data.map((item: new_object) => {
-                const isVoted = userInfo ? item.new_votedEmails.includes(userInfo.email) : undefined;
+
+                const vote = userInfo ? this.getUserVote(userInfo?.email, item.new_votedEmails) : undefined
+
                 const responseItem: ResponseNewObject = {
                     new_id: item.new_id,
                     new_link: item.new_link,
@@ -88,7 +110,7 @@ export class NewsManipulator {
                     new_noOpinion: item.new_noOpinion,
                     created_at: item.created_at,
                     updated_at: item.updated_at,
-                    isVoted: isVoted
+                    isVoted: vote
                 };
 
                 return responseItem;
@@ -106,5 +128,15 @@ export class NewsManipulator {
         });
 
         return categoriesSet;
+    }
+
+    getUserVote(email: string, votedEmails: new_object["new_votedEmails"]): votes | undefined {
+
+        const vote = eva.getOrElse(undefined, votedEmails, email, "email")
+        console.log("Trying to check if user already voted: ")
+        console.log(vote)
+
+        return vote
+
     }
 }

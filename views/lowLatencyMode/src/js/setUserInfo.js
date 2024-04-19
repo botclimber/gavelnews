@@ -26,8 +26,8 @@ function eitherLoginOrLogout() {
 
     else {
         menuLL.innerHTML = /*html */ `
-    <button id="googleAuth" onclick="googleLogin()" class="ml-[5px] filter-btn flex gap-2" style="background-color: #2c2c2c;">
-                    <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo">
+    <button id="googleAuth" onclick="googleLogin()" class="ml-[5px] filter-btn" style="background-color: #2c2c2c;">
+                    <img class="w-5 h-5" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo">
                 </button>
     `
         logout(false)

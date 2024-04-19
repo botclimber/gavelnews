@@ -1,3 +1,10 @@
+export type votes = "true" | "unclear" | "false"
+
+export type voteId = {
+    email: string,
+    vote: votes
+}
+
 interface NewObjectBase {
     new_id: string;
     new_link: string;
@@ -17,11 +24,11 @@ interface NewObjectBase {
 
 // when sending response if isVoted undefined dont display vote buttons
 export type ResponseNewObject = NewObjectBase & {
-    isVoted?: boolean;
+    isVoted?: votes;
 }
 
 export type new_object = NewObjectBase & {
-    new_votedEmails: string[];
+    new_votedEmails: voteId[];
 }
 
 export type fromRequestJsonFileFormat = {
