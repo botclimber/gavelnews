@@ -9,7 +9,7 @@ export class NewsManipulator {
         this.data = dataFromFile
     }
 
-    async updateNewVeracity(newId: string, op: opinion, userInfo: UserInfo): Promise<new_object | undefined> {
+    async updateNewVeracity(newId: string, op: opinion, userInfo: UserInfo): Promise< {new_id: string, new_isTrue: number, new_isUnclear: number, new_isFalse: number, vote: string, prevVote?: string} | undefined> {
         const voteToOpinion = {
             true: "new_isTrue",
             false: "new_isFalse",
@@ -28,9 +28,9 @@ export class NewsManipulator {
             const keyToDecrement = voteToOpinion[vote] as opinion
             this.data.data[idx][keyToDecrement] -= 1
 
-            this.data.data[idx].new_votedEmails.filter( (obj: voteId) => { obj.email !== userInfo.email } )
+            this.data.data[idx].new_votedEmails = this.data.data[idx].new_votedEmails.filter( (obj: voteId) => { obj.email !== userInfo.email } )
 
-            // also decrement on users data
+            await allUsers.decrementVote(vote as keyof User["votes"], userInfo)
         }
 
         const addVote = async (vote: votes, idx: number) => {
@@ -53,7 +53,13 @@ export class NewsManipulator {
                     if(currentVote) await removeVote(currentVote, +x)
                     await addVote(vote as votes, +x)
 
-                    new_object = this.data.data[x];
+                    const res_newId = this.data.data[x].new_id
+                    const res_new_isTrue = this.data.data[x].new_isTrue
+                    const res_new_isUnclear = this.data.data[x].new_isUnclear
+                    const res_new_isFalse = this.data.data[x].new_isFalse
+                    new_object = {new_id: res_newId, new_isTrue:res_new_isTrue, new_isUnclear:res_new_isUnclear, new_isFalse: res_new_isFalse, vote: vote, prevVote: currentVote}
+
+                    console.log(this.data.data[x])
 
                 }
             }
@@ -94,7 +100,7 @@ export class NewsManipulator {
             data: this.data.data.map((item: new_object) => {
 
                 const vote = userInfo ? this.getUserVote(userInfo?.email, item.new_votedEmails) : undefined
-
+                
                 const responseItem: ResponseNewObject = {
                     new_id: item.new_id,
                     new_link: item.new_link,
@@ -132,11 +138,9 @@ export class NewsManipulator {
 
     getUserVote(email: string, votedEmails: new_object["new_votedEmails"]): votes | undefined {
 
-        const vote = eva.getOrElse(undefined, votedEmails, email, "email")
-        console.log("Trying to check if user already voted: ")
-        console.log(vote)
+        const vote: voteId | undefined = eva.getOrElse(undefined, votedEmails, email, "email")
 
-        return vote
+        return (vote)? vote.vote : undefined
 
     }
 }

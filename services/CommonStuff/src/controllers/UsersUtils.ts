@@ -176,6 +176,30 @@ class UsersUtils {
         }
     }
 
+    async decrementVote(vote: keyof User["votes"], userInfo: UserInfo): Promise<void> {
+        try {
+
+            // Find the user in the list
+            const userIndex = await this.getUserIndex(undefined, userInfo);
+            if (userIndex === undefined) {
+                console.log('User not found');
+                return
+            }
+
+            // Increment the specified vote
+            if (this.users[userIndex].votes[vote] !== undefined) {
+                this.users[userIndex].votes[vote]--;
+            } else {
+                console.log('Invalid vote type');
+                return;
+            }
+
+        } catch (error) {
+            console.error("Error incrementing vote:", error);
+            return;
+        }
+    }
+
     async incrementChatMessage(userIdentifier: UserIdentifier, userInfo?: UserInfo): Promise<void> {
         try {
 

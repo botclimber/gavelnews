@@ -205,8 +205,7 @@ body {
 }
 
 .filterButtons {
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 1px 5px 1px 5px;
     border-radius: 5px;
     margin-bottom: 3px;
     background-color: #2c2c2c;
@@ -234,5 +233,15 @@ body {
 
 .votedBtn{
     box-shadow: 3px 5px 10px #2c2c2c; /* Colored shadow when active */
-    transform: scale(1.05); /* Make it slightly bigger when active */
+    transform: scale(1.15); /* Make it slightly bigger when active */
+    animation: pulse 0.5s infinite alternate; /* Apply pulse animation */
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(1); /* Initial scale */
+    }
+    to {
+        transform: scale(1.10); /* Scale up slightly */
+    }
 }

@@ -1,10 +1,4 @@
-async function hideButtons(newId) {
-  const btns = document.getElementById(`toVoteButtons-${newId}`)
-  btns.style.display = "none"
-}
-
 async function setBarsContent(new_data) {
-  console.log(new_data)
 
   const bar = document.getElementById(`bar-${new_data.new_id}`)
 
@@ -25,4 +19,11 @@ async function setBarsContent(new_data) {
         <span class="tooltip-text">${isFalsePerc}% (${new_data.new_isFalse})</span>
       </div>
     `
+}
+
+async function setButtons(votedBtnElement, prevVoteBtnElement){
+
+  if(prevVoteBtnElement) prevVoteBtnElement.classList.remove("votedBtn")
+  votedBtnElement.classList.add("votedBtn")
+
 }

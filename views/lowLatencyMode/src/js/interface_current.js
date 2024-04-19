@@ -13,14 +13,16 @@ async function vote(voteValue, newId) {
   })
     .then(async response => {
 
-      await hideButtons(newId)
-
       const data = await response.json()
 
       if (response.ok) {
         allData = data.allData.data.data // ? strange ...
 
-        await setBarsContent(data.new_data)
+        const votedBtnElement = document.getElementById(`${data.updatedVotes.vote}-${newId}`)
+        const prevVotedBtnElement = (data.updatedVotes.prevVote)? document.getElementById(`${data.updatedVotes.prevVote}-${newId}`) : undefined
+
+        await setButtons(votedBtnElement, prevVotedBtnElement);
+        await setBarsContent(data.updatedVotes)
       } else throw Error(data.msg)
 
     })
@@ -51,7 +53,10 @@ async function setContent(dataList, append = false) {
     const isFalsePerc = percentages.isFalsePerc
     const isUnclearPerc = percentages.isUnclearPerc
 
-    const isVoted = (r.isVoted === undefined || r.isVoted) ? "votedBtn" : ""
+    const allowVote = (userGoogleCredentials.token) ? "" : "hidden"
+    const trueIsVoted = (r.isVoted === "true")? "votedBtn" : ""
+    const unclearIsVoted = (r.isVoted === "unclear")? "votedBtn" : ""
+    const falseIsVoted = (r.isVoted === "false")? "votedBtn" : ""
 
     const img = (r.new_img) ? `<img src="${r.new_img}" class="w-full h-full object-cover" alt="" />` : `<img src="https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg" class="w-full h-full object-cover" alt="" />`
 
@@ -79,8 +84,8 @@ async function setContent(dataList, append = false) {
                 </div>
         
                 <!-- Buttons for user feedback -->
-                <div class="flex justify-center items-center mb-5" id = "toVoteButtons-${r.new_id}">
-                    <button title="True" onclick="vote('new_isTrue','${r.new_id}')" style="border:1px solid #d0d0d0" class="text-sm px-[8px] py-[2px] rounded-[5px] bg-[#8CB369] text-white font-bold mr-1 ${isVoted}">
+                <div class="flex justify-center items-center mb-5 ${allowVote}" id = "toVoteButtons-${r.new_id}">
+                    <button id="true-${r.new_id}" title="True" onclick="vote('new_isTrue','${r.new_id}')" style="border:1px solid #d0d0d0" class="text-sm px-[8px] py-[2px] rounded-[5px] bg-[#8CB369] text-white font-bold mr-1 ${trueIsVoted}">
                     <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="500" zoomAndPan="magnify"
                             viewBox="110 110 150 150" height="500" preserveAspectRatio="xMidYMid meet" version="1.0">
@@ -101,7 +106,7 @@ async function setContent(dataList, append = false) {
                             </g>
                         </svg>
                     </button>
-                    <button title="Unclear" onclick="vote('new_isUnclear','${r.new_id}')" style="border:1px solid #d0d0d0" class="text-sm px-[8px] py-[2px] border-1 border-[white] rounded-[5px] bg-[#F4A259] text-white font-bold mr-1 ${isVoted}">
+                    <button id="unclear-${r.new_id}" title="Unclear" onclick="vote('new_isUnclear','${r.new_id}')" style="border:1px solid #d0d0d0" class="text-sm px-[8px] py-[2px] border-1 border-[white] rounded-[5px] bg-[#F4A259] text-white font-bold mr-1 ${unclearIsVoted}">
                     <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="500" zoomAndPan="magnify"
                             viewBox="110 110 150 150" height="500" preserveAspectRatio="xMidYMid meet" version="1.0">
@@ -124,7 +129,7 @@ async function setContent(dataList, append = false) {
                                 fill-opacity="1" fill-rule="nonzero" />
                         </svg>
                     </button>
-                    <button title="False" onclick="vote('new_isFalse','${r.new_id}')" style="border:1px solid #d0d0d0" class="text-sm px-[8px] py-[2px] border-1 border-[white] rounded-[5px] bg-[#BC4B51] text-white font-bold ${isVoted}">
+                    <button id="false-${r.new_id}" title="False" onclick="vote('new_isFalse','${r.new_id}')" style="border:1px solid #d0d0d0" class="text-sm px-[8px] py-[2px] border-1 border-[white] rounded-[5px] bg-[#BC4B51] text-white font-bold ${falseIsVoted}">
                     <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="500" zoomAndPan="magnify"
                             viewBox="95 100 180 180" height="500" preserveAspectRatio="xMidYMid meet" version="1.0">

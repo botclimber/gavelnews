@@ -20,3 +20,9 @@ var sortObject = { isActive: false, param: undefined };
 var currentReqUrl;
 
 var contentSize = 0;
+
+const newVoteToVote = {
+    "new_isTrue" : "true",
+    "new_isUnclear" : "unclear",
+    "new_isFalse" : "false"
+}
