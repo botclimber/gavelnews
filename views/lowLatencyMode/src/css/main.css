@@ -231,11 +231,17 @@ body {
     }
 }
 
+/*.votedBtn{
+    box-shadow: 3px 5px 10px #2c2c2c; 
+    transform: scale(1.15); 
+    animation: pulse 1s infinite alternate; 
+}*/
+
 .votedBtn{
-    box-shadow: 3px 5px 10px #2c2c2c; /* Colored shadow when active */
-    transform: scale(1.15); /* Make it slightly bigger when active */
-    animation: pulse 0.5s infinite alternate; /* Apply pulse animation */
+    box-shadow: inset 0px 3px 10px rgba(0.5, 0.5, 0.2, 0.5); /* Simulate button being pressed */
+    transform: scale(0.80); /* Scale down the button size */
 }
+
 
 @keyframes pulse {
     from {
