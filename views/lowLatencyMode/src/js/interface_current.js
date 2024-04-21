@@ -39,7 +39,7 @@ async function setContent(dataList, append = false) {
 
   dataList.forEach(r => {
 
-    const newType = (r.new_type === undefined || r.new_type === "" || r.new_type === null) ? "" : `<svg class="h-4 w-5" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 422.186 422.186" xml:space="preserve" fill="#000000" transform="matrix(-1, 0, 0, -1, 0, 0)rotate(-45)">
+    const newType = (r.new_type === undefined || r.new_type === "" || r.new_type === null) ? "" : `<svg class="h-4 w-4" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 422.186 422.186" xml:space="preserve" fill="#000000" transform="matrix(-1, 0, 0, -1, 0, 0)rotate(-45)">
     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
     <g id="SVGRepo_iconCarrier"> 
@@ -64,7 +64,7 @@ async function setContent(dataList, append = false) {
       `<div id="${r.new_id}" class="mb-5">
                 <div >
 
-                <a href="${r.new_link}" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)" target="_blank">  
+                <a style="cursor: pointer;" onclick="openModal()" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)">  
                   <div class="relative h-[220px] mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20" data-te-ripple-init data-te-ripple-color="light">
                     ${img}
                   </div>
@@ -112,7 +112,7 @@ async function setContent(dataList, append = false) {
                             viewBox="110 110 150 150" height="500" preserveAspectRatio="xMidYMid meet" version="1.0">
                             <defs>
                                 <clipPath id="4956d79bfd">
-                                    <path d="M 112.5 112.5 L 262.5 112.5 L 262.5 262.5 L 112.5 262.5 Z M 112.5 112.5 "
+                                    <path d="M 112.5 112.5 L 262.5 112.5 L 262.5 262.5 L 112.5 262.5 Z M 112.5 112.5"
                                         clip-rule="nonzero" />
                                 </clipPath>
                             </defs>
@@ -147,16 +147,15 @@ async function setContent(dataList, append = false) {
                         </svg>
                     </button>
                 </div>
-                  <div class="titleBody">
+                  <div>
                     <h5 class="mb-3 text-md font-bold">
-                      <a href="${r.new_link}" target="_blank">${r.new_title}</a>
+                      <a style="cursor: pointer;" >${r.new_title}</a>
                     </h5>
-
-                    <div class="mt-5 flex items-center justify-center text-sm font-medium text-yellow-600">
+                  </div>
+                  <div class="mt-3 flex items-center justify-center text-sm font-medium text-yellow-600">
                       ${newType}
                     </div>
-                  </div>
-                  <div class="mt-10">
+                  <div class="mt-5">
                   <button title="Copy link to current chat" onclick="insertNewInInput('${r.new_id}')" class="bg-[#2c2c2c] hover:bg-[#7b7575] text-[8pt] text-white font-bold py-1 px-2 rounded inline-flex items-center">
                   <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10.0464 14C8.54044 12.4882 8.67609 9.90087 10.3494 8.22108L15.197 3.35462C16.8703 1.67483 19.4476 1.53865 20.9536 3.05046C22.4596 4.56228 22.3239 7.14956 20.6506 8.82935L18.2268 11.2626" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path> <path opacity="0.5" d="M13.9536 10C15.4596 11.5118 15.3239 14.0991 13.6506 15.7789L11.2268 18.2121L8.80299 20.6454C7.12969 22.3252 4.55237 22.4613 3.0464 20.9495C1.54043 19.4377 1.67609 16.8504 3.34939 15.1706L5.77323 12.7373" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"></path> </g></svg>
                   </button>

@@ -1,0 +1,29 @@
+/* Modal styles */
+.modal {
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Dark overlay */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal.open {
+    display: flex;
+    opacity: 1;
+}
+
+.overlay.open {
+    display: block;
+    opacity: 1;
+}
