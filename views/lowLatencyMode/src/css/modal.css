@@ -1,6 +1,6 @@
 /* Modal styles */
-.modal {
-    z-index: 9998;
+.defaultModal {
+    z-index: 3;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
 }
@@ -16,9 +16,10 @@
     background: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
+    z-index: 2;
 }
 
-.modal.open {
+.defaultModal.open {
     display: flex;
     opacity: 1;
 }
