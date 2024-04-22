@@ -10,6 +10,7 @@ const modalLastClickedNew = {
 
 // Function to open the modal
 function openModal(n_id, n_url, n_title, n_img, n_true, n_unclear, n_false, n_desc, n_type, n_date, n_source) {
+    changeConnection(`/${n_id}`, false, `${n_title}`, false, true)
     modalLastClickedNew.url = n_url
 
     const modal_title = document.getElementById("modal-title") 

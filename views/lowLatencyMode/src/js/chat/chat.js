@@ -1,12 +1,15 @@
 var activeNew = null
 var socket = chatConnection();
 var newConnection;
+
 const emojiContainer = document.getElementById("emojiContainer")
+const emojiContainer_modal = document.getElementById("emojiContainer_modal")
 
 function loadEmojis() {
 
     for (let x in emojis) {
-        emojiContainer.innerHTML += `<button class="emoji-button" onclick="selectEmoji('${emojis[x]}')">${emojis[x]}</button>`
+        emojiContainer.innerHTML += `<button class="emoji-button" onclick="selectEmoji('chat-input-message', '${emojis[x]}')">${emojis[x]}</button>`
+        emojiContainer_modal.innerHTML += `<button class="emoji-button" onclick="selectEmoji('chat-input-message-modal', '${emojis[x]}')">${emojis[x]}</button>`
     }
 
 }
@@ -50,8 +53,9 @@ addEventListener("keydown", (event) => {
     if (event.key === "Alt" && activeNew !== null) insertNewInInput(activeNew);
 })
 
-async function changeConnection(chatCode = "/", general = true, newTitle = "", openChat = true) {
+async function changeConnection(chatCode = "/", general = true, newTitle = "", openChat = true, isModal = false) {
     chat.innerHTML = ""
+    chat_modal.innerHTML = ""
 
     currentChat.chatCode = chatCode
     currentChat.general = general
@@ -64,7 +68,7 @@ async function changeConnection(chatCode = "/", general = true, newTitle = "", o
 
     if (openChat) chatContainer.classList.remove('hidden');
 
-    socket = chatConnection(chatCode, general, newTitle)
+    socket = chatConnection(chatCode, general, newTitle, isModal)
 }
 
 function insertNewInInput(newCode = null) {
@@ -89,11 +93,11 @@ function insertRoomInInput(newCode = null) {
     }
 }
 
-async function chatConnection(chatCode = "/", general = true, newTitle = "") {
+async function chatConnection(chatCode = "/", general = true, newTitle = "", isModal = false) {
     newConnection = true
     await waitForAllData();
 
-    setChatTitle(`#${chatCode.replace("/", "")}`, general, `${newTitle}`)
+    if(!isModal) setChatTitle(`#${chatCode.replace("/", "")}`, general, `${newTitle}`)
 
     // Establishing a WebSocket connection
     const connection = new WebSocket(`${chatWebsocket}${chatCode}`);
@@ -118,9 +122,9 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "") {
             }
         } else {
             if (Array.isArray(data)) {
-                for (const item of data) await printToChat(JSON.parse(item));
+                for (const item of data) await printToChat(JSON.parse(item), isModal);
 
-            } else await printToChat(data);
+            } else await printToChat(data, isModal);
 
             const isAtBottom = isScrolledToBottom(chat);
 

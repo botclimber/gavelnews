@@ -1,6 +1,8 @@
 const chatTitle = document.getElementById('chatTitle')
 const chat = document.getElementById("chat-output")
+const chat_modal = document.getElementById("chat-output-modal")
 const msgInput = document.getElementById("chat-input-message")
+const msgInputModal = document.getElementById("chat-input-message-modal")
 
 const newRegex = /\[new:(.*?)\]/g;
 const newCodeRegex = /\[new:([a-zA-Z0-9-]+)\]/;
@@ -106,7 +108,9 @@ function setChatTitle(chatCode = "/", general = true, title = "", goBackBtn = tr
 }
 
 // data: {userImg?, username?, userType, icon, usernameId, message, date}
-async function printToChat(data) {
+async function printToChat(data, isModal = false) {
+    const chatToPaint = (isModal)? chat_modal : chat
+
     try {
         const messageReplaceNewCodes = await replaceNewCode(data.message);
         const messageReplaceRoomCodes = await replaceRoomCode(messageReplaceNewCodes);
@@ -132,7 +136,7 @@ async function printToChat(data) {
         const imMsgOwner = clientUserName == data.usernameId["*"];
 
         if (imMsgOwner) {
-            chat.innerHTML += `<div class="flex gap-3 my-4 text-gray-600 text-sm flex-1 justify-end">
+            chatToPaint.innerHTML += `<div class="flex gap-3 my-4 text-gray-600 text-sm flex-1 justify-end">
             <p class="leading-relaxed text-right">
                 <span class="block font-bold text-gray-700">${nameToBeDisplayed} - You </span>${messageReplaceRoomCodes}
                 <span class="block text-[6.5pt] text-gray-400 mt-2">${data.date}</span>
@@ -143,7 +147,7 @@ async function printToChat(data) {
         </div>
         `;
         } else {
-            chat.innerHTML += `<div class="flex gap-3 my-4 text-gray-600 text-sm flex-1"><span
+            chatToPaint.innerHTML += `<div class="flex gap-3 my-4 text-gray-600 text-sm flex-1"><span
             class="relative flex shrink-0 overflow-hidden rounded-full w-8 h-8">
             ${img}
         </span>
