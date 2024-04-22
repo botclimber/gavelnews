@@ -1,4 +1,5 @@
 handleResponse = async (res, append = false) => {
+  console.log(res)
   contentSize += res.contentSize
 
   if (contentSize >= res.allContentSize) loadBtn.classList.add('hidden');
@@ -8,8 +9,6 @@ handleResponse = async (res, append = false) => {
 
   next_page++
 
-  allData = [...allData, ...res.content.data]
-  console.log(allData)
   await setContent(res.content.data, append)
 }
 

@@ -60,11 +60,14 @@ async function setContent(dataList, append = false) {
 
     const img = (r.new_img) ? `<img src="${r.new_img}" class="w-full h-full object-cover" alt="" />` : `<img src="https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg" class="w-full h-full object-cover" alt="" />`
 
+    const quoteDesc = r.new_desc.replaceAll("'", "\\'")
+    const doubleQuoteDesc = quoteDesc.replaceAll('"', '\\"')
+
     news_div.innerHTML += /* html */
       `<div id="${r.new_id}" class="mb-5">
                 <div >
 
-                <a style="cursor: pointer;" onclick="openModal()" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)">  
+                <a style="cursor: pointer;" onclick="openModal('${r.new_id}', '${r.new_link}', '${r.new_title}', '${r.new_img}', JSON.stringify({perc: ${isTruePerc}, number: ${r.new_isTrue}}), JSON.stringify({perc: ${isUnclearPerc}, number: ${r.new_isUnclear}}), JSON.stringify({perc: ${isFalsePerc}, number: ${r.new_isFalse}}), '${doubleQuoteDesc}', '${r.new_type}', '${dateAsGlobal}', '${r.new_source}')" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)">  
                   <div class="relative h-[220px] mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20" data-te-ripple-init data-te-ripple-color="light">
                     ${img}
                   </div>

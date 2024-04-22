@@ -11,9 +11,7 @@ const chatTitleLimit = 15
 var dateAsGlobal;
 var readOnlyPage;
 
-
 var currentChat = { chatCode: "/", general: true, newTitle: "" };
-var allData = [];
 var allDataIsSet = false;
 
 var next_page = 1;
