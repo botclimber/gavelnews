@@ -1,5 +1,7 @@
 # ignore configuration file
 system.config.js
+newsService_system.config.js
+schedulerService_system.config.js
 
 # ignore file package-lock.json
 package-lock.json
