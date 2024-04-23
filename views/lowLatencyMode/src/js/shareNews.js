@@ -10,7 +10,7 @@ function share(media) {
 
     case "telegram": window.open(`https://t.me/share/url?url=${encodedUrl}&text=Gavel News shared new!`); break;
 
-    case "copy": navigator.clipboard.writeText(encodedUrl); break;
+    case "copy": navigator.clipboard.writeText(modalLastClickedNew.toShareLink); break;
 
     default: return
   }

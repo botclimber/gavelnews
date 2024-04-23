@@ -65,8 +65,6 @@ async function setContent(dataList, append = false) {
     const doubleQuoteDesc = desc.replaceAll('"', '\'');
     const quoteDesc = doubleQuoteDesc.replaceAll("'", "\\'");
 
-    console.log(quoteDesc)
-
     news_div.innerHTML += /* html */
       `<div id="${r.new_id}" class="mb-5">
                 <div >
