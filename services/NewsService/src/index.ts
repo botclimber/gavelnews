@@ -27,8 +27,9 @@ const options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/gavel.news/fullchain.pem')
 }
 
+const server = https.createServer(options, app)
+
 const PORT = process.env.SERVER_PORT || 443;
-const CHAT_PORT = (process.env.CHAT_PORT)? +process.env.CHAT_PORT : 8443;
 
 // Configure CORS
 app.use(cors());
@@ -54,8 +55,7 @@ app.use("/admin", checkHeader, GetAdminRouter);
 app.use("/admin", checkHeader, PutAdminRouter);
 
 // setup chat service
-const chatServer = https.createServer(options).listen(CHAT_PORT);
-const chatService = new ChatClass(chatServer);
+const chatService = new ChatClass(server);
 
 // Initialize users
 allUsers.setUsers();
@@ -64,8 +64,7 @@ allUsers.setUsers();
 persistSensitiveData();
 changeDay(chatService);
 
-https.createServer(options, app).listen(PORT, function () {
-    console.log("News server listening on port " + PORT);
-    console.log("Chat server listening on port " + CHAT_PORT);
+server.listen(PORT, function () {
+    console.log("Server listening on port " + PORT);
 });
 

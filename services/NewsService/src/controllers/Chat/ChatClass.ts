@@ -45,6 +45,8 @@ export class ChatClass {
 
     try {
       this.wss.on('connection', (ws: WebSocket, req) => {
+	
+	console.log("New user connected!")
 
         // Extract chat code from URL
         const userAgent = req.headers['user-agent'] ?? "";
