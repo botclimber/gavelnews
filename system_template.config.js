@@ -6,6 +6,8 @@ const ScrapperScheduler = {
 const NewsEnv = {
     "HOUR": 0,
     "MIN": 0,
+    "SERVER_PORT": 0,
+    "CHAT_PORT": 0,
     "CLIENT_ID": "",
     "CLIENT_SECRET": "",
     "SECRET": ""

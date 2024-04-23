@@ -3,6 +3,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from "cors";
 import path from "path";
+import http from "http";
 
 import PutAdminRouter from './routes/put/admin/PutAdminRoutes';
 import GetAdminRouter from './routes/get/admin/GetAdminRoutes';
@@ -55,7 +56,6 @@ allUsers.setUsers();
 persistSensitiveData();
 changeDay(chatService);
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+http.createServer(app).listen(PORT, function () {
+    console.log("Express server listening on port " + PORT);
 });
