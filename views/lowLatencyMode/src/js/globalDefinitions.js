@@ -1,5 +1,5 @@
-const api = "http://localhost"
-const chatWebsocket = "ws://localhost:8002"
+const api = "https://gavel.news"
+const chatWebsocket = "wss://gavel.news:8443"
 
 const loadBtn = document.getElementById("loadMoreButton");
 const newsContentSize = document.getElementById("contentSize")

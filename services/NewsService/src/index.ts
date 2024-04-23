@@ -3,6 +3,8 @@ import express, { NextFunction, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from "cors";
 import path from "path";
+import fs from "fs";
+import https from "https";
 
 import PutAdminRouter from './routes/put/admin/PutAdminRoutes';
 import GetAdminRouter from './routes/get/admin/GetAdminRoutes';
@@ -19,8 +21,14 @@ import { ChatClass } from './controllers/Chat/ChatClass';
 const viewsPath = "../../../../../views/lowLatencyMode/"
 
 const app = express();
-const PORT = 80;
-const CHAT_PORT = 8002;
+
+const options = {
+	key: fs.readFileSync('/etc/letsencrypt/live/gavel.news/privkey.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/gavel.news/fullchain.pem')
+}
+
+const PORT = process.env.SERVER_PORT || 443;
+const CHAT_PORT = (process.env.CHAT_PORT)? +process.env.CHAT_PORT : 8443;
 
 // Configure CORS
 app.use(cors());
@@ -55,7 +63,7 @@ allUsers.setUsers();
 persistSensitiveData();
 changeDay(chatService);
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+https.createServer(options, app).listen(PORT, function () {
+    console.log("Express server listening on port " + PORT);
 });
+
