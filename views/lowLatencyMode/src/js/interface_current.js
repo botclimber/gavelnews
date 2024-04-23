@@ -58,16 +58,20 @@ async function setContent(dataList, append = false) {
     const unclearIsVoted = (r.isVoted === "unclear")? "votedBtn" : ""
     const falseIsVoted = (r.isVoted === "false")? "votedBtn" : ""
 
-    const img = (r.new_img) ? `<img src="${r.new_img}" class="w-full h-full object-cover" alt="" />` : `<img src="https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg" class="w-full h-full object-cover" alt="" />`
+    const imgUrl = (r.new_img) ? r.new_img : "https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg"
+    const img = `<img src="${imgUrl}" class="w-full h-full object-cover" alt="" />`
 
-    const quoteDesc = r.new_desc.replaceAll("'", "\\'")
-    const doubleQuoteDesc = quoteDesc.replaceAll('"', '\\"')
+    const desc = (r.new_desc)? r.new_desc : "";
+    const doubleQuoteDesc = desc.replaceAll('"', '\'');
+    const quoteDesc = doubleQuoteDesc.replaceAll("'", "\\'");
+
+    console.log(quoteDesc)
 
     news_div.innerHTML += /* html */
       `<div id="${r.new_id}" class="mb-5">
                 <div >
 
-                <a style="cursor: pointer;" onclick="openModal('${r.new_id}', '${r.new_link}', '${r.new_title}', '${r.new_img}', JSON.stringify({perc: ${isTruePerc}, number: ${r.new_isTrue}}), JSON.stringify({perc: ${isUnclearPerc}, number: ${r.new_isUnclear}}), JSON.stringify({perc: ${isFalsePerc}, number: ${r.new_isFalse}}), '${doubleQuoteDesc}', '${r.new_type}', '${dateAsGlobal}', '${r.new_source}')" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)">  
+                <a style="cursor: pointer;" onclick="openModal('${r.new_id}', '${r.new_link}', '${r.new_title}', '${imgUrl}', JSON.stringify({perc: ${isTruePerc}, number: ${r.new_isTrue}}), JSON.stringify({perc: ${isUnclearPerc}, number: ${r.new_isUnclear}}), JSON.stringify({perc: ${isFalsePerc}, number: ${r.new_isFalse}}), '${quoteDesc}', '${r.new_type}', '${dateAsGlobal}', '${r.new_source}')" onmouseover="setNewForChat('${r.new_id}')" onmouseout="setNewForChat(null)">  
                   <div class="relative h-[220px] mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20" data-te-ripple-init data-te-ripple-color="light">
                     ${img}
                   </div>

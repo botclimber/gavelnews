@@ -5,13 +5,17 @@ const defaultModalOverlay = document.getElementById("defaultOverlay");
  * We can actually use this to store the last clicked new information and later still use it
  */
 const modalLastClickedNew = {
-    url: ""
+    url: "",
+    toShareLink: ""
 }
 
 // Function to open the modal
 function openModal(n_id, n_url, n_title, n_img, n_true, n_unclear, n_false, n_desc, n_type, n_date, n_source) {
     changeConnection(`/${n_id}`, false, `${n_title}`, false, true)
     modalLastClickedNew.url = n_url
+
+    const date = (readOnlyPage) ? dateAsGlobal : "current"
+    modalLastClickedNew.toShareLink = `${api}/?date=${date}&new_id=${n_id}`
 
     const modal_title = document.getElementById("modal-title") 
     const modal_img = document.getElementById("modal-img")

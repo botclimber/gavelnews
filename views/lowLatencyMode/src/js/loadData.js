@@ -26,10 +26,7 @@ loadDataFromServerPOST = async (reqUrl, bodyContent = {}, append = false) => {
     await handleResponse(news, append);
   } else if (response.status === 403) {
     // If the error is 403, clear the body and show an error message
-    window.document.body.innerHTML = news.msg;
-    window.document.body.style.color = "white";
-    window.document.body.style.backgroundColor = "black";
-    showErrorMessage(news.msg);
+    blockedUser();
   } else {
     // For other errors, show an error message
     showErrorMessage(news.msg);
@@ -49,10 +46,7 @@ loadDataFromServerGET = async (reqUrl, append = false) => {
     await handleResponse(news, append);
   } else if (response.status === 403) {
     // If the error is 403, clear the body and show an error message
-    window.document.body.innerHTML = news.msg;
-    window.document.body.style.color = "white";
-    window.document.body.style.backgroundColor = "black";
-    showErrorMessage(news.msg);
+    blockedUser();
   } else {
     // For other errors, show an error message
     showErrorMessage(news.msg);
@@ -68,20 +62,19 @@ async function reloadData() {
   withLoadScreen(async () => { await loadDataFromServerGET(currentReqUrl); setChatsStatusOnLoad() })
 }
 
-async function setCategories(){
+async function setCategories() {
   const cats = document.getElementById("categoriesDropDown")
-  const dateForCategories = (readOnlyPage)? dateAsGlobal : "current"
+  const dateForCategories = (readOnlyPage) ? dateAsGlobal : "current"
   console.log(`requesting categories ${dateForCategories}`)
   const request = await fetch(`${api}/news/categories/${dateForCategories}`)
   const response = await request.json()
 
-  if(request.ok){
-    response.cats.map( cat => {
-      if(cat) cats.innerHTML += `<a href="#" onclick="withLoadScreen(() => filterByCat('${cat}'))">${cat}</a>`;
+  if (request.ok) {
+    response.cats.map(cat => {
+      if (cat) cats.innerHTML += `<a href="#" onclick="withLoadScreen(() => filterByCat('${cat}'))">${cat}</a>`;
     });
-  }else showErrorMessage(response.msg);
+  } else showErrorMessage(response.msg);
 
 }
 
 setCategories();
-withLoadScreen(() => { currentReqUrl = pageBaseEndpoint; loadDataFromServerGET(currentReqUrl); })
