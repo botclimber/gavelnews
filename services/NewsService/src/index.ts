@@ -54,7 +54,8 @@ app.use("/admin", checkHeader, GetAdminRouter);
 app.use("/admin", checkHeader, PutAdminRouter);
 
 // setup chat service
-const chatService = new ChatClass(CHAT_PORT);
+const chatServer = https.createServer(options).listen(CHAT_PORT);
+const chatService = new ChatClass(chatServer);
 
 // Initialize users
 allUsers.setUsers();
@@ -64,6 +65,7 @@ persistSensitiveData();
 changeDay(chatService);
 
 https.createServer(options, app).listen(PORT, function () {
-    console.log("Express server listening on port " + PORT);
+    console.log("News server listening on port " + PORT);
+    console.log("Chat server listening on port " + CHAT_PORT);
 });
 
