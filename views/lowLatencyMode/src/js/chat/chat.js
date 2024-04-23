@@ -57,9 +57,10 @@ addEventListener("keydown", (event) => {
 })
 
 async function changeConnection(chatCode = "/", general = true, newTitle = "", openChat = true, isModal = false) {
-    chat.innerHTML = ""
-    chat_modal.innerHTML = ""
 
+    if(isModal) chat_modal.innerHTML = "";
+    else chat.innerHTML = "";
+    
     currentChat.chatCode = chatCode
     currentChat.general = general
     currentChat.newTitle = newTitle
