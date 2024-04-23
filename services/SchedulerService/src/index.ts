@@ -6,8 +6,8 @@ const rule = new schedule.RecurrenceRule();
 
 rule.dayOfWeek = [Week.MONDAY, Week.TUESDAY, Week.WEDNESDAY, Week.THURSDAY, Week.FRIDAY, Week.SATURDAY, Week.SUNDAY];
 
-rule.hour = process.env.HOUR || 2;
-rule.minute = process.env.MIN || 20;
+rule.hour = process.env.HOUR || 0;
+rule.minute = process.env.MIN || 30;
 rule.tz = "Europe/Lisbon";
 
 console.log(`Scheduler set for (${rule.hour}h, ${rule.minute}min, ${rule.tz} tz)`)

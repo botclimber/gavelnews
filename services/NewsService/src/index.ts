@@ -14,14 +14,15 @@ import PatchNewsRouter from './routes/patch/news/PatchNewsRoutes';
 import loggingMiddleware from './middleware/recognizerMiddleware';
 import { checkHeader } from './middleware/AdminMiddleware';
 import { allUsers } from '../../CommonStuff/src/controllers/UsersUtils';
-import { changeDay, persistNewsData, persistSensitiveData, persistUsersData } from './cron/cronJob';
+import { changeDay, persistSensitiveData } from './cron/cronJob';
 import { ChatClass } from './controllers/Chat/ChatClass';
 
 const viewsPath = "../../../../../views/lowLatencyMode/"
 
 const app = express();
-const PORT = 80;
-const CHAT_PORT = 8002;
+
+const PORT = process.env.SERVER_PORT || 80;
+const CHAT_PORT = (process.env.CHAT_PORT)? +process.env.CHAT_PORT : 8002;
 
 // Configure CORS
 app.use(cors());
@@ -59,3 +60,4 @@ changeDay(chatService);
 http.createServer(app).listen(PORT, function () {
     console.log("Express server listening on port " + PORT);
 });
+
