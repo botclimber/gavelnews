@@ -48,7 +48,8 @@ app.use("/admin", checkHeader, GetAdminRouter);
 app.use("/admin", checkHeader, PutAdminRouter);
 
 // setup chat service
-const chatService = new ChatClass(CHAT_PORT);
+const chatServer = http.createServer().listen(CHAT_PORT)
+const chatService = new ChatClass(chatServer);
 
 // Initialize users
 allUsers.setUsers();
