@@ -90,6 +90,7 @@ async function flatScrayObject(dataToFlatten: fromScrapyJsonFileFormat): Promise
 }
 
 // TODO: dont abort in case of some file doesnt exist, just inform
+// TODO: !important: add here at this stage all necessary additional fields e.g. (votedEmails, isTrue, isFalse, isUnclear, hide, etc ...)
 export async function transformExtractedData(): Promise<void> {
 
     const yesterdayDate = getPreviousDate(1)

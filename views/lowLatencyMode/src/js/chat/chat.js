@@ -15,31 +15,34 @@ function loadEmojis() {
 }
 
 // Sending a message to the server
-async function sendMessage() {
+async function sendMessage(isModal = false) {
     const date = new Date();
     const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} | ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
 
     console.log("Sending message ...")
-    const msg = msgInput.value
+    const msg = (isModal)? msgInputModal.value : msgInput.value
     const toJson = {token: userGoogleCredentials.token, "icon": chatIcon, "usernameId": userInfo, "message": msg, "date": formattedDate }
+
+    console.log(toJson)
 
     const s = await socket
     s.send(JSON.stringify(toJson));
     console.log("Message Sent.")
 }
 
-function onInputFocus(event) {
+function onInputFocus(event, isModal = false) {
 
     const lookForEmoji = () => {
         // TODO: check if this is uneficcient
         Object.keys(emojis).map(key => {
-            msgInput.value = msgInput.value.replaceAll(key, emojis[key])
+            if(isModal) msgInputModal.value = msgInputModal.value.replaceAll(key, emojis[key])
+            else msgInput.value = msgInput.value.replaceAll(key, emojis[key]);
         })
     }
 
     lookForEmoji()
 
-    if (event.keyCode == 13) sendMessage(); // if user clicks Enter
+    if (event.keyCode == 13) sendMessage(isModal); // if user clicks Enter
 }
 
 function setNewForChat(newId) { activeNew = newId }
@@ -126,10 +129,13 @@ async function chatConnection(chatCode = "/", general = true, newTitle = "", isM
 
             } else await printToChat(data, isModal);
 
-            const isAtBottom = isScrolledToBottom(chat);
+            const chatToHandle = (isModal)? chat_modal : chat;
+            const isAtBottom = isScrolledToBottom(chatToHandle);
 
-            if (isAtBottom || newConnection){ scrollToBottom(chat); newConnection = false }
-            msgInput.value = "";
+            if (isAtBottom || newConnection){ scrollToBottom(chatToHandle); newConnection = false }
+
+            if(isModal) msgInputModal.value = "";
+            else msgInput.value = "" ;
         }
     };
 

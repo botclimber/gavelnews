@@ -68,3 +68,4 @@
 - [ ] backoffice - news with most activity
 - [ ] date formatted to text
 - [ ] width/height fixed in categories and news source buttons 
+- [ ] add aditional keys on data ETL level
