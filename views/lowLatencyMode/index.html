@@ -30,10 +30,10 @@
 <body style="background-color: #e6e6de;color:#2c2c2c;">
 
     <!-- Chat Button -->
-    <button id="chatBtn" onclick="changeConnection()" style="z-index: 1;"
-        class="fixed bottom-[50px] right-5 inline-flex items-center justify-center text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border-[5px] rounded-full w-[70px] h-[70px] hover:bg-gray-100 m-0 cursor-pointer border-[#2c2c2c] bg-none p-0 normal-case leading-5 hover:text-gray-900"
+    <button id="chatBtn" onclick="changeConnection()" style="z-index: 1;background-color: #e6e6de;"
+        class="fixed bottom-[50px] right-10 inline-flex items-center justify-center text-sm font-medium border-[5px] rounded-full w-[70px] h-[70px] cursor-pointer border-[#2c2c2c]"
         type="button" aria-haspopup="dialog" aria-expanded="false" data-state="closed">
-        <img src="src/images/Discussion.svg" style="backdrop-filter: blur(5px);" class="rounded-full" />
+        <img src="src/images/Discussion.svg" class="rounded-full" />
     </button>
 
     <!-- <div class="flex space-x-[1px] overflow-x-auto" id="dateContainer">
@@ -195,23 +195,24 @@
                 </svg>
             </button>
         </section>
+        
+        <footer style="color:#e6e6de;" class="bg-[#2c2c2c] py-2">
+            <div class="container mx-auto flex justify-between items-center grid gap-3 grid-cols-3">
+                <div class="text-left ml-4">
+                    <p>CONTACTO:</p>
+                    <a href="mailto:gnewsgeral@gmail.com" class="text-[#e6e6de]">gnewsgeral@gmail.com</a>
+    
+                </div>
+                <div class="text-center">
+                    <!-- <p class="text-sm">COMO NAVEGAR NESTE SITE</p>
+                    <p class="text-sm">POLÍTICA DE PRIVACIDADE</p> -->
+                </div>
+                <div class="text-right mr-4">
+                    <p class="text-sm">2024 Gavel News.</p>
+                </div>
+            </div>
+        </footer>
     </div>
-    <footer style="color:#e6e6de;" class="bg-[#2c2c2c] py-2">
-        <div class="container mx-auto flex justify-between items-center grid gap-3 grid-cols-3">
-            <div class="text-left ml-4">
-                <p>CONTACTO:</p>
-                <a href="mailto:gnewsgeral@gmail.com" class="text-[#e6e6de]">gnewsgeral@gmail.com</a>
-
-            </div>
-            <div class="text-center">
-                <!-- <p class="text-sm">COMO NAVEGAR NESTE SITE</p>
-                <p class="text-sm">POLÍTICA DE PRIVACIDADE</p> -->
-            </div>
-            <div class="text-right mr-4">
-                <p class="text-sm">2024 Gavel News.</p>
-            </div>
-        </div>
-    </footer>
 
     <!-- Chat Container -->
     <div id="chatContainer" style="z-index: 1;color:black;" class="fixed hidden">
@@ -269,10 +270,10 @@
         class="defaultModal hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 max-w-full max-h-full">
             <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="relative bg-white rounded-lg" style="background-color: #4b5563;color:white;">
                 <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                    <h3 class="text-xl font-semibold">
                         New Info
                     </h3>
                     <button onclick="closeModal()" type="button"
