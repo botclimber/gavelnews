@@ -1,5 +1,6 @@
 # ignore configuration file
 system.config.js
+system_constants.js
 newsService_system.config.js
 schedulerService_system.config.js
 
