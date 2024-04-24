@@ -1,6 +1,3 @@
-const api = "http://localhost"
-const chatWebsocket = "ws://localhost"
-
 const loadBtn = document.getElementById("loadMoreButton");
 const newsContentSize = document.getElementById("contentSize")
 const news_div = document.getElementById("news")
