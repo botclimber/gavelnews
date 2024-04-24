@@ -20,9 +20,9 @@ import { ChatClass } from './controllers/Chat/ChatClass';
 const viewsPath = "../../../../../views/lowLatencyMode/"
 
 const app = express();
+const server = http.createServer(app)
 
 const PORT = process.env.SERVER_PORT || 80;
-const CHAT_PORT = (process.env.CHAT_PORT)? +process.env.CHAT_PORT : 8002;
 
 // Configure CORS
 app.use(cors());
@@ -48,8 +48,7 @@ app.use("/admin", checkHeader, GetAdminRouter);
 app.use("/admin", checkHeader, PutAdminRouter);
 
 // setup chat service
-const chatServer = http.createServer().listen(CHAT_PORT)
-const chatService = new ChatClass(chatServer);
+const chatService = new ChatClass(server);
 
 // Initialize users
 allUsers.setUsers();
@@ -58,7 +57,7 @@ allUsers.setUsers();
 persistSensitiveData();
 changeDay(chatService);
 
-http.createServer(app).listen(PORT, function () {
+server.listen(PORT, function () {
     console.log("Express server listening on port " + PORT);
 });
 

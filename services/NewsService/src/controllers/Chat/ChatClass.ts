@@ -31,6 +31,7 @@ export class ChatClass {
 
   constructor(server: http.Server) {
     this.wss = new WebSocket.Server({ server });
+    console.log(this.wss)
     this.messagesMemory = new Map();
     this.chatClientsMap = new Map();
     this.messageRate = new Map();
