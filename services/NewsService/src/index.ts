@@ -58,6 +58,6 @@ persistSensitiveData();
 changeDay(chatService);
 
 server.listen(PORT, function () {
-    console.log("Express server listening on port " + PORT);
+    console.log("Server listening on port " + PORT);
 });
 

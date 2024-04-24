@@ -7,6 +7,7 @@ import { allUsers } from "../../../../CommonStuff/src/controllers/UsersUtils";
 import { GoogleAuth } from "../../../../CommonStuff/src/controllers/GoogleAuthUtils";
 import http from "http";
 
+
 type chatCode = string
 const googleUtils = new GoogleAuth()
 
@@ -46,6 +47,8 @@ export class ChatClass {
 
     try {
       this.wss.on('connection', (ws: WebSocket, req) => {
+	
+	console.log("New user connected!")
 
         // Extract chat code from URL
         const userAgent = req.headers['user-agent'] ?? "";

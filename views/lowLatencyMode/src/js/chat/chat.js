@@ -26,8 +26,17 @@ async function sendMessage(isModal = false) {
     console.log(toJson)
 
     const s = await socket
-    s.send(JSON.stringify(toJson));
-    console.log("Message Sent.")
+
+    console.log(s)
+    if (s.readyState === WebSocket.OPEN) {
+        // Send the message
+    	s.send(JSON.stringify(toJson));
+    	console.log("Message Sent.")
+    
+    } else {
+        // Handle the case where the connection is not yet open
+        console.error('WebSocket connection is not yet open.');
+    }
 }
 
 function onInputFocus(event, isModal = false) {
