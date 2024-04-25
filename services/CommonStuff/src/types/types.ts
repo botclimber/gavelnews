@@ -1,3 +1,9 @@
+export type ServerConfig = {
+  useHTTPS: boolean,
+  certPath?: string,
+  keyPath?: string
+}
+
 export type votes = "true" | "unclear" | "false"
 
 export type voteId = {

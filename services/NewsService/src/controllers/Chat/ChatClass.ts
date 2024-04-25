@@ -6,6 +6,7 @@ import { calculateFutureDate, formatDate, getPreviousDate } from "../../../../Co
 import { allUsers } from "../../../../CommonStuff/src/controllers/UsersUtils";
 import { GoogleAuth } from "../../../../CommonStuff/src/controllers/GoogleAuthUtils";
 import https from "https";
+import http from "http";
 
 type chatCode = string
 const googleUtils = new GoogleAuth()
@@ -29,7 +30,7 @@ export class ChatClass {
   private chatClientsMap: Map<chatCode, WebSocket[]>
   private helper: ChatClassHelper
 
-  constructor(server: https.Server) {
+  constructor(server: http.Server | https.Server) {
     this.wss = new WebSocket.Server({ server });
     this.messagesMemory = new Map();
     this.chatClientsMap = new Map();

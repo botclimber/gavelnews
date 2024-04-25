@@ -6,6 +6,10 @@ const ScrapperScheduler = {
 const NewsEnv = {
     "HOUR": 0,
     "MIN": 0,
+    "SERVER_PORT": 0,
+    "USE_HTTPS": false,
+    "CERT_PATH": undefined,
+    "KEY_PATH": undefined,
     "CLIENT_ID": "",
     "CLIENT_SECRET": "",
     "SECRET": ""

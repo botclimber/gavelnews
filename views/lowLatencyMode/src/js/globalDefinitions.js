@@ -1,6 +1,3 @@
-const api = "https://gavel.news"
-const chatWebsocket = "wss://gavel.news"
-
 const loadBtn = document.getElementById("loadMoreButton");
 const newsContentSize = document.getElementById("contentSize")
 const news_div = document.getElementById("news")
