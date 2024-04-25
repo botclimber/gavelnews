@@ -63,6 +63,16 @@ export function createServer(config: ServerConfig): http.Server | https.Server {
 
     server = https.createServer(options, app);
 
+    // Middleware to redirect HTTP to HTTPS
+    app.use((req, res, next) => {
+      // If the request is already secure (HTTPS), move to the next middleware
+      if (req.secure) {
+        return next();
+      }
+      // Redirect to HTTPS
+      res.redirect('https://' + req.hostname + req.url);
+    });
+
   } else {
     server = http.createServer(app);
   }
