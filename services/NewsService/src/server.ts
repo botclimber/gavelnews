@@ -63,15 +63,17 @@ export function createServer(config: ServerConfig): http.Server | https.Server {
 
     server = https.createServer(options, app);
 
-    // Middleware to redirect HTTP to HTTPS
-    app.use((req, res, next) => {
-      // If the request is already secure (HTTPS), move to the next middleware
-      if (req.secure) {
-        return next();
-      }
-      // Redirect to HTTPS
-      res.redirect('https://' + req.hostname + req.url);
-    });
+	// Create HTTP server
+	const httpServer = http.createServer((req, res) => {
+	  // Redirect to HTTPS
+	  res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+	  res.end();
+	});
+
+	// Listen on port 80 for HTTP (redirects to HTTPS)
+	httpServer.listen(80, () => {
+	  console.log('HTTP server listening on port 80');
+	});
 
   } else {
     server = http.createServer(app);
