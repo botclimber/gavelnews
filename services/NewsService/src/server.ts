@@ -52,24 +52,24 @@ export function createServer(config: ServerConfig): http.Server | https.Server {
   // setup chat service
   let server;
   if (config.useHTTPS) {
-    
-    const certPath = config.certPath || './cert.pem';
-    const keyPath = config.keyPath || './key.pem';
-    
+
+    const certPath = config.certPath || "";
+    const keyPath = config.keyPath || "";
+
     const options = {
       cert: fs.readFileSync(certPath),
       key: fs.readFileSync(keyPath)
     };
-    
+
     server = https.createServer(options, app);
-  
+
   } else {
     server = http.createServer(app);
   }
 
   // setup chat service
   const chatService = new ChatClass(server);
-  
+
   // Initialize users
   allUsers.setUsers();
 
