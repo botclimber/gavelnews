@@ -154,7 +154,7 @@ async function setContent(dataList, append = false) {
                 </div>
                   <div>
                     <h5 class="mb-3 text-md font-bold">
-                      <a style="cursor: pointer;" >${r.new_title}</a>
+                      <a style="cursor: pointer;" onclick="openModal('${r.new_id}', '${r.new_link}', '${r.new_title}', '${imgUrl}', JSON.stringify({perc: ${isTruePerc}, number: ${r.new_isTrue}}), JSON.stringify({perc: ${isUnclearPerc}, number: ${r.new_isUnclear}}), JSON.stringify({perc: ${isFalsePerc}, number: ${r.new_isFalse}}), '${quoteDesc}', '${r.new_type}', '${dateAsGlobal}', '${r.new_source}')">${r.new_title}</a>
                     </h5>
                   </div>
                   <div class="mt-3 flex items-center justify-center text-sm font-medium text-yellow-600">

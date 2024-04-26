@@ -2,18 +2,21 @@
 <html>
 
 <head>
-    <title>Gavel-News</title>
+    <title>Gavel News</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./src/images/favicon.png">
-    <script src="https://cdn.tailwindcss.com"></script>
 
+    <script src="./src/js/tailwind.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <!-- Include Font Awesome for icons (optional) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./src/css/main.css">
+    <link rel="stylesheet" href="./src/css/modal.css">
 
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://accounts.google.com/gsi/client" async></script>
@@ -22,22 +25,24 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
         rel="stylesheet">
-
 </head>
 
 <body style="background-color: #e6e6de;color:#2c2c2c;">
+
+    <!-- <div class="flex space-x-[1px] overflow-x-auto" id="dateContainer">
+    </div>-->
 
     <!-- Contaainer for demo purpose -->
     <div class="px-10 py-5">
         <!-- Section: Design Block -->
         <section class="mb-12 text-center">
 
-            <div id="menu" class="menu flex flex-col sm:flex-row items-center justify-between">
+            <div id="menu" class="menu flex flex-row items-center justify-between">
                 <div onclick="reloadData()" style="cursor: pointer;"
                     class="text-center flex items-center justify-center mr-1">
                     <img src="./src/images/logoPreto.png" width="65px" />
                 </div>
-                <div class="mt-1 ml-[0.5rem]">
+                <div id="buttons-mobile" class="hidden mt-1 ml-[0.5rem]">
                     <button title="true" onclick="withLoadScreen(() => sortBy('new_isTrue'))"
                         class="filter-btn bg-[#8CB369]">
                         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +108,7 @@
                         </svg>
                     </button>
                 </div>
-                <div class="text-center mt-1 ml-[0.5rem]">
+                <div id="datePicker-mobile" class="hidden text-center mt-1 ml-[0.5rem]">
                     <button id="dateContainer" onchange="location.href=`index_old.html?date=${this.value}`"
                         style="background-color: #2c2c2c;" class="border-1 border-gray-300 rounded filter-btn"><svg
                             class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -116,19 +121,19 @@
                             </g>
                         </svg></button>
                 </div>
-                <div class="mt-1" style="flex-grow: 1;margin:0 0.5rem;">
+                <div id="search-mobile" class="hidden mt-1" style="flex-grow: 1;margin:0 0.5rem;">
                     <input id="searchComponent" type="text" value="" class="search-box" placeholder="Search...">
                 </div>
-                <div class="relative mt-1">
+                <div id="cat-mobile" class="hidden relative mt-1">
                     <div class="dropdown">
                         <button class="filterButtons">Categories</button>
                         <div class="dropdown-content max-h-[400px] overflow-y-auto" id="categoriesDropDown">
                         </div>
                     </div>
                 </div>
-                <div class="relative ml-[0.5rem] mt-1">
+                <div id="sources-mobile" class="hidden relative ml-[0.5rem] mt-1">
                     <div class="dropdown">
-                        <button class="filterButtons">News Source</button>
+                        <button class="filterButtons">Sources</button>
                         <div class="dropdown-content max-h-[500px] overflow-y-auto">
                             <a href="#" onclick="withLoadScreen(() => filterBy('*'))">All</a>
                             <a href="#" onclick="withLoadScreen(() => filterBy('publico'))">Publico</a>
@@ -183,32 +188,49 @@
                 </svg>
             </button>
         </section>
+        
+        <footer style="color:#e6e6de;" class="bg-[#2c2c2c] py-2">
+            <div class="container mx-auto flex justify-between items-center grid gap-3 grid-cols-3">
+                <div class="text-left ml-4">
+                    <!-- <p>CONTACTO:</p>
+                    <a href="mailto:gnewsgeral@gmail.com" class="text-[#e6e6de]">gnewsgeral@gmail.com</a> -->
+    
+                </div>
+                <div class="text-center">
+                    <!-- <p class="text-sm">COMO NAVEGAR NESTE SITE</p>
+                    <p class="text-sm">POLÍTICA DE PRIVACIDADE</p> -->
+                    <p class="text-sm">2024 Gavel News</p>
+                </div>
+                <div class="text-right mr-4">
+                    <!-- <p class="text-sm">2024 Gavel News.</p> -->
+                </div>
+            </div>
+        </footer>
     </div>
-    <footer style="color:#e6e6de;" class="bg-[#2c2c2c] py-2">
-        <div class="container mx-auto flex justify-between items-center grid gap-3 grid-cols-3">
-            <div class="text-left ml-4">
-                <p>CONTACTO:</p>
-                <a href="mailto:gnewsgeral@gmail.com" class="text-[#e6e6de]">gnewsgeral@gmail.com</a>
-
-            </div>
-            <div class="text-center">
-                <!-- <p class="text-sm">COMO NAVEGAR NESTE SITE</p>
-                <p class="text-sm">POLÍTICA DE PRIVACIDADE</p> -->
-            </div>
-            <div class="text-right mr-4">
-                <p class="text-sm">2024 Gavel News.</p>
-            </div>
-        </div>
-    </footer>
 
     <!-- Chat Container -->
-    <div id="chatContainer" style="z-index: 1;" class="fixed hidden">
+    <div id="chatContainer" style="z-index: 1;color:black;" class="fixed hidden">
         <!-- component -->
-        <div style="box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);"
+        <div id="resizableDiv" style="box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);"
             class="chat-container fixed bottom-[calc(4rem+1.5rem)] right-0 mr-4 bg-white p-4 rounded-lg border border-[#e5e7eb]">
+
             <!-- Heading -->
-            <div style="display:flex; justify-content: space-between;">
-                <div id="chatTitle">
+            <div class="flex justify-between">
+                <div class="flex items-center">
+                    <div id="resizeIcon" class="cursor-nwse-resize">
+                        <svg class="w-5 h-5" fill="#2c2c2c" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                            transform="matrix(-1, 0, 0, 1, 0, 0)">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M4,14.5 L4,18.5 C4,19.3284271 4.67157288,20 5.5,20 L9.5,20 C10.3284271,20 11,19.3284271 11,18.5 L11,14.5 C11,13.6715729 10.3284271,13 9.5,13 L5.5,13 C4.67157288,13 4,13.6715729 4,14.5 Z M16.2928932,16 L15.1464466,14.8535534 C14.9511845,14.6582912 14.9511845,14.3417088 15.1464466,14.1464466 C15.3417088,13.9511845 15.6582912,13.9511845 15.8535534,14.1464466 L17.8535534,16.1464466 C18.0488155,16.3417088 18.0488155,16.6582912 17.8535534,16.8535534 L15.8535534,18.8535534 C15.6582912,19.0488155 15.3417088,19.0488155 15.1464466,18.8535534 C14.9511845,18.6582912 14.9511845,18.3417088 15.1464466,18.1464466 L16.2928932,17 L13.5,17 C13.2238576,17 13,16.7761424 13,16.5 C13,16.2238576 13.2238576,16 13.5,16 L16.2928932,16 L16.2928932,16 Z M8,7.70710678 L8,10.5 C8,10.7761424 7.77614237,11 7.5,11 C7.22385763,11 7,10.7761424 7,10.5 L7,7.70710678 L5.85355339,8.85355339 C5.65829124,9.04881554 5.34170876,9.04881554 5.14644661,8.85355339 C4.95118446,8.65829124 4.95118446,8.34170876 5.14644661,8.14644661 L7.14644661,6.14644661 C7.34170876,5.95118446 7.65829124,5.95118446 7.85355339,6.14644661 L9.85355339,8.14644661 C10.0488155,8.34170876 10.0488155,8.65829124 9.85355339,8.85355339 C9.65829124,9.04881554 9.34170876,9.04881554 9.14644661,8.85355339 L8,7.70710678 Z M3,14.5 C3,13.1192881 4.11928813,12 5.5,12 L9.5,12 C10.8807119,12 12,13.1192881 12,14.5 L12,18.5 C12,19.8807119 10.8807119,21 9.5,21 L5.5,21 C4.11928813,21 3,19.8807119 3,18.5 L3,14.5 Z M4,5.5 C4,5.77614237 3.77614237,6 3.5,6 C3.22385763,6 3,5.77614237 3,5.5 C3,4.11928813 4.11928813,3 5.5,3 C5.77614237,3 6,3.22385763 6,3.5 C6,3.77614237 5.77614237,4 5.5,4 C4.67157288,4 4,4.67157288 4,5.5 Z M8.5,4 C8.22385763,4 8,3.77614237 8,3.5 C8,3.22385763 8.22385763,3 8.5,3 L10.5,3 C10.7761424,3 11,3.22385763 11,3.5 C11,3.77614237 10.7761424,4 10.5,4 L8.5,4 Z M13.5,4 C13.2238576,4 13,3.77614237 13,3.5 C13,3.22385763 13.2238576,3 13.5,3 L15.5,3 C15.7761424,3 16,3.22385763 16,3.5 C16,3.77614237 15.7761424,4 15.5,4 L13.5,4 Z M18.5,4 C18.2238576,4 18,3.77614237 18,3.5 C18,3.22385763 18.2238576,3 18.5,3 C19.8807119,3 21,4.11928813 21,5.5 C21,5.77614237 20.7761424,6 20.5,6 C20.2238576,6 20,5.77614237 20,5.5 C20,4.67157288 19.3284271,4 18.5,4 Z M20,8.5 C20,8.22385763 20.2238576,8 20.5,8 C20.7761424,8 21,8.22385763 21,8.5 L21,10.5 C21,10.7761424 20.7761424,11 20.5,11 C20.2238576,11 20,10.7761424 20,10.5 L20,8.5 Z M20,13.5 C20,13.2238576 20.2238576,13 20.5,13 C20.7761424,13 21,13.2238576 21,13.5 L21,15.5 C21,15.7761424 20.7761424,16 20.5,16 C20.2238576,16 20,15.7761424 20,15.5 L20,13.5 Z M20,18.5 C20,18.2238576 20.2238576,18 20.5,18 C20.7761424,18 21,18.2238576 21,18.5 C21,19.8807119 19.8807119,21 18.5,21 C18.2238576,21 18,20.7761424 18,20.5 C18,20.2238576 18.2238576,20 18.5,20 C19.3284271,20 20,19.3284271 20,18.5 Z M15.5,20 C15.7761424,20 16,20.2238576 16,20.5 C16,20.7761424 15.7761424,21 15.5,21 L13.5,21 C13.2238576,21 13,20.7761424 13,20.5 C13,20.2238576 13.2238576,20 13.5,20 L15.5,20 Z M3,8.5 C3,8.22385763 3.22385763,8 3.5,8 C3.77614237,8 4,8.22385763 4,8.5 L4,10.5 C4,10.7761424 3.77614237,11 3.5,11 C3.22385763,11 3,10.7761424 3,10.5 L3,8.5 Z">
+                                </path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="flex ml-1" id="chatTitle">
+                    </div>
                 </div>
                 <div>
                     <button type="button" id="closeChatBtn">x</button>
@@ -221,21 +243,186 @@
             <!-- Input box  -->
             <div class="flex items-center pt-0">
                 <div class="flex items-center justify-center w-full space-x-2">
+                    <!-- Emoji button to reveal options -->
+                    <button onclick="toggleEmojiContainer('emojiContainer')">😀</button>
 
+                    <!-- Emoji container -->
+                    <div id="emojiContainer" style="display: none;"></div>
                     <input onkeypress="onInputFocus(event)" id="chat-input-message"
                         class="flex h-10 w-full rounded-md border border-[#e5e7eb] px-3 py-2 text-sm placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#9ca3af] disabled:cursor-not-allowed disabled:opacity-50 text-[#030712] focus-visible:ring-offset-2"
-                        placeholder="Type your message" value="Chat is for read only" disabled>
+                        placeholder="Type your message" value="">
+                    <button type="button" onclick="sendMessage()"
+                        class="inline-flex items-center justify-center rounded-md text-sm font-medium text-[#f9fafb] disabled:pointer-events-none disabled:opacity-50 bg-[#2c2c2c] hover:bg-[#7b7575] h-10 px-4 py-2">
+                        Send</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Main modal -->
+    <div id="default-modal" tabindex="-1" aria-hidden="true"
+        class="defaultModal hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 max-w-full max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg" style="background-color: #4b5563;color:white;">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
+                    <h3 class="text-xl font-semibold">
+                        New Info
+                    </h3>
+                    <button onclick="closeModal()" type="button"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5 space-y-4">
+                    <div>
+                        <!-- Whatsapp -->
+                        <button type="button" title="whatsapp" onclick="share('whatsapp')" data-twe-ripple-init
+                            data-twe-ripple-color="light"
+                            class="mb-2 inline-block rounded bg-[#128c7e] px-3 py-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg">
+                            <span class="[&>svg]:h-4 [&>svg]:w-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 448 512">
+                                    <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
+                                    <path
+                                        d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" />
+                                </svg>
+                            </span>
+                        </button>
+
+                        <!-- Google -->
+                        <button type="button" title="email" onclick="share('mail')" data-twe-ripple-init data-twe-ripple-color="light"
+                            class="mb-2 inline-block rounded bg-[#ea4335] px-3 py-2  text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg">
+                            <span class="[&>svg]:h-4 [&>svg]:w-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 488 512">
+                                    <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
+                                    <path
+                                        d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
+                                </svg>
+                            </span>
+                        </button>
+
+                        <!-- Telegram -->
+                        <button type="button" title="telegram" onclick="share('telegram')" data-twe-ripple-init
+                            data-twe-ripple-color="light"
+                            class="mb-2 inline-block rounded bg-[#0088cc] px-3 py-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg">
+                            <span class="[&>svg]:h-4 [&>svg]:w-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 496 512">
+                                    <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
+                                    <path
+                                        d="M248 8C111 8 0 119 0 256S111 504 248 504 496 393 496 256 385 8 248 8zM363 176.7c-3.7 39.2-19.9 134.4-28.1 178.3-3.5 18.6-10.3 24.8-16.9 25.4-14.4 1.3-25.3-9.5-39.3-18.7-21.8-14.3-34.2-23.2-55.3-37.2-24.5-16.1-8.6-25 5.3-39.5 3.7-3.8 67.1-61.5 68.3-66.7 .2-.7 .3-3.1-1.2-4.4s-3.6-.8-5.1-.5q-3.3 .7-104.6 69.1-14.8 10.2-26.9 9.9c-8.9-.2-25.9-5-38.6-9.1-15.5-5-27.9-7.7-26.8-16.3q.8-6.7 18.5-13.7 108.4-47.2 144.6-62.3c68.9-28.6 83.2-33.6 92.5-33.8 2.1 0 6.6 .5 9.6 2.9a10.5 10.5 0 0 1 3.5 6.7A43.8 43.8 0 0 1 363 176.7z" />
+                                </svg>
+                            </span>
+                        </button>
+
+                        <!-- copy url -->
+                        <button type="button" title="copy to clipboard" onclick="share('copy')" data-twe-ripple-init data-twe-ripple-color="light"
+                            class="mb-2 inline-block rounded bg-[#1769ff] px-3 py-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg">
+                            <span class="[&>svg]:h-4 [&>svg]:w-4">
+                                <svg fill="#ffffff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 54.971 54.971" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M51.173,3.801c-5.068-5.068-13.315-5.066-18.384,0l-9.192,9.192c-0.781,0.781-0.781,2.047,0,2.828 c0.781,0.781,2.047,0.781,2.828,0l9.192-9.192c1.691-1.69,3.951-2.622,6.363-2.622c2.413,0,4.673,0.932,6.364,2.623 s2.623,3.951,2.623,6.364c0,2.412-0.932,4.672-2.623,6.363L36.325,31.379c-3.51,3.508-9.219,3.508-12.729,0 c-0.781-0.781-2.047-0.781-2.828,0s-0.781,2.048,0,2.828c2.534,2.534,5.863,3.801,9.192,3.801s6.658-1.267,9.192-3.801 l12.021-12.021c2.447-2.446,3.795-5.711,3.795-9.192C54.968,9.512,53.62,6.248,51.173,3.801z"></path> <path d="M27.132,40.57l-7.778,7.778c-1.691,1.691-3.951,2.623-6.364,2.623c-2.412,0-4.673-0.932-6.364-2.623 c-3.509-3.509-3.509-9.219,0-12.728L17.94,24.306c1.691-1.69,3.951-2.622,6.364-2.622c2.412,0,4.672,0.932,6.363,2.622 c0.781,0.781,2.047,0.781,2.828,0s0.781-2.047,0-2.828c-5.067-5.067-13.314-5.068-18.384,0L3.797,32.793 c-2.446,2.446-3.794,5.711-3.794,9.192c0,3.48,1.348,6.745,3.795,9.191c2.446,2.447,5.711,3.795,9.191,3.795 c3.481,0,6.746-1.348,9.192-3.795l7.778-7.778c0.781-0.781,0.781-2.047,0-2.828S27.913,39.789,27.132,40.57z"></path> </g> </g></svg>
+                            </span>
+                        </button>
+
+                        <!-- Open Source -->
+                        <button onclick="window.open( modalLastClickedNew.url,'_blank')" type="button"
+                            data-twe-ripple-init data-twe-ripple-color="light"
+                            class="mb-2 inline-block rounded bg-[#2c2c2c] px-3 py-2 text-xs font-medium uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:outline-none focus:ring-0 active:shadow-lg"
+                            style="float: right;">
+                            <span>
+                                Open Source
+                            </span>
+                        </button>
+                    </div>
+
+                    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2">
+                        <div>
+                            <div>
+                                <div class="relative h-[220px] mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20"
+                                    data-te-ripple-init="" data-te-ripple-color="light">
+                                    <img id="modal-img" src="#" class="w-full h-full object-cover" alt="">
+                                </div>
+
+
+                                <!-- Colored bar based on user votes -->
+                                <div class="flex justify-center mb-2">
+                                    <div class="w-full h-3 bg-[#8CB369] rounded-l-full relative" id="modal-trueWidth">
+                                        <span class="tooltip-text" id="modal-trueTooltip"></span>
+                                    </div>
+                                    <div class="w-full h-3 bg-[#F4A259] relative" id="modal-unclearWidth">
+                                        <span class="tooltip-text" id="modal-unclearTooltip"></span>
+                                    </div>
+                                    <div class="w-full h-3 bg-[#BC4B51] rounded-r-full relative" id="modal-falseWidth">
+                                        <span class="tooltip-text" id="modal-falseTooltip"></span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h5 class="text-white text-md font-bold">
+                                        <p id="modal-title"></p>
+                                    </h5>
+                                </div>
+                                <div id="modal-category"
+                                    class="mt-5 flex items-center justify-center text-sm font-medium text-yellow-600">
+                                </div>
+                                <p id="modal-desc" class="mt-5 text-sm text-white">
+                                </p>
+                                <p class="mt-5 text-white">
+                                    <small id="modal-dateSource"></small>
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <!-- Chat Container -->
+                            <div id="chatContainer_modal" style="color:black;">
+                                <!-- component -->
+                                <div style="box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 0.05);"
+                                    class="w-full h-full mr-4 bg-white p-4 rounded-lg border border-[#e5e7eb]">
+
+                                    <!-- Chat Container -->
+                                    <div class="h-[400px] overflow-y-auto" id="chat-output-modal">
+                                    </div>
+                                    <!-- Input box  -->
+                                    <div class="flex items-center pt-0">
+                                        <div class="flex items-center justify-center w-full space-x-2">
+                                            <!-- Emoji button to reveal options -->
+                                            <button onclick="toggleEmojiContainer('emojiContainer_modal')">😀</button>
+
+                                            <!-- Emoji container -->
+                                            <div id="emojiContainer_modal" style="display: none;"></div>
+                                            <input onkeypress="onInputFocus(event, true)" id="chat-input-message-modal"
+                                                class="flex h-10 w-full rounded-md border border-[#e5e7eb] px-3 py-2 text-sm placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#9ca3af] disabled:cursor-not-allowed disabled:opacity-50 text-[#030712] focus-visible:ring-offset-2"
+                                                placeholder="Type your message" value="">
+                                            <button type="button" onclick="sendMessage(true)"
+                                                class="inline-flex items-center justify-center rounded-md text-sm font-medium text-[#f9fafb] disabled:pointer-events-none disabled:opacity-50 bg-[#2c2c2c] hover:bg-[#7b7575] h-10 px-4 py-2">
+                                                Send</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer 
+                <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div data-modal-target="default-modal" data-modal-toggle="default-modal" class="overlay" id="defaultOverlay"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         flatpickr("#dateContainer", {
             // disable dates and generate allowed ones
-            minDate:"2024-04-01",
+            minDate: "2024-04-01",
             maxDate: "today",
             disableMobile: true,
         });
@@ -243,6 +430,7 @@
 
     <!-- Container for demo purpose -->
     <script src="./src/js/system_constants.js"></script>
+    <script src="./src/js/eva-functional-utils.js"></script>
     <script src="./src/js/chatIcons.js"></script>
     <script src="./src/js/setUserInfo.js"></script>
     <script src="./src/js/globalDefinitions.js"></script>
@@ -253,8 +441,44 @@
     <script src="./src/js/interface_old.js"></script>
     <script src="./src/js/loadData.js"></script>
 
+    <script src="./src/js/chat/emojis.js"></script>
     <script src="./src/js/chat/chat_functions.js"></script>
     <script src="./src/js/chat/chat_readOnly.js"></script>
+
+    <script src="./src/js/modal.js"></script>
+    <script src="./src/js/shareNews.js"></script>
+
+    <!-- Menu pick depending on dispositive -->
+    <script>
+        if(!isMobileDevice()){
+            document.getElementById("buttons-mobile").classList.remove("hidden")
+            document.getElementById("datePicker-mobile").classList.remove("hidden")
+            document.getElementById("search-mobile").classList.remove("hidden")
+            document.getElementById("cat-mobile").classList.remove("hidden")
+            document.getElementById("sources-mobile").classList.remove("hidden")
+        } 
+    </script>
+
+    <script>
+        chat.addEventListener("click", (event) => toggleEmojiContainer('emojiContainer', false))
+        chat_modal.addEventListener("click", (event) => toggleEmojiContainer('emojiContainer_modal', false))
+
+        // Function to toggle visibility of emoji container
+        function toggleEmojiContainer(id, visible = true) {
+
+            const emoContainer = document.getElementById(id)
+
+            if (!visible) emoContainer.style.display = "none";
+            else emoContainer.style.display = emoContainer.style.display !== 'none' ? 'none' : '';
+
+        }
+
+        // Function to select an emoji and insert it into the input field
+        function selectEmoji(id, emoji) {
+            const input = document.getElementById(id);
+            input.value += emoji;
+        }
+    </script>
 
     <!-- JavaScript for toggling the chat -->
     <script>
@@ -265,6 +489,59 @@
             chatContainer.classList.add('hidden');
         });
     </script>
+
+    <!-- Manual Resizable Chat Window -->
+    <script>
+        const resizeIcon = document.getElementById('resizeIcon');
+        const resizableDiv = document.getElementById('resizableDiv');
+
+        let startX, startY, startWidth, startHeight;
+
+        resizeIcon.addEventListener('mousedown', (e) => {
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = parseInt(document.defaultView.getComputedStyle(resizableDiv).width, 10);
+            startHeight = parseInt(document.defaultView.getComputedStyle(resizableDiv).height, 10);
+            document.addEventListener('mousemove', resizeNotMobile);
+            document.addEventListener('mouseup', stopResizeNotMobile);
+        });
+
+        function resizeNotMobile(e) {
+            const newWidth = startWidth - e.clientX + startX;
+            const newHeight = startHeight - e.clientY + startY;
+            resizableDiv.style.width = newWidth + 'px';
+            resizableDiv.style.height = newHeight + 'px';
+        }
+
+        function stopResizeNotMobile() {
+            document.removeEventListener('mousemove', resizeNotMobile);
+            document.removeEventListener('mouseup', stopResizeNotMobile);
+        }
+
+
+        // Handles Mobile
+        resizeIcon.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            startWidth = parseInt(document.defaultView.getComputedStyle(resizableDiv).width, 10);
+            startHeight = parseInt(document.defaultView.getComputedStyle(resizableDiv).height, 10);
+            document.addEventListener('touchmove', resizeMobile);
+            document.addEventListener('touchend', stopResizeMobile);
+        });
+
+        function resizeMobile(e) {
+            const newWidth = startWidth - e.touches[0].clientX + startX;
+            const newHeight = startHeight - e.touches[0].clientY + startY;
+            resizableDiv.style.width = newWidth + 'px';
+            resizableDiv.style.height = newHeight + 'px';
+        }
+
+        function stopResizeMobile() {
+            document.removeEventListener('touchmove', resizeMobile);
+            document.removeEventListener('touchend', stopResizeMobile);
+        }
+    </script>
+
 
 </body>
 

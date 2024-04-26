@@ -47,7 +47,7 @@ async function setChatsStatus() {
 
 }
 
-async function readOnlyChat(chatCode, chatTitle) {
+async function readOnlyChat(chatCode, chatTitle, modal = false) {
     if (dateAsGlobal != null) {
         chat.innerHTML = ""
 
@@ -56,15 +56,15 @@ async function readOnlyChat(chatCode, chatTitle) {
 
         console.log(data)
 
-        setChatTitle(`#${chatCode}`, false, chatTitle, false, "readOnlyChat()");
+        if (!modal) setChatTitle(`#${chatCode}`, false, chatTitle, false, "readOnlyChat()");
 
         if (data.length > 0) {
             for (const item of data) {
-               await printToChat(item);
+                await printToChat(item, modal);
             }
         }
 
-        chatContainer.classList.remove('hidden');
+        if (!modal) chatContainer.classList.remove('hidden');
     }
 }
 

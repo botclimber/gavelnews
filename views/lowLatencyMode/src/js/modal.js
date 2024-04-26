@@ -11,7 +11,10 @@ const modalLastClickedNew = {
 
 // Function to open the modal
 function openModal(n_id, n_url, n_title, n_img, n_true, n_unclear, n_false, n_desc, n_type, n_date, n_source) {
-    changeConnection(`/${n_id}`, false, `${n_title}`, false, true)
+    
+    if(!readOnlyPage) changeConnection(`/${n_id}`, false, `${n_title}`, false, true)
+    else readOnlyChat(n_id, n_title, true)
+    
     modalLastClickedNew.url = n_url
 
     const date = (readOnlyPage) ? dateAsGlobal : "current"
@@ -35,7 +38,7 @@ function openModal(n_id, n_url, n_title, n_img, n_true, n_unclear, n_false, n_de
     const isUnclearData = JSON.parse(n_unclear)
     const isFalseData = JSON.parse(n_false)
 
-    const new_type = (n_type === undefined || n_type === "" || n_type === null) ? "" : `<svg class="h-4 w-4" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 422.186 422.186" xml:space="preserve" fill="#000000" transform="matrix(-1, 0, 0, -1, 0, 0)rotate(-45)">
+    const new_type = (n_type === "undefined" || n_type === undefined || n_type === "" || n_type === null) ? "" : `<svg class="h-4 w-4" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 422.186 422.186" xml:space="preserve" fill="#000000" transform="matrix(-1, 0, 0, -1, 0, 0)rotate(-45)">
     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
     <g id="SVGRepo_iconCarrier"> 

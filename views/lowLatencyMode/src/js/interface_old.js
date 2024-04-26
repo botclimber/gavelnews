@@ -14,7 +14,7 @@ async function setContent(dataList, append = false) {
 
   dataList.forEach(r => {
 
-    const newType = (r.new_type === undefined) ? "" : `<svg class="h-4 w-4" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 422.186 422.186" xml:space="preserve" fill="#000000" transform="matrix(-1, 0, 0, -1, 0, 0)rotate(-45)">
+    const newType = (r.new_type === undefined || r.new_type === "" || r.new_type === null) ? "" : `<svg class="h-4 w-4" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 422.186 422.186" xml:space="preserve" fill="#000000" transform="matrix(-1, 0, 0, -1, 0, 0)rotate(-45)">
     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
     <g id="SVGRepo_iconCarrier"> 
@@ -35,13 +35,17 @@ async function setContent(dataList, append = false) {
       else return "";
     }
 
-    const img = (r.new_img)? `<img src="${r.new_img}" class="w-full h-full object-cover" alt="" />` : `<img src="https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg" class="w-full h-full object-cover" alt="" />`
-    const desc = r.new_desc ?? ""
+    const imgUrl = (r.new_img) ? r.new_img : "https://t4.ftcdn.net/jpg/04/99/93/31/360_F_499933117_ZAUBfv3P1HEOsZDrnkbNCt4jc3AodArl.jpg"
+    const img = `<img src="${imgUrl}" class="w-full h-full object-cover" alt="" />`
+
+    const desc = (r.new_desc)? r.new_desc : "";
+    const doubleQuoteDesc = desc.replaceAll('"', '\'');
+    const quoteDesc = doubleQuoteDesc.replaceAll("'", "\\'");
 
     news_div.innerHTML += /* html */
       `<div id="${r.new_id}" class="mb-5">
                 <div>
-                  <a href="${r.new_link}" target="_blank">  
+                  <a style="cursor: pointer;" onclick="openModal('${r.new_id}', '${r.new_link}', '${r.new_title}', '${imgUrl}', JSON.stringify({perc: ${isTruePerc}, number: ${r.new_isTrue}}), JSON.stringify({perc: ${isUnclearPerc}, number: ${r.new_isUnclear}}), JSON.stringify({perc: ${isFalsePerc}, number: ${r.new_isFalse}}), '${quoteDesc}', '${r.new_type}', '${dateAsGlobal}', '${r.new_source}')">  
                   <div class="relative h-[220px] mb-6 overflow-hidden rounded-lg bg-cover bg-no-repeat shadow-lg dark:shadow-black/20" data-te-ripple-init data-te-ripple-color="light">
                     ${img}
                     <div class="absolute top-0 left-0 w-full h-full ${getColorOverlay()} opacity-50"></div>
@@ -61,7 +65,7 @@ async function setContent(dataList, append = false) {
                     </div>
                 </div>
         
-                  <h5 class="text-md font-bold"><a href="${r.new_link}" target="_blank">${r.new_title}</a></h5>
+                  <h5 class="text-md font-bold"><a style="cursor: pointer;" onclick="openModal('${r.new_id}', '${r.new_link}', '${r.new_title}', '${imgUrl}', JSON.stringify({perc: ${isTruePerc}, number: ${r.new_isTrue}}), JSON.stringify({perc: ${isUnclearPerc}, number: ${r.new_isUnclear}}), JSON.stringify({perc: ${isFalsePerc}, number: ${r.new_isFalse}}), '${quoteDesc}', '${r.new_type}', '${dateAsGlobal}', '${r.new_source}')">${r.new_title}</a></h5>
                   <div class="mt-3 flex items-center justify-center text-sm font-medium text-yellow-600">
                     ${newType}
                   </div>
