@@ -20,7 +20,8 @@ window.addEventListener('scroll', function () {
   var scrollPosition = window.scrollY;
 
   // Adjust class based on scroll position
-  if (scrollPosition > 50 && !isMobileDevice()) {
+  //if (scrollPosition > 50 && !isMobileDevice()) {
+  if (scrollPosition > 50) {
     menu.classList.add('menu-scrolled');
 
   } else {

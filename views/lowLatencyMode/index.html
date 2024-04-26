@@ -49,7 +49,7 @@
                     class="text-center flex items-center justify-center mr-1">
                     <img src="./src/images/logoPreto.png" width="65px" />
                 </div>
-                <div id="buttons-mobile" class="mt-1 ml-[0.5rem]">
+                <div id="buttons-mobile" class="hidden mt-1 ml-[0.5rem]">
                     <button title="true" onclick="withLoadScreen(() => sortBy('new_isTrue'))"
                         class="filter-btn bg-[#8CB369]">
                         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg"
@@ -115,7 +115,7 @@
                         </svg>
                     </button>
                 </div>
-                <div id="datePicker-mobile" class="text-center mt-1 ml-[0.5rem]">
+                <div id="datePicker-mobile" class="hidden text-center mt-1 ml-[0.5rem]">
                     <button id="dateContainer" onchange="location.href=`index_old.html?date=${this.value}`"
                         style="background-color: #2c2c2c;" class="border-1 border-gray-300 rounded filter-btn"><svg
                             class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -128,17 +128,17 @@
                             </g>
                         </svg></button>
                 </div>
-                <div id="search-mobile" class="mt-1" style="flex-grow: 1;margin:0 0.5rem;">
+                <div id="search-mobile" class="hidden mt-1" style="flex-grow: 1;margin:0 0.5rem;">
                     <input id="searchComponent" type="text" value="" class="search-box" placeholder="Search...">
                 </div>
-                <div id="cat-mobile" class="relative mt-1">
+                <div id="cat-mobile" class="hidden relative mt-1">
                     <div class="dropdown">
                         <button class="filterButtons">Categories</button>
                         <div class="dropdown-content max-h-[400px] overflow-y-auto" id="categoriesDropDown">
                         </div>
                     </div>
                 </div>
-                <div id="sources-mobile" class="relative ml-[0.5rem] mt-1">
+                <div id="sources-mobile" class="hidden relative ml-[0.5rem] mt-1">
                     <div class="dropdown">
                         <button class="filterButtons">Sources</button>
                         <div class="dropdown-content max-h-[500px] overflow-y-auto">
@@ -457,12 +457,12 @@
 
     <!-- Menu pick depending on dispositive -->
     <script>
-        if(isMobileDevice()){
-            document.getElementById("buttons-mobile").classList.add("hidden")
-            document.getElementById("datePicker-mobile").classList.add("hidden")
-            document.getElementById("search-mobile").classList.add("hidden")
-            document.getElementById("cat-mobile").classList.add("hidden")
-            document.getElementById("sources-mobile").classList.add("hidden")
+        if(!isMobileDevice()){
+            document.getElementById("buttons-mobile").classList.remove("hidden")
+            document.getElementById("datePicker-mobile").classList.remove("hidden")
+            document.getElementById("search-mobile").classList.remove("hidden")
+            document.getElementById("cat-mobile").classList.remove("hidden")
+            document.getElementById("sources-mobile").classList.remove("hidden")
         } 
     </script>
 
