@@ -13,7 +13,7 @@ export function isValidDateFormat(dateString: string): boolean {
 // TODO: add param for ASC | DESC
 export function sortBy(data: ResponseData, param: keyof ResponseNewObject): ResponseData {
 
-  const veracityValues = ["new_isTrue", "new_isFalse", "new_isUnclear", "new_noOpinion"]
+  const veracityValues = ["new_isTrue", "new_isFalse", "new_isUnclear"]
 
   const getSortResult = (aValue: any, bValue: any) => {
     // Check if aValue or bValue is undefined
@@ -31,8 +31,8 @@ export function sortBy(data: ResponseData, param: keyof ResponseNewObject): Resp
     // Use optional chaining to access properties safely
 
     if (veracityValues.includes(param)){
-      const aTotal = (a.new_isFalse + a.new_isTrue + a.new_isUnclear + a.new_noOpinion )
-      const bTotal = (b.new_isFalse + b.new_isTrue + b.new_isUnclear + b.new_noOpinion )
+      const aTotal = (a.new_isFalse + a.new_isTrue + a.new_isUnclear)
+      const bTotal = (b.new_isFalse + b.new_isTrue + b.new_isUnclear)
 
       const aNr = a[param] ?? 0
       const bNr = b[param] ?? 0
