@@ -2,9 +2,23 @@
 2021
 2024 (updated)
 
+# Requirements
+Node JS
+Python3
+pm2
+
 # Setup
-0. if not existing create Data/ folder inside ./services/ dir, chats/ folder inside ./services/Data/ dir and users/allUsers.json file with ([] empty array) inside ./service/Data/
+
+## Data structure
+0. generate token
+1. git clone https://(token)@github.com/botclimber/gavelnews.git
+2. create Data/ folder inside ./services/
+3. create chats/ folder inside ./services/Data/
+4. create users/allUsers.json file with '[]' inside ./service/Data/
+
+## Run following commands in root folder:
 1. npm install
+2. sudo npm install --global gulp-cli
 3. gulp build
 4. gulp compile
 5. go to /services/WebScraperService:
@@ -14,7 +28,7 @@
         - source .packages/bin/activate
     - install dependencies:
         - pip install -r requirements.txt
-7. create system.config.js file from template and apply suitable configuration depending on your OS        
+7. in project root folder create system.config.js file from template and apply suitable configuration depending on your OS        
 8. pm2 start system.config.js
 
 > [!IMPORTANT]  
