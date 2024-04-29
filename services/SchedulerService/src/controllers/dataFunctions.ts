@@ -12,3 +12,5 @@ export async function additionalFields(mergedData: NewObjectBase[]): Promise<new
         }
     })
 }
+
+// TODO: check if there are repeated news from previous days

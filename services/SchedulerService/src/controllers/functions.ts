@@ -96,7 +96,7 @@ export async function transformExtractedData(): Promise<void> {
     const yesterdayDate = getPreviousDate(1)
 
     // TODO: make path a constant
-    const mergedDataFilePathName = `../Data/allData_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
+    const mergedDataFilePathName = `../Data/allData.json`
 
     const expressoFilePath = `../Data/expresso_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
     const sicNoticiasFilePath = `../Data/sicNoticias_${dateAndTime.format(yesterdayDate, dateFormat)}.json`

@@ -67,6 +67,16 @@ export class NewsManipulator {
         } catch (e) { console.log(e); return; }
     }
 
+    updateNewVisibility(newId: string, hide: boolean): void{
+        for (let x in this.data.data){
+            if(this.data.data[x].new_id == newId){
+                this.data.data[x].visible = hide
+                
+                break;
+            }
+        }
+    }
+
     dataSize(): number {
         return Buffer.byteLength(JSON.stringify(this.data), 'utf8') / (1024 * 1024);
     }
@@ -95,7 +105,7 @@ export class NewsManipulator {
     async getData(userInfo?: UserInfo): Promise<ResponseData> {
 
         const responseData: ResponseData = {
-            data: this.data.data.map((item: new_object) => {
+            data: this.data.data.filter(item => item.visible).map((item: new_object) => {
 
                 const vote = userInfo ? this.getUserVote(userInfo?.email, item.new_votedEmails) : undefined
                 
@@ -113,6 +123,7 @@ export class NewsManipulator {
                     new_isUnclear: item.new_isUnclear,
                     created_at: item.created_at,
                     updated_at: item.updated_at,
+                    visible: item.visible,
                     isVoted: vote
                 };
 

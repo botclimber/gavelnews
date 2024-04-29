@@ -48,7 +48,7 @@ export async function persistSensitiveData(): Promise<void> {
 
     schedule.scheduleJob(rulePersistData, async () => {
         try {
-            await persistNewsData(`${pathMainData}/allData_${ONE_DAY_BEFORE}.json`);
+            await persistNewsData(`${pathMainData}/allData.json`);
             await persistUsersData();
         } catch (error) {
             console.error("Error occurred while persisting sensitive data:", error);
@@ -62,7 +62,7 @@ export async function changeDay(chatService: ChatClass): Promise<void> {
     schedule.scheduleJob(ruleChangeDay, async () => {
         try {
 
-            await persistNewsData(`${pathBackupData}/allData_${TWO_DAYS_BEFORE}.json`);
+            await persistNewsData(`${pathBackupData}/allData.json`);
             await persistUsersData();
             await saveDataAndRestartChat(chatService);
 
