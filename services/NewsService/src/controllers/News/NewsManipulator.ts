@@ -137,7 +137,7 @@ export class NewsManipulator {
         const categoriesSet: Set<string> = new Set();
 
         // Iterate over each new_object and extract the new_type
-        this.data.data.forEach((item) => {
+        this.data.data.filter(item => item.visible).forEach((item) => {
             categoriesSet.add(item.new_type);
         });
 
