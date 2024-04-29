@@ -13,15 +13,13 @@ export class NewsManipulator {
         const voteToOpinion = {
             true: "new_isTrue",
             false: "new_isFalse",
-            unclear: "new_isUnclear",
-            noopinion: "new_noOpinion"
+            unclear: "new_isUnclear"
         }
 
         const opinionToVote = {
             new_isTrue: "true",
             new_isFalse: "false",
-            new_isUnclear: "unclear",
-            new_noOpinion: "noopinion"
+            new_isUnclear: "unclear"
         }
 
         const removeVote = async (vote: votes, idx: number) => {
@@ -113,7 +111,6 @@ export class NewsManipulator {
                     new_isTrue: item.new_isTrue,
                     new_isFalse: item.new_isFalse,
                     new_isUnclear: item.new_isUnclear,
-                    new_noOpinion: item.new_noOpinion,
                     created_at: item.created_at,
                     updated_at: item.updated_at,
                     isVoted: vote

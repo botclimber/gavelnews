@@ -1,9 +1,10 @@
 import { spawn } from "child_process";
 import * as fs from "fs";
 import * as dateAndTime from "date-and-time";
-import { new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat } from "../../../CommonStuff/src/types/types"
+import { new_object, fromRequestJsonFileFormat, fromScrapyJsonFileFormat, NewObjectBase } from "../../../CommonStuff/src/types/types"
 import { dateFormat } from "../../../CommonStuff/src/consts/consts"
 import { getPreviousDate } from "../../../CommonStuff/src/functions/functions"
+import { additionalFields } from "./dataFunctions";
 
 export function backupCurrentFiles(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -84,17 +85,17 @@ async function readJSONFile<T>(filePath: string): Promise<T> {
     });
 }
 
-async function flatScrayObject(dataToFlatten: fromScrapyJsonFileFormat): Promise<new_object[]> {
+async function flatScrayObject(dataToFlatten: fromScrapyJsonFileFormat): Promise<NewObjectBase[]> {
     const transformedData = dataToFlatten.flatMap(r => r.data)
     return transformedData
 }
 
 // TODO: dont abort in case of some file doesnt exist, just inform
-// TODO: !important: add here at this stage all necessary additional fields e.g. (votedEmails, isTrue, isFalse, isUnclear, hide, etc ...)
 export async function transformExtractedData(): Promise<void> {
 
     const yesterdayDate = getPreviousDate(1)
 
+    // TODO: make path a constant
     const mergedDataFilePathName = `../Data/allData_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
 
     const expressoFilePath = `../Data/expresso_${dateAndTime.format(yesterdayDate, dateFormat)}.json`
@@ -114,13 +115,15 @@ export async function transformExtractedData(): Promise<void> {
     const cnnData = await readJSONFile<fromScrapyJsonFileFormat>(cnnFilePath)
     const visaoData = await readJSONFile<fromScrapyJsonFileFormat>(visaoFilePath)
 
-    const flattenObservadorData: new_object[] = await flatScrayObject(observadorData)
-    const flattenCnnData: new_object[] = await flatScrayObject(cnnData)
-    const flattenVisaoData: new_object[] = await flatScrayObject(visaoData)
+    const flattenObservadorData: NewObjectBase[] = await flatScrayObject(observadorData)
+    const flattenCnnData: NewObjectBase[] = await flatScrayObject(cnnData)
+    const flattenVisaoData: NewObjectBase[] = await flatScrayObject(visaoData)
 
-    const mergedData: new_object[] = [...expressoData.data, ...sicNoticiasData.data, ...publicoData.data, ...jornalNoticiasData.data, ...flattenObservadorData, ...flattenCnnData, ...flattenVisaoData]
+    const mergedData: NewObjectBase[] = [...expressoData.data, ...sicNoticiasData.data, ...publicoData.data, ...jornalNoticiasData.data, ...flattenObservadorData, ...flattenCnnData, ...flattenVisaoData]
+    
+    const dataWithAdditionalFields: new_object[] = await additionalFields(mergedData)
 
-    fs.writeFile(mergedDataFilePathName, JSON.stringify({ "data": mergedData }), 'utf-8', (err) => {
+    fs.writeFile(mergedDataFilePathName, JSON.stringify({ "data": dataWithAdditionalFields }), 'utf-8', (err) => {
         if (err) {
             console.error('Error writing to file:', err);
         } else {

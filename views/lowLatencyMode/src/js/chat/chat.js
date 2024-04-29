@@ -44,8 +44,8 @@ function onInputFocus(event, isModal = false) {
     const lookForEmoji = () => {
         // TODO: check if this is uneficcient
         Object.keys(emojis).map(key => {
-            if(isModal) msgInputModal.value = msgInputModal.value.replaceAll(key, emojis[key])
-            else msgInput.value = msgInput.value.replaceAll(key, emojis[key]);
+            if(isModal) msgInputModal.value = msgInputModal.value.replaceAll(key.substring(1), emojis[key])
+            else msgInput.value = msgInput.value.replaceAll(key.substring(1), emojis[key]);
         })
     }
 

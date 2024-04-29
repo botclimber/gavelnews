@@ -2,7 +2,7 @@
 import sys
 
 sys.path.append('../CommonUtils')
-from utils import randomVeracityValue, strDefaultValue, getSubtractedDate, PAGES_TO_READ
+from utils import strDefaultValue, getSubtractedDate, PAGES_TO_READ
 
 import requests
 import json
@@ -37,12 +37,7 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
                 "new_img": x.get("multimediaPrincipal", strDefaultValue),
                 "new_type": x.get("rubrica", strDefaultValue),
                 "new_date": x.get("data", strDefaultValue),
-                "new_source": "publico",
-                "new_isTrue": randomVeracityValue(),
-                "new_isFalse": randomVeracityValue(),
-                "new_isUnclear": randomVeracityValue(),
-                "new_noOpinion": randomVeracityValue(),
-                "new_votedEmails": []
+                "new_source": "publico"
             }
             
             print("\t",dataset, "\n")	

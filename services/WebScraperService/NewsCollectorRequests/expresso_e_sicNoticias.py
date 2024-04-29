@@ -5,7 +5,7 @@
 import sys
 
 sys.path.append('../CommonUtils')
-from utils import randomVeracityValue, strDefaultValue, objDefaultValue, getSubtractedDate, PER_PAGE_LIMIT
+from utils import strDefaultValue, objDefaultValue, getSubtractedDate, PER_PAGE_LIMIT
 
 import requests
 import json
@@ -35,12 +35,7 @@ def generateFile(filename, ext, pagestoread, news_per_page_limit, base_url, url,
                     "new_img": x.get("picture", objDefaultValue).get("urlOriginal", strDefaultValue),
                     "new_type": x.get("mainCategory", objDefaultValue).get("name", strDefaultValue),
                     "new_date": x.get("publishedData", strDefaultValue),
-                    "new_source": source,
-                    "new_isTrue": randomVeracityValue(),
-                    "new_isFalse": randomVeracityValue(),
-                    "new_isUnclear": randomVeracityValue(),
-                    "new_noOpinion": randomVeracityValue(),
-                    "new_votedEmails": []
+                    "new_source": source
                 }
                 
                 print("\t",dataset, "\n")	
