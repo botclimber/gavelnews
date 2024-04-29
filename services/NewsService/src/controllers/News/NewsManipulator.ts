@@ -13,15 +13,13 @@ export class NewsManipulator {
         const voteToOpinion = {
             true: "new_isTrue",
             false: "new_isFalse",
-            unclear: "new_isUnclear",
-            noopinion: "new_noOpinion"
+            unclear: "new_isUnclear"
         }
 
         const opinionToVote = {
             new_isTrue: "true",
             new_isFalse: "false",
-            new_isUnclear: "unclear",
-            new_noOpinion: "noopinion"
+            new_isUnclear: "unclear"
         }
 
         const removeVote = async (vote: votes, idx: number) => {
@@ -69,6 +67,16 @@ export class NewsManipulator {
         } catch (e) { console.log(e); return; }
     }
 
+    updateNewVisibility(newId: string, hide: boolean): void{
+        for (let x in this.data.data){
+            if(this.data.data[x].new_id == newId){
+                this.data.data[x].visible = hide
+                
+                break;
+            }
+        }
+    }
+
     dataSize(): number {
         return Buffer.byteLength(JSON.stringify(this.data), 'utf8') / (1024 * 1024);
     }
@@ -97,7 +105,7 @@ export class NewsManipulator {
     async getData(userInfo?: UserInfo): Promise<ResponseData> {
 
         const responseData: ResponseData = {
-            data: this.data.data.map((item: new_object) => {
+            data: this.data.data.filter(item => item.visible).map((item: new_object) => {
 
                 const vote = userInfo ? this.getUserVote(userInfo?.email, item.new_votedEmails) : undefined
                 
@@ -113,9 +121,9 @@ export class NewsManipulator {
                     new_isTrue: item.new_isTrue,
                     new_isFalse: item.new_isFalse,
                     new_isUnclear: item.new_isUnclear,
-                    new_noOpinion: item.new_noOpinion,
                     created_at: item.created_at,
                     updated_at: item.updated_at,
+                    visible: item.visible,
                     isVoted: vote
                 };
 

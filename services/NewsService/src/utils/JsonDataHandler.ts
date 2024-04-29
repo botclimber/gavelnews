@@ -9,7 +9,7 @@ export let jsonData: NewsManipulator;
 export function loadData(path: string, date: Date): fromRequestJsonFileFormat {
 
     try {
-        const filePath = `${path}allData_${formatDate(date, dateFormat)}.json`
+        const filePath = `${path}allData.json`
 
         return JSON.parse(loadFromFile(filePath))
 

@@ -7,13 +7,6 @@ import scrapy
 import uuid
 from collections import OrderedDict
 
-import random
-
-# TODO: find a way of also getting this from the common/utils folder
-# used for test purposes
-def randomVeracityValue():
-    return random.randint(1, 250)
-
 def get_or_else_index(lst, index, default_value):
     try:
         return lst[index]
@@ -54,7 +47,7 @@ class VisaoNewsCollector(scrapy.Spider):
 			nType = get_or_else_index(news_type, x, "")
 			img = get_or_else_index(news_img, x, "")
       
-			data.append({"new_id":str(uuid.uuid4()), "new_link": link, "new_title": title, "new_desc": desc, "new_type": nType, "new_date": "", "new_img": img, "new_source": "visao", "new_isTrue": randomVeracityValue(), "new_isFalse": randomVeracityValue(), "new_isUnclear": randomVeracityValue(), "new_noOpinion": randomVeracityValue(), "new_votedEmails": []})
+			data.append({"new_id":str(uuid.uuid4()), "new_link": link, "new_title": title, "new_desc": desc, "new_type": nType, "new_date": "", "new_img": img, "new_source": "visao"})
 		
 		yield {"data": data}
 			

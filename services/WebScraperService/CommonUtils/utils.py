@@ -1,10 +1,6 @@
 import random
 from datetime import timedelta, date
 
-# used for test purposes
-def randomVeracityValue():
-    return random.randint(1, 250)
-
 def getSubtractedDate(daysBehind):
     return date.today() - timedelta(days=daysBehind)
 

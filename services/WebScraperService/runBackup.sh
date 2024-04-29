@@ -6,7 +6,7 @@ echo "Target date: $twodaysbefore"
 cd ../Data/
 mkdir backup
 mkdir backup/$twodaysbefore
-mv allData_$twodaysbefore.json backup/$twodaysbefore/
+mv allData.json backup/$twodaysbefore/
 mv cnnPortugal_$twodaysbefore.json backup/$twodaysbefore/
 mv jornalNoticias_$twodaysbefore.json backup/$twodaysbefore/
 mv publico_$twodaysbefore.json backup/$twodaysbefore/

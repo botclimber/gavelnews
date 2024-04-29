@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append('../CommonUtils')
-from utils import randomVeracityValue, strDefaultValue , PAGES_TO_READ, getSubtractedDate
+from utils import strDefaultValue , PAGES_TO_READ, getSubtractedDate
 
 import requests
 import json
@@ -45,12 +45,7 @@ with open(f"../../Data/{FILE_NAME}.{EXT}", "w", encoding="utf-8") as f:
                 "updated_at": x.get("updatedAt", strDefaultValue),
                 "new_date": new_metadata.get('publishedAt', strDefaultValue),
                 "new_source": "jornal noticias",
-                "new_type": "",
-                "new_isTrue": randomVeracityValue(),
-                "new_isFalse": randomVeracityValue(),
-                "new_isUnclear": randomVeracityValue(),
-                "new_noOpinion": randomVeracityValue(),
-                "new_votedEmails": []
+                "new_type": ""
             }
             
             print("\t",dataset, "\n")	

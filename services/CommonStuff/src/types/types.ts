@@ -11,7 +11,7 @@ export type voteId = {
     vote: votes
 }
 
-interface NewObjectBase {
+export interface NewObjectBase {
     new_id: string;
     new_link: string;
     new_title: string;
@@ -20,25 +20,25 @@ interface NewObjectBase {
     new_type: string;
     new_date: string;
     new_source: string;
-    new_isTrue: number;
-    new_isFalse: number;
-    new_isUnclear: number;
-    new_noOpinion: number;
     created_at?: string;
     updated_at?: string;
 }
 
-// when sending response if isVoted undefined dont display vote buttons
-export type ResponseNewObject = NewObjectBase & {
-    isVoted?: votes;
-}
-
 export type new_object = NewObjectBase & {
-    new_votedEmails: voteId[];
+    new_isTrue: number,
+    new_isFalse: number,
+    new_isUnclear: number,
+    visible: boolean,
+    new_votedEmails: voteId[]
 }
 
 export type fromRequestJsonFileFormat = {
     "data": new_object[]
+}
+
+// when sending response if isVoted undefined dont display vote buttons
+export type ResponseNewObject = Omit<new_object, "new_votedEmails"> & {
+    isVoted?: votes
 }
 
 export type ResponseData = {
@@ -47,7 +47,7 @@ export type ResponseData = {
 
 export type fromScrapyJsonFileFormat = fromRequestJsonFileFormat[]
 
-export type opinion = "new_isTrue" | "new_isFalse" | "new_isUnclear" | "new_noOpinion"
+export type opinion = "new_isTrue" | "new_isFalse" | "new_isUnclear"
 
 export type ReservedUsername = { [key: string]: string }
 export type message = {
