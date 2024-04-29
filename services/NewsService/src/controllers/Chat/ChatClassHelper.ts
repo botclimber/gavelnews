@@ -94,8 +94,10 @@ export class ChatClassHelper {
     async saveMessagesToFile(messages: string[], path: string): Promise<void> {
 
         try {
-            for (let x of messages) {
-                await saveToFile(x, path, true)
+            if (messages.length > 0) {
+                for (let x of messages) {
+                    await saveToFile(x, path, true)
+                }
             }
 
         } catch (e) {
@@ -123,7 +125,7 @@ export class ChatClassHelper {
         delete modifiedMessage.token;
 
         // Mask usernameId key before broadcast
-        const maskedUsernameId: ReservedUsername = {"*": message.usernameId[Object.keys(message.usernameId)[0]]};
+        const maskedUsernameId: ReservedUsername = { "*": message.usernameId[Object.keys(message.usernameId)[0]] };
         modifiedMessage.usernameId = maskedUsernameId;
 
         // Add userType (if token exists ? knownUser : guest)

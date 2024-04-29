@@ -295,8 +295,7 @@ export class ChatClass {
     try {
       this.messagesMemory.forEach((messages, key) => {
         if (key !== "/" && messages.length > 0) {
-          //const date = getPreviousDate(2)
-          const date = getPreviousDate(1) // for test purposes
+          const date = getPreviousDate(2)
 
           this.helper.saveMessagesToFile(messages, `${pathChatsData}${key}_${formatDate(date, dateFormat)}.txt`)
         }
