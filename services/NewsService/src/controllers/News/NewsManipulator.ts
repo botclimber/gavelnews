@@ -130,6 +130,13 @@ export class NewsManipulator {
                 return responseItem;
             })
         };
+
+        // Shuffle the data array using Fisher-Yates algorithm
+        for (let i = responseData.data.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [responseData.data[i], responseData.data[j]] = [responseData.data[j], responseData.data[i]]; // Swap elements
+        }
+
         return responseData;
     }
 

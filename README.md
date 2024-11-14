@@ -83,3 +83,4 @@ pm2
 - [ ] date formatted to text
 - [ ] width/height fixed in categories and news source buttons 
 - [ ] add aditional keys on data ETL level
+- [ ] handle URL/links in the chat
