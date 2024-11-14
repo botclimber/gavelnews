@@ -151,7 +151,6 @@ class UsersUtils {
         }
     }
 
-
     async incrementVote(vote: keyof User["votes"], userInfo: UserInfo): Promise<void> {
         try {
 

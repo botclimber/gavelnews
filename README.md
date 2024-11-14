@@ -71,16 +71,17 @@ pm2
 - [ ] contact page ?
 - [ ] welcome page for first users ?
 - [ ] google auth refresh token 
-- [ ] let votes open until lock
-- [ ] write log system
+- [x] let votes open until lock
+- [x] write log system (?)
 - [ ] description only appears on detailed page, also allow comments
-- [ ] link and chat buttons on same row
+- [x] link and chat buttons on same row
 - [ ] overlay explaining concept that appears only once
-- [ ] only 3 buttons (true, false, unclear)
+- [x] only 3 buttons (true, false, unclear)
 - [ ] separator for trending news (not prio)
-- [ ] change icons to (check, cross and question mark)
+- [x] change icons to (check, cross and question mark)
 - [ ] backoffice - news with most activity
 - [ ] date formatted to text
 - [ ] width/height fixed in categories and news source buttons 
 - [ ] add aditional keys on data ETL level
 - [ ] handle URL/links in the chat
+- [ ] move chat consts to environment file

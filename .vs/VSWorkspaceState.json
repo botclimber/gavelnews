@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\services",
+    "\\services\\NewsService",
+    "\\services\\NewsService\\src",
+    "\\services\\NewsService\\src\\controllers",
+    "\\services\\NewsService\\src\\controllers\\Chat",
+    "\\services\\NewsService\\src\\controllers\\Chat\\ChatRefact",
+    "\\services\\NewsService\\src\\controllers\\News"
+  ],
+  "SelectedNode": "\\services\\NewsService\\src\\controllers\\Chat\\ChatClassHelper.ts",
+  "PreviewInSolutionExplorer": false
+}
